@@ -1,0 +1,120 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Classes</h1>
+
+  <!-- Form to add a new class -->
+  <form action="/classes" method="POST" class="mb-5">
+    <div class="form-group">
+      <label for="className">Class Name:</label>
+      <input type="text" id="className" name="className" class="form-control" placeholder="Enter class name" required>
+    </div>
+
+    <!-- Dropdown for selecting department -->
+    <div class="form-group">
+      <label for="departmentId">Department Name:</label>
+      <select id="departmentId" name="departmentId" class="form-control" required>
+        <option value=""   selected>Select a department</option>
+        <% departments.forEach(function(department) { %>
+          <option value="<%= department._id %>"><%= department.departmentName %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <!-- Checkbox list for selecting subjects -->
+    <div class="form-group">
+      <label for="subjects">Subjects:</label>
+      <% if (subjects && subjects.length > 0) { %>
+        <% subjects.forEach(function(subject) { %>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="subject<%= subject._id %>" name="subjects" value="<%= subject._id %>">
+            <label class="form-check-label" for="subject<%= subject._id %>"><%= subject.subjectName %></label>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="text-muted">No subjects available</div>
+      <% } %>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Class</button>
+  </form>
+
+  <!-- Display existing classes with inline editing -->
+  <ul class="list-group">
+    <% if (classes && classes.length > 0) { %>
+      <% classes.forEach(function(classItem) { %>
+        <li class="list-group-item mb-2">
+          <!-- Display class info -->
+          <div id="classInfo-<%= classItem._id %>">
+            <strong>Class Name:</strong> <%= classItem.className %>
+            <br>
+            <strong>Department:</strong>
+            <% if (classItem.departmentId) { %>
+              <span><%= classItem.departmentId.departmentName %></span>
+            <% } else { %>
+              <span class="text-muted">No department assigned</span>
+            <% } %>
+            <br>
+            <strong>Subjects:</strong>
+            <% if (classItem.subjects && classItem.subjects.length > 0) { %>
+              <% classItem.subjects.forEach(function(subject) { %>
+                <span class="badge badge-primary"><%= subject.subjectName %></span>
+              <% }); %>
+            <% } else { %>
+              <span class="text-muted">No subjects assigned</span>
+            <% } %>
+            <br>
+
+            <!-- Edit and Delete buttons -->
+            <div class="mt-2">
+              <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= classItem._id %>')">Edit</button>
+              <form action="/classes/<%= classItem._id %>?_method=DELETE" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Inline Edit Form (Hidden by default) -->
+          <div id="editForm-<%= classItem._id %>" style="display: none;">
+            <form action="/classes/<%= classItem._id %>?_method=PUT" method="POST">
+              <div class="form-group">
+                <label for="className-<%= classItem._id %>">Class Name:</label>
+                <input type="text" id="className-<%= classItem._id %>" name="className" class="form-control" value="<%= classItem.className %>" required>
+              </div>
+
+              <!-- Dropdown for selecting department -->
+              <div class="form-group">
+                <label for="departmentId-<%= classItem._id %>">Department Name:</label>
+                <select id="departmentId-<%= classItem._id %>" name="departmentId" class="form-control" required>
+                  <% departments.forEach(function(department) { %>
+                    <option value="<%= department._id %>" <%= classItem.departmentId && department._id.equals(classItem.departmentId._id) ? 'selected' : '' %>><%= department.departmentName %></option>
+                  <% }); %>
+                </select>
+              </div>
+
+              <!-- Checkbox list for selecting subjects -->
+              <div class="form-group">
+                <label for="subjects">Subjects:</label>
+                <% subjects.forEach(function(subject) { %>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="subject<%= subject._id %>" name="subjects" value="<%= subject._id %>" <%= classItem.subjects.some(s => s._id.equals(subject._id)) ? 'checked' : '' %>>
+                    <label class="form-check-label" for="subject<%= subject._id %>"><%= subject.subjectName %></label>
+                  </div>
+                <% }); %>
+              </div>
+
+              <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('<%= classItem._id %>')">Cancel</button>
+            </form>
+          </div>
+        </li>
+      <% }); %>
+    <% } else { %>
+      <li class="list-group-item text-center">
+        No classes found.
+      </li>
+    <% } %>
+  </ul>
+</div>
+
+<%- include('../layout/footer') %>

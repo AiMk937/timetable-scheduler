@@ -1,0 +1,155 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Teachers</h1>
+
+  <!-- Form to add a new teacher -->
+  <form action="/teachers" method="POST" class="mb-5">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" class="form-control" placeholder="Enter teacher's name" required>
+    </div>
+
+    <!-- Checkbox list for selecting subjects -->
+    <div class="form-group">
+      <label for="subjects">Subjects:</label>
+      <% subjects.forEach(function(subject) { %>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="subject<%= subject._id %>" name="subjects" value="<%= subject._id %>">
+          <label class="form-check-label" for="subject<%= subject._id %>"><%= subject.subjectName %></label>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Checkbox list for selecting classes -->
+    <div class="form-group">
+      <label for="classIds">Classes:</label>
+      <% classes.forEach(function(classItem) { %>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="class<%= classItem._id %>" name="classIds" value="<%= classItem._id %>">
+          <label class="form-check-label" for="class<%= classItem._id %>"><%= classItem.className %></label>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Checkbox list for selecting departments -->
+    <div class="form-group">
+      <label for="departments">Departments:</label>
+      <% departments.forEach(function(department) { %>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="department<%= department._id %>" name="departments" value="<%= department._id %>">
+          <label class="form-check-label" for="department<%= department._id %>"><%= department.departmentName %></label>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="workload">Workload (hours per week):</label>
+      <input type="number" id="workload" name="workload" class="form-control" placeholder="Enter workload" required>
+    </div> -->
+    <button type="submit" class="btn btn-primary">Add Teacher</button>
+  </form>
+
+  <!-- Display existing teachers with inline editing -->
+  <ul class="list-group">
+    <% teachers.forEach(function(teacher) { %>
+      <li class="list-group-item mb-2">
+        <!-- Display teacher info -->
+        <div id="teacherInfo-<%= teacher._id %>">
+          <strong>Name:</strong> <%= teacher.name %>
+          <br>
+          <strong>Subjects:</strong>
+          <% if (teacher.subjects && teacher.subjects.length > 0) { %>
+            <% teacher.subjects.forEach(function(subject) { %>
+              <span class="badge badge-primary"><%= subject.subjectName %></span>
+            <% }); %>
+          <% } else { %>
+            <span class="text-muted">No subjects assigned</span>
+          <% } %>
+          <br>
+          <strong>Classes:</strong>
+          <% if (teacher.classIds && teacher.classIds.length > 0) { %>
+            <% teacher.classIds.forEach(function(classItem) { %>
+              <span class="badge badge-secondary"><%= classItem.className %></span>
+            <% }); %>
+          <% } else { %>
+            <span class="text-muted">No classes assigned</span>
+          <% } %>
+          <br>
+          <strong>Departments:</strong>
+          <% if (teacher.departments && teacher.departments.length > 0) { %>
+            <% teacher.departments.forEach(function(department) { %>
+              <span class="badge badge-info"><%= department.departmentName %></span>
+            <% }); %>
+          <% } else { %>
+            <span class="text-muted">No departments assigned</span>
+          <% } %>
+          <!-- <br> -->
+          <!-- <strong>Workload:</strong> <%= teacher.workload %> hours/week -->
+          <br>
+
+          <!-- Edit and Delete buttons -->
+          <div class="mt-2">
+            <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= teacher._id %>')">Edit</button>
+            <form action="/teachers/<%= teacher._id %>?_method=DELETE" method="POST" class="d-inline">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Inline Edit Form (Hidden by default) -->
+        <div id="editForm-<%= teacher._id %>" style="display: none;">
+          <form action="/teachers/<%= teacher._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+              <label for="name-<%= teacher._id %>">Name:</label>
+              <input type="text" id="name-<%= teacher._id %>" name="name" class="form-control" value="<%= teacher.name %>" required>
+            </div>
+
+            <!-- Checkbox list for selecting subjects -->
+            <div class="form-group">
+              <label for="subjects">Subjects:</label>
+              <% subjects.forEach(function(subject) { %>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="subject<%= subject._id %>" name="subjects" value="<%= subject._id %>" <%= teacher.subjects.some(s => s._id.equals(subject._id)) ? 'checked' : '' %>>
+                  <label class="form-check-label" for="subject<%= subject._id %>"><%= subject.subjectName %></label>
+                </div>
+              <% }); %>
+            </div>
+
+            <!-- Checkbox list for selecting classes -->
+            <div class="form-group">
+              <label for="classIds">Classes:</label>
+              <% classes.forEach(function(classItem) { %>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="class<%= classItem._id %>" name="classIds" value="<%= classItem._id %>" <%= teacher.classIds.some(c => c._id.equals(classItem._id)) ? 'checked' : '' %>>
+                  <label class="form-check-label" for="class<%= classItem._id %>"><%= classItem.className %></label>
+                </div>
+              <% }); %>
+            </div>
+
+            <!-- Checkbox list for selecting departments -->
+            <div class="form-group">
+              <label for="departments">Departments:</label>
+              <% departments.forEach(function(department) { %>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="department<%= department._id %>" name="departments" value="<%= department._id %>" <%= teacher.departments.some(d => d._id.equals(department._id)) ? 'checked' : '' %>>
+                  <label class="form-check-label" for="department<%= department._id %>"><%= department.departmentName %></label>
+                </div>
+              <% }); %>
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="workload-<%= teacher._id %>">Workload (hours per week):</label>
+              <input type="number" id="workload-<%= teacher._id %>" name="workload" class="form-control" value="<%= teacher.workload %>" required>
+            </div> -->
+
+            <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('<%= teacher._id %>')">Cancel</button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<%- include('../layout/footer') %>

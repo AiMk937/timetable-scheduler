@@ -1,0 +1,63 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Subjects</h1>
+
+  <!-- Form to add a new subject -->
+  <form action="/subjects" method="POST" class="mb-5">
+    <div class="form-group">
+      <label for="subjectName">Subject Name:</label>
+      <input type="text" id="subjectName" name="subjectName" class="form-control" placeholder="Enter subject name" required>
+    </div>
+    <div class="form-group">
+      <label for="departmentName">Department Name:</label>
+      <select id="departmentName" name="departmentName" class="form-control">
+        <% departments.forEach(function(department) { %>
+          <option value="<%= department._id %>"><%= department.departmentName %></option>
+        <% }); %>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Subject</button>
+  </form>
+
+  <!-- Display existing subjects -->
+  <ul class="list-group">
+    <% subjects.forEach(function(subject) { %>
+      <li class="list-group-item mb-3">
+        <strong>Subject Name:</strong> <%= subject.subjectName %>
+        <br>
+        <strong>Department:</strong> <%= subject.departmentId.departmentName %>
+
+        <!-- Inline Edit Form - Hidden initially, shown when "Edit" is clicked -->
+        <form action="/subjects/<%= subject._id %>?_method=PUT" method="POST" class="mt-2" style="display:none;" id="editForm-<%= subject._id %>">
+          <div class="form-group">
+            <label for="subjectName">Subject Name:</label>
+            <input type="text" name="subjectName" class="form-control" value="<%= subject.subjectName %>" required>
+          </div>
+          <div class="form-group">
+            <label for="departmentName">Department Name:</label>
+            <select name="departmentName" class="form-control">
+              <% departments.forEach(function(department) { %>
+                <option value="<%= department._id %>" <%= department._id.equals(subject.departmentId._id) ? 'selected' : '' %>><%= department.departmentName %></option>
+              <% }); %>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="button" class="btn btn-secondary" onclick="toggleEditForm('<%= subject._id %>')">Cancel</button>
+        </form>
+
+        <div class="mt-2">
+          <!-- Trigger the toggle to show the inline edit form -->
+          <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= subject._id %>')">Edit</button>
+          
+          <!-- Delete Subject -->
+          <form action="/subjects/<%= subject._id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<%- include('../layout/footer') %>

@@ -1,0 +1,130 @@
+/* Custom Global Styles to complement Bootstrap */
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 7vh; /* Space for the navbar */
+    padding-bottom: 10vh; /* Space for the footer */
+}
+
+.container {
+    flex: 1; /* Allow the container to take the remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-bottom: 5vh; /* Ensure some space before the footer */
+}
+
+.d-inline {
+    padding: 0;
+}
+
+.navbar {
+    position: fixed !important;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+/* Form Styles for custom look */
+form {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-control {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Custom Button Styles */
+.btn-custom {
+    background-color: #28a745;
+    color: white;
+    border-radius: 0;
+}
+
+.btn-custom:hover {
+    background-color: #218838;
+}
+
+/* List Styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 20px;
+}
+
+/* Custom table styles if needed */
+.table-custom th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Navbar styles to enhance Bootstrap's defaults */
+.navbar-nav .nav-item .nav-link {
+    font-weight: bold;
+    position: relative;
+    top: 10px;
+}
+
+/* Ensure academic year section scrolls well */
+#academicYearList {
+    max-height: 400px;
+    overflow-y: auto; /* Enable scrolling within the academic year list */
+}
+
+/* Adjust alignment of checkbox and workload input */
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-row .col {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.form-row input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Adjust width for workload input */
+.form-row .col input[type="number"] {
+    width: 200px;
+}
+
+/* Ensure scrolling is contained within the container */
+.existing-academic-years {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
