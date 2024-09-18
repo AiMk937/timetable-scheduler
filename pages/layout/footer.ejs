@@ -1,25 +1,38 @@
 <body>
 
-        <!-- Your page content goes here -->
-    
-        <footer class="bg-dark text-white text-center py-3 mt-4 w-100">
-            <p class="mb-0">&copy; 2024 School Management System. All Rights Reserved.</p>
-        </footer>
-    
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
-            function toggleEditForm(departmentId) {
-              const form = document.getElementById('editForm-' + departmentId);
-              if (form.style.display === 'none' || form.style.display === '') {
-                form.style.display = 'block';
-              } else {
-                form.style.display = 'none';
-              }
-            }
-          </script>
-    
-    </body>
+  <!-- Your page content goes here -->
+
+  <footer class="bg-dark text-white text-center py-3 mt-4 w-100">
+    <p class="mb-0">&copy; 2024 School Management System. All Rights Reserved.</p>
+  </footer>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function toggleEditForm(departmentId) {
+      const form = document.getElementById('editForm-' + departmentId);
+      if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+      } else {
+        form.style.display = 'none';
+      }
+    }
+    document.getElementById('toggleFormBtn').addEventListener('click', function () {
+      const form = document.getElementById('addForm');
+      if (form.style.display === 'none') {
+        form.style.display = 'block';
+      } else {
+        form.style.display = 'none';
+      }
+    });
+      function toggleForm() {
+    const form = document.getElementById('classForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+  </script>
+
+</body>
+
 </html>

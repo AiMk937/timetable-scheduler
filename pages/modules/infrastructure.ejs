@@ -1,0 +1,44 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Infrastructure:</h1>
+
+  <!-- Button to toggle the form -->
+  <button id="toggleFormBtn" class="btn btn-primary mb-3">Add Room</button>
+
+  <!-- Form to add a new room (hidden by default) -->
+  <form id="addForm" action="/infrastructure" method="POST" class="mb-5" style="display:none;">
+    <div class="form-group">
+      <label for="roomNo">Room No:</label>
+      <input type="text" id="roomNo" name="roomNo" class="form-control" placeholder="Enter room number" required>
+    </div>
+
+    <!-- Room Type Input -->
+    <div class="form-group">
+      <label for="type">Type:</label>
+      <select id="type" name="type" required class="form-control">
+        <option value="classroom">Classroom</option>
+        <option value="lab">Lab</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Add Room</button>
+  </form>
+
+  <!-- Display existing rooms -->
+  <ul class="list-group">
+    <% infrastructures.forEach(function(infrastructure) { %>
+      <li class="list-group-item">
+        <strong>Room No:</strong> <%= infrastructure.roomNo %> <strong>(<%= infrastructure.type %>)</strong>
+        <br>
+        <div class="mt-2">
+          <form action="/infrastructure/delete/<%= infrastructure._id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<%- include('../layout/footer') %>

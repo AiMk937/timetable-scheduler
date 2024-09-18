@@ -3,54 +3,108 @@
 <div class="container mt-4">
   <h1 class="mb-4">Subjects</h1>
 
+  <!-- Button to open the form to add a new subject -->
+  <button class="btn btn-primary mb-3" onclick="document.getElementById('addSubjectForm').style.display='block'">Add Subject</button>
+
   <!-- Form to add a new subject -->
-  <form action="/subjects" method="POST" class="mb-5">
-    <div class="form-group">
-      <label for="subjectName">Subject Name:</label>
-      <input type="text" id="subjectName" name="subjectName" class="form-control" placeholder="Enter subject name" required>
-    </div>
-    <div class="form-group">
-      <label for="departmentName">Department Name:</label>
-      <select id="departmentName" name="departmentName" class="form-control">
-        <% departments.forEach(function(department) { %>
-          <option value="<%= department._id %>"><%= department.departmentName %></option>
-        <% }); %>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Add Subject</button>
-  </form>
+  <div id="addSubjectForm" style="display:none;">
+    <form action="/subjects" method="POST" class="mb-5">
+      <div class="form-group">
+        <label for="subjectName">Subject Name:</label>
+        <input type="text" id="subjectName" name="subjectName" class="form-control" placeholder="Enter subject name" required>
+      </div>
+
+      <!-- Dropdown for selecting department -->
+      <div class="form-group">
+        <label for="departmentId">Department:</label>
+        <select id="departmentId" name="departmentName" class="form-control" required>
+          <% departments.forEach(function(department) { %>
+            <option value="<%= department._id %>"><%= department.departmentName %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <!-- Input for contact hours -->
+      <div class="form-group">
+        <label for="contactHours">Contact Hours per Week:</label>
+        <input type="number" id="contactHours" name="contactHours" class="form-control" placeholder="Enter contact hours" required>
+      </div>
+
+      <!-- Radio input for subject type -->
+      <div class="form-group">
+        <label for="subjectType">Subject Type:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="theory" name="subjectType" value="Theory" required>
+          <label class="form-check-label" for="theory">Theory</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="lab" name="subjectType" value="Lab" required>
+          <label class="form-check-label" for="lab">Lab</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add Subject</button>
+    </form>
+  </div>
 
   <!-- Display existing subjects -->
   <ul class="list-group">
     <% subjects.forEach(function(subject) { %>
-      <li class="list-group-item mb-3">
-        <strong>Subject Name:</strong> <%= subject.subjectName %>
-        <br>
-        <strong>Department:</strong> <%= subject.departmentId.departmentName %>
+      <li class="list-group-item">
+        <div>
+          <strong>Subject Name:</strong> <%= subject.subjectName %>
+          <br>
+          <strong>Department:</strong> <%= subject.departmentId.departmentName %>
+          <br>
+          <strong>Contact Hours per Week:</strong> <%= subject.contactHours %>
+          <br>
+          <strong>Subject Type:</strong> <%= subject.subjectType %>
+        </div>
 
-        <!-- Inline Edit Form - Hidden initially, shown when "Edit" is clicked -->
-        <form action="/subjects/<%= subject._id %>?_method=PUT" method="POST" class="mt-2" style="display:none;" id="editForm-<%= subject._id %>">
-          <div class="form-group">
-            <label for="subjectName">Subject Name:</label>
-            <input type="text" name="subjectName" class="form-control" value="<%= subject.subjectName %>" required>
-          </div>
-          <div class="form-group">
-            <label for="departmentName">Department Name:</label>
-            <select name="departmentName" class="form-control">
-              <% departments.forEach(function(department) { %>
-                <option value="<%= department._id %>" <%= department._id.equals(subject.departmentId._id) ? 'selected' : '' %>><%= department.departmentName %></option>
-              <% }); %>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-success">Save Changes</button>
-          <button type="button" class="btn btn-secondary" onclick="toggleEditForm('<%= subject._id %>')">Cancel</button>
-        </form>
+        <!-- Edit form (hidden initially) -->
+        <div id="editForm-<%= subject._id %>" style="display: none;">
+          <form action="/subjects/<%= subject._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+              <label for="subjectName">Subject Name:</label>
+              <input type="text" id="subjectName" name="subjectName" class="form-control" value="<%= subject.subjectName %>" required>
+            </div>
 
+            <!-- Dropdown for selecting department -->
+            <div class="form-group">
+              <label for="departmentId">Department:</label>
+              <select id="departmentId" name="departmentName" class="form-control" required>
+                <% departments.forEach(function(department) { %>
+                  <option value="<%= department._id %>" <%= department._id.equals(subject.departmentId._id) ? 'selected' : '' %>><%= department.departmentName %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <!-- Input for contact hours -->
+            <div class="form-group">
+              <label for="contactHours">Contact Hours per Week:</label>
+              <input type="number" id="contactHours" name="contactHours" class="form-control" value="<%= subject.contactHours %>" required>
+            </div>
+
+            <!-- Radio input for subject type -->
+            <div class="form-group">
+              <label for="subjectType">Subject Type:</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="theory" name="subjectType" value="Theory" <%= subject.subjectType === 'Theory' ? 'checked' : '' %> required>
+                <label class="form-check-label" for="theory">Theory</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="lab" name="subjectType" value="Lab" <%= subject.subjectType === 'Lab' ? 'checked' : '' %> required>
+                <label class="form-check-label" for="lab">Lab</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+
+        <!-- Action buttons -->
         <div class="mt-2">
-          <!-- Trigger the toggle to show the inline edit form -->
           <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= subject._id %>')">Edit</button>
-          
-          <!-- Delete Subject -->
           <form action="/subjects/<%= subject._id %>?_method=DELETE" method="POST" class="d-inline">
             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
           </form>
@@ -59,5 +113,16 @@
     <% }); %>
   </ul>
 </div>
+
+<script>
+  function toggleEditForm(subjectId) {
+    const form = document.getElementById('editForm-' + subjectId);
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'block';
+    } else {
+      form.style.display = 'none';
+    }
+  }
+</script>
 
 <%- include('../layout/footer') %>

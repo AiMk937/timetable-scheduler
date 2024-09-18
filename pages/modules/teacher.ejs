@@ -3,8 +3,10 @@
 <div class="container mt-4">
   <h1 class="mb-4">Teachers</h1>
 
+  <button id="toggleFormBtn" class="btn btn-primary mb-3">Add Teachers</button>
+
   <!-- Form to add a new teacher -->
-  <form action="/teachers" method="POST" class="mb-5">
+  <form id="addForm" action="/teachers" method="POST" class="mb-5" style="display:none;">
     <div class="form-group">
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" class="form-control" placeholder="Enter teacher's name" required>

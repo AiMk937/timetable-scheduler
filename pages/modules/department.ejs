@@ -3,13 +3,15 @@
 <div class="container mt-4">
   <h1 class="mb-4">Departments</h1>
 
-  <!-- Form to add a new department -->
-  <form action="/departments" method="POST" class="mb-5">
+  <button id="toggleFormBtn" class="btn btn-primary mb-3">Add Department</button>
+
+  <!-- Form to add a new department (hidden by default) -->
+  <form id="addForm" action="/departments" method="POST" class="mb-5" style="display:none;">
     <div class="form-group">
       <label for="departmentName">Department Name:</label>
       <input type="text" id="departmentName" name="departmentName" class="form-control" placeholder="Enter department name" required>
     </div>
-    <button type="submit" class="btn btn-primary">Add Department</button>
+    <button type="submit" class="btn btn-success">Add Department</button>
   </form>
 
   <!-- Display existing departments -->

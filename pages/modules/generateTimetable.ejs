@@ -1,0 +1,31 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-5">
+  <h2>Generate Timetable</h2>
+  
+  <form action="/timetable/generate" method="GET">
+    <!-- Academic Year Dropdown -->
+    <div class="form-group">
+      <label for="academicYear">Select Academic Year:</label>
+      <select id="academicYear" name="academicYearId" class="form-control" required>
+        <% academicYears.forEach(function(academicYear) { %>
+          <option value="<%= academicYear._id %>"><%= academicYear.academicYear %> - <%= academicYear.semester %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <!-- Class Dropdown -->
+    <div class="form-group">
+      <label for="classId">Select Class:</label>
+      <select id="classId" name="classId" class="form-control" required>
+        <% classes.forEach(function(classItem) { %>
+          <option value="<%= classItem._id %>"><%= classItem.className %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate Timetable</button>
+  </form>
+</div>
+
+<%- include('../layout/footer') %>

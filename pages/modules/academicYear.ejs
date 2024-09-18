@@ -3,75 +3,67 @@
 <div class="container mt-4">
   <h1 class="mb-4">Academic Years</h1>
 
+  <!-- Button to show form to add new academic year -->
+  <button class="btn btn-primary mb-4" onclick="toggleForm()">Add Academic Year</button>
+
   <!-- Form to add a new academic year -->
-  <form action="/academic-years" method="POST" class="mb-5">
-    <div class="form-group">
-      <label for="academicYear">Academic Year:</label>
-      <input type="text" id="academicYear" name="academicYear" class="form-control" placeholder="e.g. 2023-2024" required>
-    </div>
-    <div class="form-group">
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" name="startDate" class="form-control" required>
-    </div>
-    <div class="form-group">
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" name="endDate" class="form-control" required>
-    </div>
-    <div class="form-group">
-      <label for="semester">Semester:</label>
-      <select id="semester" name="semester" class="form-control">
-        <option value="odd">Odd Semester</option>
-        <option value="even">Even Semester</option>
-      </select>
-    </div>
-
-    <!-- Group for Teachers and their workloads -->
-    <div class="form-group">
-      <label for="teachers">Assign Teachers:</label>
-      <div class="teacher-workload-group">
-        <% teachers.forEach(function(teacher) { %>
-          <div class="form-row teacher-workload-row">
-            <div class="col-6">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="teachers" id="teacher<%= teacher._id %>" value="<%= teacher._id %>">
-                <label class="form-check-label" for="teacher<%= teacher._id %>">
-                  <%= teacher.name %>
-                </label>
-              </div>
-            </div>
-            <div class="col-6">
-              <input type="number" name="workloads<%= teacher._id %>" class="form-control" placeholder="Workload (hours/week)" required>
-            </div>
-          </div>
-        <% }); %>
+  <div id="addAcademicYearForm" style="display: none;">
+    <form action="/academic-years" method="POST" class="mb-5">
+      <div class="form-group">
+        <label for="academicYear">Academic Year:</label>
+        <input type="text" id="academicYear" name="academicYear" class="form-control" placeholder="e.g. 2023-2024" required>
       </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add Academic Year</button>
-  </form>
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="semester">Semester:</label>
+        <select id="semester" name="semester" class="form-control">
+          <option value="odd">Odd Semester</option>
+          <option value="even">Even Semester</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">Add Academic Year</button>
+    </form>
+  </div>
 
   <!-- Display existing academic years -->
-  <h2>Existing Academic Years</h2>
   <ul class="list-group">
-    <% academicYears.forEach(function(year) { %>
+    <% academicYears.forEach(function(academicYear) { %>
       <li class="list-group-item">
-        <strong>Academic Year:</strong> <%= year.academicYear %>
+        <strong>Academic Year:</strong> <%= academicYear.academicYear %>
         <br>
-        <strong>Semester:</strong> <%= year.semester %>
+        <strong>Start Date:</strong> <%= new Date(academicYear.startDate).toLocaleDateString() %>
         <br>
-        <strong>Start Date:</strong> <%= year.startDate.toLocaleDateString() %>
+        <strong>End Date:</strong> <%= new Date(academicYear.endDate).toLocaleDateString() %>
         <br>
-        <strong>End Date:</strong> <%= year.endDate.toLocaleDateString() %>
+        <strong>Semester:</strong> <%= academicYear.semester %>
         <br>
-        <strong>Teachers:</strong>
-        <ul>
-          <% year.teachers.forEach(function(teacher) { %>
-            <li><%= teacher.teacher.name %> (Workload: <%= teacher.workload %> hours/week)</li>
-          <% }); %>
-        </ul>
+        <div class="mt-2">
+          <a href="/academic-years/edit/<%= academicYear._id %>" class="btn btn-warning btn-sm">Edit</a>
+          <form action="/academic-years/<%= academicYear._id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
       </li>
     <% }); %>
   </ul>
 </div>
 
 <%- include('../layout/footer') %>
+
+<script>
+  function toggleForm() {
+    var form = document.getElementById('addAcademicYearForm');
+    if (form.style.display === 'none') {
+      form.style.display = 'block';
+    } else {
+      form.style.display = 'none';
+    }
+  }
+</script>

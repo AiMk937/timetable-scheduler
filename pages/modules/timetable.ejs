@@ -1,0 +1,32 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-5">
+  <h2>Generated Timetable</h2>
+  
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Slot</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% timetable.forEach((row, index) => { %>
+        <tr>
+          <td>Slot <%= index + 1 %></td>
+          <td><%= row.Monday %></td>
+          <td><%= row.Tuesday %></td>
+          <td><%= row.Wednesday %></td>
+          <td><%= row.Thursday %></td>
+          <td><%= row.Friday %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../layout/footer') %>
