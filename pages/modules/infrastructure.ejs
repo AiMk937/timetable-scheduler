@@ -22,6 +22,26 @@
       </select>
     </div>
 
+    <!-- Department Input -->
+    <div class="form-group">
+      <label for="departmentId">Department:</label>
+      <select id="departmentId" name="departmentId" class="form-control" required>
+        <% departments.forEach(function(department) { %>
+          <option value="<%= department._id %>"><%= department.departmentName %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <!-- Class Input -->
+    <div class="form-group">
+      <label for="classId">Class:</label>
+      <select id="classId" name="classId" class="form-control" required>
+        <% classes.forEach(function(classItem) { %>
+          <option value="<%= classItem._id %>"><%= classItem.className %></option>
+        <% }); %>
+      </select>
+    </div>
+
     <button type="submit" class="btn btn-success">Add Room</button>
   </form>
 
@@ -31,9 +51,58 @@
       <li class="list-group-item">
         <strong>Room No:</strong> <%= infrastructure.roomNo %> <strong>(<%= infrastructure.type %>)</strong>
         <br>
+        <strong>Department:</strong> <%= infrastructure.departmentId.departmentName %>
+        <br>
+        <strong>Class:</strong> <%= infrastructure.classId.className %>
+        <br>
         <div class="mt-2">
+          <!-- Delete button -->
           <form action="/infrastructure/delete/<%= infrastructure._id %>?_method=DELETE" method="POST" class="d-inline">
             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+
+          <!-- Edit button -->
+          <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= infrastructure._id %>')">Edit</button>
+        </div>
+
+        <!-- Edit form (hidden initially) -->
+        <div id="editForm-<%= infrastructure._id %>" style="display: none;">
+          <form action="/infrastructure/<%= infrastructure._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+              <label for="roomNo">Room No:</label>
+              <input type="text" name="roomNo" class="form-control" value="<%= infrastructure.roomNo %>" required>
+            </div>
+
+            <!-- Room Type Input -->
+            <div class="form-group">
+              <label for="type">Type:</label>
+              <select name="type" class="form-control" required>
+                <option value="classroom" <%= infrastructure.type === 'classroom' ? 'selected' : '' %>>Classroom</option>
+                <option value="lab" <%= infrastructure.type === 'lab' ? 'selected' : '' %>>Lab</option>
+              </select>
+            </div>
+
+            <!-- Department Input -->
+            <div class="form-group">
+              <label for="departmentId">Department:</label>
+              <select name="departmentId" class="form-control" required>
+                <% departments.forEach(function(department) { %>
+                  <option value="<%= department._id %>" <%= department._id.equals(infrastructure.departmentId._id) ? 'selected' : '' %>><%= department.departmentName %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <!-- Class Input -->
+            <div class="form-group">
+              <label for="classId">Class:</label>
+              <select name="classId" class="form-control" required>
+                <% classes.forEach(function(classItem) { %>
+                  <option value="<%= classItem._id %>" <%= classItem._id.equals(infrastructure.classId._id) ? 'selected' : '' %>><%= classItem.className %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
           </form>
         </div>
       </li>

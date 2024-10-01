@@ -23,6 +23,18 @@
         <% }); %>
       </select>
     </div>
+    <div class="form-group">
+      <label for="department">Select Department:</label>
+        <select name="departmentId" id="department">
+            <% if (departments && departments.length) { %>
+                <% departments.forEach(function(department) { %>
+                    <option value="<%= department._id %>"><%= department.departmentName %></option>
+                <% }); %>
+            <% } else { %>
+                <option value="">No Departments Available</option>
+            <% } %>
+        </select>
+    </div>
 
     <button type="submit" class="btn btn-primary">Generate Timetable</button>
   </form>

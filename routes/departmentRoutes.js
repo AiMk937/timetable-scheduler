@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const departments = await Department.find();
+    console.log(departments)
     res.render('modules/department', { departments }); // Render the department.ejs template with department data
   } catch (err) {
     console.error('Error fetching departments:', err.message);
