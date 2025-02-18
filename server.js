@@ -64,7 +64,7 @@
   // ----- Gemini API Integration for Timetable Generation ----- //
 
   // Instantiate the Generative AI client with your API key
-  const genAI = new GoogleGenerativeAI("AIzaSyDurrWhYB2hV234MlrKpPaQYUNX54cubmI"); // Replace with your actual API key
+  const genAI = new GoogleGenerativeAI(""); // Replace with your actual API key
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   // Route to generate a timetable using the Gemini model via Google Generative AI
