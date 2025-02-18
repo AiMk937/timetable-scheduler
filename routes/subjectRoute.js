@@ -23,7 +23,8 @@ router.post('/', async (req, res) => {
       subjectName: req.body.subjectName,
       departmentId: new mongoose.Types.ObjectId(req.body.departmentName),
       contactHours: req.body.contactHours,  // Contact hours per week
-      subjectType: req.body.subjectType  // Whether the subject is Theory or Lab
+      subjectType: req.body.subjectType,  // Whether the subject is Theory or Lab
+      category: req.body.category
     });
 
     await newSubject.save();
@@ -38,7 +39,7 @@ router.post('/', async (req, res) => {
 // PUT route to update a subject
 router.put('/:id', async (req, res) => {
   try {
-    const { subjectName, departmentName, contactHours, subjectType } = req.body;
+    const { subjectName, departmentName, contactHours, subjectType, category } = req.body;
 
     await Subject.findByIdAndUpdate(
       req.params.id,
@@ -46,7 +47,8 @@ router.put('/:id', async (req, res) => {
         subjectName: subjectName,
         departmentId: new mongoose.Types.ObjectId(departmentName),
         contactHours: contactHours,
-        subjectType: subjectType
+        subjectType: subjectType,
+        category: category
       },
       { new: true }
     );

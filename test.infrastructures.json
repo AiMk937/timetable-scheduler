@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "66f0fc7a6ef0b254c2fdef26"
+  },
+  "roomNo": "101-A",
+  "type": "lab",
+  "departmentId": {
+    "$oid": "66e3c501755b909cd78e8596"
+  },
+  "classId": {
+    "$oid": "66e91ee86d5f16bbb171c326"
+  },
+  "__v": 0,
+  "labSubjectId": {
+    "$oid": "66e91ddf6d5f16bbb171c2f0"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f0fc846ef0b254c2fdef2d"
+  },
+  "roomNo": "101-B",
+  "type": "lab",
+  "departmentId": {
+    "$oid": "66e3c501755b909cd78e8596"
+  },
+  "classId": {
+    "$oid": "66e91ee86d5f16bbb171c326"
+  },
+  "__v": 0,
+  "labSubjectId": {
+    "$oid": "66e91e2f6d5f16bbb171c304"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f0fc8c6ef0b254c2fdef34"
+  },
+  "roomNo": "102",
+  "type": "lab",
+  "departmentId": {
+    "$oid": "66e3c501755b909cd78e8596"
+  },
+  "classId": {
+    "$oid": "66e91ee86d5f16bbb171c326"
+  },
+  "__v": 0,
+  "labSubjectId": {
+    "$oid": "66e91e4c6d5f16bbb171c30e"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f0fc956ef0b254c2fdef3b"
+  },
+  "roomNo": "103",
+  "type": "lab",
+  "departmentId": {
+    "$oid": "66e3c501755b909cd78e8596"
+  },
+  "classId": {
+    "$oid": "66e91ee86d5f16bbb171c326"
+  },
+  "__v": 0,
+  "labSubjectId": {
+    "$oid": "66e91df76d5f16bbb171c2fa"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f0fc9c6ef0b254c2fdef42"
+  },
+  "roomNo": "412",
+  "type": "classroom",
+  "departmentId": {
+    "$oid": "66e3c501755b909cd78e8596"
+  },
+  "classId": {
+    "$oid": "66e91ee86d5f16bbb171c326"
+  },
+  "__v": 0
+}]

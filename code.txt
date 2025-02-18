@@ -1,0 +1,108 @@
+### redundant code for timetable generation  ###
+
+const express = require('express');
+const router = express.Router();
+const Class = require('../models/Class');
+const Teacher = require('../models/Teachers');
+const Infrastructure = require('../models/Infrastructure');
+const Subject = require('../models/Subject');
+
+router.get('/generate', async (req, res) => {
+    try {
+        const { academicYearId, classId } = req.query;
+
+        // Fetch the class, teachers, subjects, and available infrastructure
+        const selectedClass = await Class.findById(classId).populate('subjects').populate('academicYear');
+        const subjects = await Subject.find({ _id: { $in: selectedClass.subjects } }).populate('departmentId');
+        const teachers = await Teacher.find({ classIds: classId }).populate('subjects');
+        const infrastructure = await Infrastructure.find();
+
+        // Log fetched data for debugging
+        console.log('Selected Class:', selectedClass);
+        console.log('Fetched Subjects:', subjects);
+        console.log('Fetched Teachers:', teachers);
+        console.log('Infrastructure:', infrastructure);
+
+        // Initialize the timetable structure
+        const timetable = Array(6).fill().map(() => ({
+            Monday: '-',
+            Tuesday: '-',
+            Wednesday: '-',
+            Thursday: '-',
+            Friday: '-',
+        }));
+
+        // Variables to track assigned subjects and rooms
+        const subjectCount = {};
+        const daySubjects = { Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [] };
+
+        // Separate labs and theory subjects
+        const labs = subjects.filter(subject => subject.subjectType === 'Lab');
+        const theorySubjects = subjects.filter(subject => subject.subjectType === 'Theory');
+
+        // Helper function to assign a subject to the entire class
+        const assignSubject = (day, slot, subject, teacher, room) => {
+            timetable[slot][day] = `${subject.subjectName} (${room.roomNo}) - ${teacher.name}`;
+        };
+
+        // Helper function to get a random element from an array
+        const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        // Helper function to get a random available room for a subject (can reuse rooms)
+        const getAvailableRoom = (type) => {
+            const availableRooms = infrastructure.filter(room => room.type === type);
+            return getRandomElement(availableRooms);  // Randomly pick from available rooms
+        };
+
+        // Step 1: Assign three different lab subjects to Slot 1 for each day
+        for (let day of ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']) {
+            let labAssignments = 0;
+
+            while (labAssignments < 3 && labs.length > 0) {
+                const selectedLab = labs[labAssignments % labs.length]; // Assign labs in a round-robin fashion
+                const labTeacher = teachers.find(teacher => teacher.subjects.some(sub => sub.equals(selectedLab._id)));
+                const availableLabRoom = getAvailableRoom('lab');  // Random room assignment for labs
+
+                if (labTeacher && availableLabRoom) {
+                    assignSubject(day, 0, selectedLab, labTeacher, availableLabRoom);
+                    subjectCount[selectedLab._id] = (subjectCount[selectedLab._id] || 0) + 1;
+                    labAssignments += 1; // Track lab assignments
+                }
+            }
+        }
+
+        // Step 2: Assign theory subjects to slots 3 to 6
+        for (let day of ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']) {
+            for (let slot = 2; slot < 6; slot++) {  // Start from slot 3 (index 2)
+                if (timetable[slot][day] === '-') {
+                    const availableTheorySubjects = theorySubjects.filter(theory =>
+                        (subjectCount[theory._id] || 0) < theory.contactHours && !daySubjects[day].includes(theory._id)
+                    );
+
+                    if (availableTheorySubjects.length > 0) {
+                        const selectedTheory = getRandomElement(availableTheorySubjects);
+                        const theoryTeacher = teachers.find(teacher => teacher.subjects.some(sub => sub.equals(selectedTheory._id)));
+                        const availableClassroom = getAvailableRoom('classroom');  // Random room assignment for theory
+
+                        if (theoryTeacher && availableClassroom) {
+                            assignSubject(day, slot, selectedTheory, theoryTeacher, availableClassroom);
+                            subjectCount[selectedTheory._id] = (subjectCount[selectedTheory._id] || 0) + 1;
+                            daySubjects[day].push(selectedTheory._id); // Track subjects assigned on this day
+                        }
+                    }
+                }
+            }
+        }
+
+        console.log('Final Timetable:', timetable);
+
+        // Send the generated timetable to the client
+        res.render('modules/timetable', { timetable });
+
+    } catch (err) {
+        console.error('Error generating timetable:', err.message);
+        res.status(400).send('Error generating timetable');
+    }
+});
+
+module.exports = router;

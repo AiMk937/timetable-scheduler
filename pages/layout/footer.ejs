@@ -10,6 +10,8 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Toggle functions and lab subject handling -->
   <script>
     function toggleEditForm(departmentId) {
       const form = document.getElementById('editForm-' + departmentId);
@@ -19,6 +21,8 @@
         form.style.display = 'none';
       }
     }
+
+    // Toggle form visibility for adding a room
     document.getElementById('toggleFormBtn').addEventListener('click', function () {
       const form = document.getElementById('addForm');
       if (form.style.display === 'none') {
@@ -27,12 +31,29 @@
         form.style.display = 'none';
       }
     });
-      function toggleForm() {
-    const form = document.getElementById('classForm');
-      form.style.display = form.style.display === 'none' ? 'block' : 'none';
-  }
+
+    // Show/hide lab subjects dropdown in the add form
+    function toggleLabSubjects() {
+      var typeSelect = document.getElementById('type');
+      var labSubjectsDiv = document.getElementById('labSubjectsDiv');
+      if (typeSelect.value === 'lab') {
+        labSubjectsDiv.style.display = 'block';
+      } else {
+        labSubjectsDiv.style.display = 'none';
+      }
+    }
+
+    // Show/hide lab subjects dropdown in the edit form
+    function toggleEditLabSubjects(id) {
+      var typeSelect = document.querySelector('#editForm-' + id + ' select[name="type"]');
+      var labSubjectsDiv = document.getElementById('editLabSubjectsDiv-' + id);
+      if (typeSelect.value === 'lab') {
+        labSubjectsDiv.style.display = 'block';
+      } else {
+        labSubjectsDiv.style.display = 'none';
+      }
+    }
   </script>
 
 </body>
-
 </html>

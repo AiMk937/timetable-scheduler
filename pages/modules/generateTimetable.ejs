@@ -9,7 +9,9 @@
       <label for="academicYear">Select Academic Year:</label>
       <select id="academicYear" name="academicYearId" class="form-control" required>
         <% academicYears.forEach(function(academicYear) { %>
-          <option value="<%= academicYear._id %>"><%= academicYear.academicYear %> - <%= academicYear.semester %></option>
+          <option value="<%= academicYear._id %>">
+            <%= academicYear.academicYear %> - <%= academicYear.semester %>
+          </option>
         <% }); %>
       </select>
     </div>
@@ -19,21 +21,27 @@
       <label for="classId">Select Class:</label>
       <select id="classId" name="classId" class="form-control" required>
         <% classes.forEach(function(classItem) { %>
-          <option value="<%= classItem._id %>"><%= classItem.className %></option>
+          <option value="<%= classItem._id %>">
+            <%= classItem.className %>
+          </option>
         <% }); %>
       </select>
     </div>
+    
+    <!-- Department Dropdown -->
     <div class="form-group">
       <label for="department">Select Department:</label>
-        <select name="departmentId" id="department">
-            <% if (departments && departments.length) { %>
-                <% departments.forEach(function(department) { %>
-                    <option value="<%= department._id %>"><%= department.departmentName %></option>
-                <% }); %>
-            <% } else { %>
-                <option value="">No Departments Available</option>
-            <% } %>
-        </select>
+      <select name="departmentId" id="department" class="form-control">
+        <% if (departments && departments.length) { %>
+          <% departments.forEach(function(department) { %>
+            <option value="<%= department._id %>">
+              <%= department.departmentName %>
+            </option>
+          <% }); %>
+        <% } else { %>
+          <option value="">No Departments Available</option>
+        <% } %>
+      </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Generate Timetable</button>
