@@ -16,58 +16,55 @@ const AcademicYear = require("../models/AcademicYear");
 // =========================================================
 router.get("/generate", async (req, res) => {
   try {
-    // Dynamically import node-fetch (for ESM usage in Node)
-    const { default: fetch } = await import("node-fetch");
-
-    // Extract query parameters from the URL
-    const { academicYearId, classId, departmentId, promptConstraints } = req.query;
-
-    // Make a POST request to the Python timetable generation service
-    const response = await fetch("http://localhost:8000/generate-timetable", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        academicYearId,
-        classId,
-        departmentId,
-        promptConstraints,
-      }),
-    });
-
-    // The Python service should return JSON of this form:
-    // {
-    //   message: "Timetable generated and stored successfully",
-    //   timetable: {
-    //     "someClassId": { Monday: [...], Tuesday: [...], ... }
-    //   }
-    // }
-    const data = await response.json();
-
-    // If no timetable was generated or it's empty
-    const allClassIds = Object.keys(data.timetable || {});
-    if (!allClassIds.length) {
-      return res.render("modules/timetable", {
-        timetable: null,
-        classId: null,
-      });
+    const { academicYearId, departmentId } = req.query;
+    if (!academicYearId || !departmentId) {
+      return res.status(400).send("Both academicYearId and departmentId are required.");
     }
 
-    // Typically, we only want the timetable for one class
-    const chosenClassId = (classId && data.timetable[classId])
-      ? classId
-      : allClassIds[0];
-
-    const timetableData = data.timetable[chosenClassId] || null;
-    console.log("Generated timetable for classId:", chosenClassId);
-
-    // Render your timetable view
-    res.render("modules/timetable", {
-      timetable: timetableData,
-      classId: chosenClassId,
+    // Call the FastAPI batch endpoint
+    const apiRes = await fetch("http://localhost:8000/generate-timetable", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ departmentId, academicYearId }),
     });
+
+    if (!apiRes.ok) {
+      const err = await apiRes.json().catch(() => ({}));
+      console.error("Python service error:", err);
+      return res.status(apiRes.status).send(err.detail || "Failed to generate timetables");
+    }
+
+    // **Destructure the correct field** here:
+    const { timetables } = await apiRes.json();
+    if (!timetables || typeof timetables !== "object") {
+      return res.status(500).send("Invalid response format from timetable service.");
+    }
+
+    // Now only class IDs (no "message" key)!
+    const classIds = Object.keys(timetables);
+    if (classIds.length === 0) {
+      return res.render("modules/timetable", { schedules: [] });
+    }
+
+    // Fetch class names
+    const objectIds = classIds.map((id) => new mongoose.Types.ObjectId(id));
+    const classes = await Class.find({ _id: { $in: objectIds } })
+      .lean()
+      .select("className");
+
+    // Build schedules array
+    const schedules = classes.map(c => ({
+      classId: c._id.toString(),
+      className: c.className,
+      schedule: timetables[c._id.toString()]
+    }));
+
+    // Render your batch view
+    res.render("modules/timetable", { schedules });
+
   } catch (error) {
     console.error("Error generating timetable:", error);
-    res.status(500).json({ error: "Failed to generate timetable" });
+    res.status(500).send("Server error generating timetables.");
   }
 });
 
@@ -216,7 +213,7 @@ router.post("/edit-command", async (req, res) => {
 
         // Attempt to find day, slot source, slot target
         const dayEntity = parsedOutput.entities.find(e => e.label === "DAY_SOURCE")
-                        || parsedOutput.entities.find(e => e.label === "DAY_TARGET");
+          || parsedOutput.entities.find(e => e.label === "DAY_TARGET");
         const slotSourceEntity = parsedOutput.entities.find(e => e.label === "SLOT_SOURCE");
         const slotTargetEntity = parsedOutput.entities.find(e => e.label === "SLOT_TARGET");
 

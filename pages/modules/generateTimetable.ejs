@@ -3,49 +3,44 @@
 <div class="container mt-5">
   <h2>Generate Timetable</h2>
   
-  <form action="/timetable/generate" method="GET">
-    <!-- Academic Year Dropdown -->
-    <div class="form-group">
-      <label for="academicYear">Select Academic Year:</label>
-      <select id="academicYear" name="academicYearId" class="form-control" required>
-        <% academicYears.forEach(function(academicYear) { %>
-          <option value="<%= academicYear._id %>">
-            <%= academicYear.academicYear %> - <%= academicYear.semester %>
+<form action="/timetable/generate" method="GET">
+  <!-- Generate timetables for entire department -->
+  <p class="text-muted">
+    This will generate timetables for all classes in the selected department and
+    academic year (odd/even semester).
+  </p>
+
+  <!-- Academic Year Dropdown -->
+  <div class="form-group">
+    <label for="academicYear">Select Academic Year & Semester:</label>
+    <select id="academicYear" name="academicYearId" class="form-control" required>
+      <% academicYears.forEach(function(academicYear) { %>
+        <option value="<%= academicYear._id %>">
+          <%= academicYear.academicYear %> - 
+          <%= academicYear.semester.charAt(0).toUpperCase() + academicYear.semester.slice(1) %> Semester
+        </option>
+      <% }); %>
+    </select>
+  </div>
+
+  <!-- Department Dropdown -->
+  <div class="form-group">
+    <label for="department">Select Department:</label>
+    <select id="department" name="departmentId" class="form-control" required>
+      <% if (departments && departments.length) { %>
+        <% departments.forEach(function(department) { %>
+          <option value="<%= department._id %>">
+            <%= department.departmentName %>
           </option>
         <% }); %>
-      </select>
-    </div>
+      <% } else { %>
+        <option value="">No Departments Available</option>
+      <% } %>
+    </select>
+  </div>
 
-    <!-- Class Dropdown -->
-    <div class="form-group">
-      <label for="classId">Select Class:</label>
-      <select id="classId" name="classId" class="form-control" required>
-        <% classes.forEach(function(classItem) { %>
-          <option value="<%= classItem._id %>">
-            <%= classItem.className %>
-          </option>
-        <% }); %>
-      </select>
-    </div>
-    
-    <!-- Department Dropdown -->
-    <div class="form-group">
-      <label for="department">Select Department:</label>
-      <select name="departmentId" id="department" class="form-control">
-        <% if (departments && departments.length) { %>
-          <% departments.forEach(function(department) { %>
-            <option value="<%= department._id %>">
-              <%= department.departmentName %>
-            </option>
-          <% }); %>
-        <% } else { %>
-          <option value="">No Departments Available</option>
-        <% } %>
-      </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Generate Timetable</button>
-  </form>
+  <button type="submit" class="btn btn-primary">Generate Timetables</button>
+</form>
 </div>
 
 <%- include('../layout/footer') %>

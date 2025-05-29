@@ -1,71 +1,79 @@
 # main.py
 from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
-from services.generator import generate_timetable
+from services.generator import generate_timetables
 
 app = FastAPI()
 
 # MongoDB connection settings
-MONGO_URI = "mongodb://localhost:27017/"
+MONGO_URI = "mongodb+srv://aimaanjkhaan:Arshee2597@cluster1.1ycsg.mongodb.net/timetableDB?retryWrites=true&w=majority&appName=Cluster1"
 client = MongoClient(MONGO_URI)
 db = client["test"]
-
-# Collection for timetables
 timetables_col = db["timetables"]
 
 @app.post("/generate-timetable")
 def generate_and_store_timetable(payload: dict):
     """
-    Expects a JSON payload with the following structure:
-    {
-      "academicYearId": "...",  // (optional)
-      "classId": "...",         // MUST be provided to generate for a specific class
-      "departmentId": "..."      // (optional)
-    }
-    
-    This endpoint calls the timetable generator with the selected class ID,
-    saves the resulting timetable in the database (under the selected class key),
-    and returns the generated timetable.
+    Expects JSON payload with:
+      - departmentId (ObjectId string)
+      - academicYearId (ObjectId string)
+
+    Generates timetables for all classes in that department and academic year,
+    saves each under its classId, and returns the collection of schedules.
     """
-    # Check that classId is provided
-    if "classId" not in payload or not payload["classId"]:
-        raise HTTPException(status_code=400, detail="classId is required.")
+    dept_id = payload.get("departmentId")
+    acad_year_id = payload.get("academicYearId")
 
-    # Generate timetable for only the selected class
-    final_timetable = generate_timetable(selected_class_id=payload["classId"])
+    # Validate batch parameters
+    if not dept_id or not acad_year_id:
+        raise HTTPException(
+            status_code=400,
+            detail="Both departmentId and academicYearId are required for batch generation."
+        )
 
+    # Generate timetables for the entire batch
+    schedules = generate_timetables(dept_id, acad_year_id)
 
-    # Save the timetable in the DB under its own document.
-    timetables_col.insert_one({
-        "classId": payload["classId"],
-        "academicYearId": payload.get("academicYearId", None),
-        "departmentId": payload.get("departmentId", None),
-        "timetable": final_timetable
-    })
+    # Persist each class's timetable
+    for cid, schedule in schedules.items():
+        timetables_col.update_one(
+            { "classId": cid, "departmentId": dept_id, "academicYearId": acad_year_id },
+            { "$set": { "timetable": schedule } },
+            upsert=True
+        )
 
     return {
-        "message": "Timetable generated and stored successfully",
-        "timetable": final_timetable
+        "message": "Batch timetables generated and stored successfully",
+        "timetables": schedules
     }
 
 @app.get("/get-timetable/{class_id}")
 def get_timetable(class_id: str):
-    result = timetables_col.find_one({"classId": class_id})
-    if not result or "timetable" not in result:
+    """Retrieve a timetable by classId."""
+    doc = timetables_col.find_one({ "classId": class_id })
+    if not doc or "timetable" not in doc:
         raise HTTPException(status_code=404, detail="Timetable not found")
-    return result["timetable"]
+    return doc["timetable"]
 
 @app.put("/update-timetable/{class_id}")
 def update_timetable(class_id: str, day: str, slot: int, subject_name: str, teacher_name: str, room_no: str):
-    result = timetables_col.find_one({"classId": class_id})
-    if not result or "timetable" not in result:
+    """Update a specific slot within an existing class timetable."""
+    doc = timetables_col.find_one({ "classId": class_id })
+    if not doc or "timetable" not in doc:
         raise HTTPException(status_code=404, detail="Timetable not found")
-    if day not in result["timetable"]:
-        raise HTTPException(status_code=404, detail="Day not found in timetable")
-    result["timetable"][day][slot] = {
+
+    timetable = doc["timetable"]
+    if day not in timetable or slot < 0 or slot >= len(timetable[day]):
+        raise HTTPException(status_code=400, detail="Invalid day or slot index")
+
+    timetable[day][slot] = {
         "subject": subject_name,
         "teacher": teacher_name,
         "room": room_no
     }
-    timetables_col.update_one({"_id": result["_id"]}, {"$set": {"timetable": result["timetable"]}})
-    return {"message": "Timetable updated successfully"}
+
+    timetables_col.update_one(
+        { "_id": doc["_id"] },
+        { "$set": { "timetable": timetable } }
+    )
+    return { "message": "Timetable updated successfully" }

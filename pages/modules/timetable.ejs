@@ -1,85 +1,71 @@
 <%- include('../layout/header') %>
 
 <div class="container mt-5">
-  <!-- Check if timetable data exists -->
-  <% if (!timetable) { %>
-    <!-- If timetable is null or undefined, show a friendly message -->
-    <p class="text-center text-muted">No timetable data available.</p>
-  <% } else { %>
-    <!-- Timetable data exists, so render the timetable table -->
-    <h2 class="text-center mb-4">Generated Timetable</h2>
-    <div class="table-responsive">
-      <table class="table table-sm table-bordered table-striped table-hover timetable-compact">
-        <!-- Table Header: Display days of the week -->
-        <thead class="thead-dark">
-          <tr>
-            <th style="width: 60px;">Slot</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-          </tr>
-        </thead>
-        <!-- Table Body: Loop over each slot (0-indexed up to SLOTS_PER_DAY) -->
-        <tbody>
-          <% for (let i = 0; i < 6; i++) { %>
-            <tr>
-              <!-- Display slot number (convert from 0-indexed to 1-indexed) -->
-              <td class="text-center align-middle">Slot <%= i + 1 %></td>
-              <!-- Loop over each day of the week -->
-              <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].forEach(day => { %>
-                <td class="align-middle">
-                  <% 
-                    // Check if timetable data exists for the day and then get the slot value.
-                    // If timetable[day] is undefined or null, slotVal will be null.
-                    const slotVal = timetable[day] ? timetable[day][i] : null; 
-                  %>
-                  <% if (!slotVal) { %>
-                    <!-- If there's no value for this slot, display a dash -->
-                    <span class="text-muted">-</span>
-                  <% } else if (typeof slotVal === "object") { %>
-                    <!-- If the slot value is an object, check if it has a 'subject' property -->
-                    <% if (slotVal.subject) { %>
-                      <!-- Single object case: display subject, teacher, and room -->
-                      <div><strong><%= slotVal.subject %></strong></div>
-                      <% if (slotVal.teacher) { %>
-                        <div><small>Teacher: <%= slotVal.teacher %></small></div>
-                      <% } %>
-                      <% if (slotVal.room) { %>
-                        <div><small>Room: <%= slotVal.room %></small></div>
-                      <% } %>
-                    <% } else { %>
-                      <!-- Grouped session case: iterate over all items in the object -->
-                      <% Object.values(slotVal).forEach(item => { %>
-                        <div class="mb-1 p-1 border rounded bg-light">
-                          <% if (item.batch) { %>
-                            <strong><%= item.batch %>:</strong>
-                          <% } %>
-                          <span><%= item.subject %></span>
-                          <% if (item.teacher) { %>
-                            <br>
-                            <small>Teacher: <%= item.teacher %></small>
-                          <% } %>
-                          <% if (item.room) { %>
-                            <br>
-                            <small>Room: <%= item.room %></small>
-                          <% } %>
-                        </div>
-                      <% }); %>
-                    <% } %>
-                  <% } else { %>
-                    <!-- If slot value is a primitive (e.g. a string), display it directly -->
-                    <%= slotVal %>
-                  <% } %>
-                </td>
-              <% }); %>
-            </tr>
-          <% } %>
-        </tbody>
-      </table>
+  <h1 class="mb-4 text-center">Batch Timetables</h1>
+
+  <% if (!schedules.length) { %>
+    <div class="alert alert-warning text-center">
+      No timetables available for this department and academic year.
     </div>
   <% } %>
+
+  <% schedules.forEach(function(sch) { %>
+    <div class="card mb-5 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Class: <%= sch.className %></h3>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover align-middle text-center mb-0">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Slot / Day</th>
+                <% const days = Object.keys(sch.schedule); days.forEach(function(day) { %>
+                  <th scope="col"><%= day %></th>
+                <% }); %>
+              </tr>
+            </thead>
+            <tbody>
+              <% 
+                const days2 = Object.keys(sch.schedule);
+                const numSlots = sch.schedule[days2[0]].length;
+                for (let si = 0; si < numSlots; si++) { 
+              %>
+                <tr>
+                  <th scope="row" class="text-start">Slot <%= si+1 %></th>
+                  <% days2.forEach(function(day) {
+                       const slot = sch.schedule[day][si];
+                  %>
+                    <td>
+                      <% if (Array.isArray(slot) && slot.length) { %>
+                        <% slot.forEach(function(entry, idx) { %>
+                          <div class="mb-1">
+                            <span class="badge bg-info text-dark me-1"><%= entry.batch || '' %></span>
+                            <strong><%= entry.subject %></strong>
+                          </div>
+                          <div>
+                            <small class="text-muted"><%= entry.teacher %> (<%= entry.room %>)</small>
+                          </div>
+                          <% if (idx < slot.length - 1) { %>
+                            <hr class="my-1">
+                          <% } %>
+                        <% }); %>
+                      <% } else if (slot && slot.subject) { %>
+                        <strong><%= slot.subject %></strong><br>
+                        <small class="text-muted"><%= slot.teacher %> (<%= slot.room %>)</small>
+                      <% } else { %>
+                        <span class="text-muted">Free</span>
+                      <% } %>
+                    </td>
+                  <% }); %>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% }); %>
 </div>
 
 <%- include('../layout/footer') %>
