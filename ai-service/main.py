@@ -1,7 +1,7 @@
 # main.py
 from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
-from services.test import generate_timetable
+from services.generator import generate_timetable
 
 app = FastAPI()
 
