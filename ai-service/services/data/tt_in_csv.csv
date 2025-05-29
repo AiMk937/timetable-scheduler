@@ -1,0 +1,757 @@
+﻿timetable_id,classId,Department,day,slot,subject,type,batch,infrastructure,Teachers
+1,Even_2023_SE,Computer,Monday,1,AOA,Theory,,108,Prof.Arpita R
+1,Even_2023_SE,Computer,Monday,2,EM IV,Theory,,108,Prof.Dinesh C 
+1,Even_2023_SE,Computer,Monday,3,EM IV (tutorial),Lab,B1,101,Prof.M Juned
+1,Even_2023_SE,Computer,Monday,3,AOAL,Lab,B2,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Monday,3,OSL ,Lab,B3,103,Dr.Anupam C
+1,Even_2023_SE,Computer,Monday,4,EM IV (tutorial),Lab,B1,101,Prof.M Juned
+1,Even_2023_SE,Computer,Monday,4,AOAL,Lab,B2,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Monday,4,OSL ,Lab,B3,103,Dr.Anupam C
+1,Even_2023_SE,Computer,Monday,5,DBMS,Theory,,108,Prof.Arpita R
+1,Even_2023_SE,Computer,Monday,6,MP,Theory,,108,Prof.M Juned
+1,Even_2023_SE,Computer,Monday,7,Major-Project,Project,,,0
+1,Even_2023_SE,Computer,Tuesday,1,EM IV,Theory,,108,Prof.Dinesh C 
+1,Even_2023_SE,Computer,Tuesday,2,AOA,Theory,,108,Prof.Arpita R
+1,Even_2023_SE,Computer,Tuesday,3,AOAL,Lab,B1,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Tuesday,3,SKL-PP,Lab,B2,101,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Tuesday,3,MPL,Lab,B3,103,Prof.M Juned
+1,Even_2023_SE,Computer,Tuesday,4,AOAL,Lab,B1,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Tuesday,4,SKL-PP,Lab,B2,101,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Tuesday,4,MPL,Lab,B3,103,Prof.M Juned
+1,Even_2023_SE,Computer,Tuesday,5,OS,Theory,,108,Dr.Anupam C
+1,Even_2023_SE,Computer,Tuesday,6,MP,Theory,,108,Prof.M Juned
+1,Even_2023_SE,Computer,Tuesday,7,Major-Project,Project,,,0
+1,Even_2023_SE,Computer,Wednesday,1,DBMS,Theory,,108,Prof.Arpita R
+1,Even_2023_SE,Computer,Wednesday,2,EM IV,Theory,,108,Prof.Dinesh C 
+1,Even_2023_SE,Computer,Wednesday,3,OSL ,Lab,B1,103,Dr.Anupam C
+1,Even_2023_SE,Computer,Wednesday,3,MPL,Lab,B2,101,Prof.M Juned
+1,Even_2023_SE,Computer,Wednesday,3,AOAL,Lab,B3,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Wednesday,4,OSL ,Lab,B1,103,Dr.Anupam C
+1,Even_2023_SE,Computer,Wednesday,4,MPL,Lab,B2,101,Prof.M Juned
+1,Even_2023_SE,Computer,Wednesday,4,AOAL,Lab,B3,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Wednesday,5,AOA,Theory,,108,Prof.Arpita R
+1,Even_2023_SE,Computer,Wednesday,6,OS,Theory,,108,Dr.Anupam C
+1,Even_2023_SE,Computer,Wednesday,7,Mentoring,Mentoring,,,0
+1,Even_2023_SE,Computer,Thursday,1,MPL,Lab,B1,102,Prof.M Juned
+1,Even_2023_SE,Computer,Thursday,1,DBMSL,Lab,B2,103,Prof.Arpita R
+1,Even_2023_SE,Computer,Thursday,1,SKL-PP,Lab,B3,101,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Thursday,2,MPL,Lab,B1,102,Prof.M Juned
+1,Even_2023_SE,Computer,Thursday,2,DBMSL,Lab,B2,103,Prof.Arpita R
+1,Even_2023_SE,Computer,Thursday,2,SKL-PP,Lab,B3,101,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Thursday,3,MP,Theory,,108,Prof.M Juned
+1,Even_2023_SE,Computer,Thursday,4,Coding Club,Club,,,0
+1,Even_2023_SE,Computer,Thursday,4,Major-Project,Project,,,0
+1,Even_2023_SE,Computer,Thursday,4,NPTEL,Mooc,,,0
+1,Even_2023_SE,Computer,Thursday,4,Mentoring,Mentoring,,,0
+1,Even_2023_SE,Computer,Thursday,5,SKL-PP,Theory,,108,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Thursday,6,SKL-PP,Theory,,108,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Thursday,7,Coding Club,Club,,,0
+1,Even_2023_SE,Computer,Thursday,7,Major-Project,Project,,,0
+1,Even_2023_SE,Computer,Thursday,7,NPTEL,Mooc,,,0
+1,Even_2023_SE,Computer,Friday,1,SKL-PP,Lab,B1,101,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Friday,1,EM IV (tutorial),Lab,B2,103,Prof.M Juned
+1,Even_2023_SE,Computer,Friday,1,DBMSL,Lab,B3,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Friday,2,SKL-PP,Lab,B1,101,Prof.Ashfaque S
+1,Even_2023_SE,Computer,Friday,2,EM IV (tutorial),Lab,B2,103,Prof.M Juned
+1,Even_2023_SE,Computer,Friday,2,DBMSL,Lab,B3,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Friday,3,DBMSL,Lab,B1,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Friday,3,OSL ,Lab,B2,103,Dr.Anupam C
+1,Even_2023_SE,Computer,Friday,3,EM IV (tutorial),Lab,B3,101,Prof.M Juned
+1,Even_2023_SE,Computer,Friday,4,DBMSL,Lab,B1,102,Prof.Arpita R
+1,Even_2023_SE,Computer,Friday,4,OSL ,Lab,B2,103,Dr.Anupam C
+1,Even_2023_SE,Computer,Friday,4,EM IV (tutorial),Lab,B3,101,Prof.M Juned
+1,Even_2023_SE,Computer,Friday,5,OS,Theory,,108,Dr.Anupam C
+1,Even_2023_SE,Computer,Friday,6,DBMS,Theory,,108,Prof.Arpita R
+1,Even_2023_SE,Computer,Friday,7,Coding Club,Club,,,0
+1,Even_2023_SE,Computer,Friday,7,Major-Project,Project,,,0
+1,Even_2023_SE,Computer,Friday,7,NPTEL,Mooc,,,0
+2,Even_2023_TE,Computer,Monday,1,SPCC,Theory,,108,Prof.Nirali A
+2,Even_2023_TE,Computer,Monday,2,MC,Theory,,108,Prof.Anuja K
+2,Even_2023_TE,Computer,Monday,3,QA,Theory,,110,Prof.Meera B
+2,Even_2023_TE,Computer,Monday,3,IOT,Theory,,108,Prof.M Juned
+2,Even_2023_TE,Computer,Monday,4,CSS,Theory,,110,Prof.Manila G
+2,Even_2023_TE,Computer,Monday,5,CCL,Lab,B1,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Monday,5,SPCC L,Lab,B2,102,Prof.Nirali A
+2,Even_2023_TE,Computer,Monday,5,AI,Lab,B3,101,Prof.Reshma L
+2,Even_2023_TE,Computer,Monday,6,CCL,Lab,B1,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Monday,6,SPCC L,Lab,B2,102,Prof.Nirali A
+2,Even_2023_TE,Computer,Monday,6,AI,Lab,B3,101,Prof.Reshma L
+2,Even_2023_TE,Computer,Monday,7,CCL,Lab,B1,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Monday,7,SPCC L,Lab,B2,102,Prof.Nirali A
+2,Even_2023_TE,Computer,Monday,7,AI,Lab,B3,101,Prof.Reshma L
+2,Even_2023_TE,Computer,Monday,8,CCL,Lab,B1,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Monday,8,SPCC L,Lab,B2,102,Prof.Nirali A
+2,Even_2023_TE,Computer,Monday,8,AI,Lab,B3,101,Prof.Reshma L
+2,Even_2023_TE,Computer,Tuesday,1,QA,Theory,,110,Prof.Meera B
+2,Even_2023_TE,Computer,Tuesday,1,IOT,Theory,,108,Prof.M Juned
+2,Even_2023_TE,Computer,Tuesday,2,MC,Theory,,108,Prof.Anuja K
+2,Even_2023_TE,Computer,Tuesday,3,AI,Theory,,110,Prof.Reshma L
+2,Even_2023_TE,Computer,Tuesday,4,Coding Club,Club,,,0
+2,Even_2023_TE,Computer,Tuesday,4,Major-Project,Project,,,0
+2,Even_2023_TE,Computer,Tuesday,4,NPTEL,Mooc,,,0
+2,Even_2023_TE,Computer,Tuesday,4,Mentoring,Mentoring,,,0
+2,Even_2023_TE,Computer,Tuesday,5,SPCC L,Lab,B1,102,Prof.Nirali A
+2,Even_2023_TE,Computer,Tuesday,5,AI,Lab,B2,101,Prof.Reshma L
+2,Even_2023_TE,Computer,Tuesday,5,MCL,Lab,B3,103,Prof.Anuja K
+2,Even_2023_TE,Computer,Tuesday,6,SPCC L,Lab,B1,102,Prof.Nirali A
+2,Even_2023_TE,Computer,Tuesday,6,AI,Lab,B2,101,Prof.Reshma L
+2,Even_2023_TE,Computer,Tuesday,6,MCL,Lab,B3,103,Prof.Anuja K
+2,Even_2023_TE,Computer,Tuesday,7,Coding Club,Club,,,0
+2,Even_2023_TE,Computer,Tuesday,7,Major-Project,Project,,,0
+2,Even_2023_TE,Computer,Tuesday,7,NPTEL,Mooc,,,0
+2,Even_2023_TE,Computer,Wednesday,1,MC,Theory,,108,Prof.Anuja K
+2,Even_2023_TE,Computer,Wednesday,2,CSS,Theory,,108,Prof.Manila G
+2,Even_2023_TE,Computer,Wednesday,3,SPCC,Theory,,110,Prof.Nirali A
+2,Even_2023_TE,Computer,Wednesday,4,AI,Theory,,110,Prof.Reshma L
+2,Even_2023_TE,Computer,Wednesday,5,MCL,Lab,B1,102,Prof.Anuja K
+2,Even_2023_TE,Computer,Wednesday,5,CCL,Lab,B2,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Wednesday,5,CSSL,Lab,B3,101-B,Prof.Manila G
+2,Even_2023_TE,Computer,Wednesday,6,MCL,Lab,B1,102,Prof.Anuja K
+2,Even_2023_TE,Computer,Wednesday,6,CCL,Lab,B2,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Wednesday,6,CSSL,Lab,B3,101-B,Prof.Manila G
+2,Even_2023_TE,Computer,Wednesday,7,MCL,Lab,B1,102,Prof.Anuja K
+2,Even_2023_TE,Computer,Wednesday,7,CCL,Lab,B2,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Wednesday,7,CSSL,Lab,B3,101-B,Prof.Manila G
+2,Even_2023_TE,Computer,Wednesday,8,MCL,Lab,B1,102,Prof.Anuja K
+2,Even_2023_TE,Computer,Wednesday,8,CCL,Lab,B2,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Wednesday,8,CSSL,Lab,B3,101-B,Prof.Manila G
+2,Even_2023_TE,Computer,Thursday,1,AI,Theory,,108,Prof.Reshma L
+2,Even_2023_TE,Computer,Thursday,2,SPCC,Theory,,108,Prof.Nirali A
+2,Even_2023_TE,Computer,Thursday,3,Major-Project,Project,,,0
+2,Even_2023_TE,Computer,Thursday,4,Coding Club,Club,,,0
+2,Even_2023_TE,Computer,Thursday,4,Major-Project,Project,,,0
+2,Even_2023_TE,Computer,Thursday,5,CSL,Lab,B1,103,0
+2,Even_2023_TE,Computer,Thursday,5,MCL,Lab,B2,102,Prof.Anuja K
+2,Even_2023_TE,Computer,Thursday,5,SPCC,Lab,B3,101-B,Prof.Nirali A
+2,Even_2023_TE,Computer,Thursday,6,CSSL,Lab,B1,103,Prof.Manila G
+2,Even_2023_TE,Computer,Thursday,6,MCL,Lab,B2,102,Prof.Anuja K
+2,Even_2023_TE,Computer,Thursday,6,SPCC,Lab,B3,101-B,Prof.Nirali A
+2,Even_2023_TE,Computer,Thursday,7,Coding Club,Club,,,0
+2,Even_2023_TE,Computer,Thursday,7,Major-Project,Project,,,0
+2,Even_2023_TE,Computer,Thursday,7,NPTEL,Mooc,,,0
+2,Even_2023_TE,Computer,Friday,2,QA,Theory,,110,Prof.Meera B
+2,Even_2023_TE,Computer,Friday,2,IOT,Theory,,108,Prof.M Juned
+2,Even_2023_TE,Computer,Friday,3,CSS,Theory,,110,Prof.Manila G
+2,Even_2023_TE,Computer,Friday,4,Major-Project,Project,,,0
+2,Even_2023_TE,Computer,Friday,5,AI,Lab,B1,102,Prof.Reshma L
+2,Even_2023_TE,Computer,Friday,5,CSSL,Lab,B2,103,Prof.Manila G
+2,Even_2023_TE,Computer,Friday,5,CCL,Lab,B3,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Friday,6,AI,Lab,B1,102,Prof.Reshma L
+2,Even_2023_TE,Computer,Friday,6,CSSL,Lab,B2,103,Prof.Manila G
+2,Even_2023_TE,Computer,Friday,6,CCL,Lab,B3,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Friday,7,AI,Lab,B1,102,Prof.Reshma L
+2,Even_2023_TE,Computer,Friday,7,CSSL,Lab,B2,103,Prof.Manila G
+2,Even_2023_TE,Computer,Friday,7,CCL,Lab,B3,201,Prof.Shiburaj P
+2,Even_2023_TE,Computer,Friday,8,AI,Lab,B1,102,Prof.Reshma L
+2,Even_2023_TE,Computer,Friday,8,CSSL,Lab,B2,103,Prof.Manila G
+2,Even_2023_TE,Computer,Friday,8,CCL,Lab,B3,201,Prof.Shiburaj P
+3,Even_2023_BE,Computer,Monday,1,DCL,Lab,B1,101-B,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Monday,1,SMAL,Lab,B3,103,Dr.Anupam C
+3,Even_2023_BE,Computer,Monday,2,DCL,Lab,B1,101-B,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Monday,2,SMAL,Lab,B3,103,Dr.Anupam C
+3,Even_2023_BE,Computer,Monday,3,DL,Theory,,110,Prof.Nirali A
+3,Even_2023_BE,Computer,Monday,3,ADS,Theory,,108,Prof.Reshma L
+3,Even_2023_BE,Computer,Monday,4,DC,Theory,,110,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Monday,5,SMA,Theory,,110,Dr.Anupam C
+3,Even_2023_BE,Computer,Monday,6,EM,Theory,,110,Prof.M Juned
+3,Even_2023_BE,Computer,Monday,6,PM,Theory,,108,Prof.Madhvi D
+3,Even_2023_BE,Computer,Tuesday,1,SMAL,Lab,B1,103,Dr.Anupam C
+3,Even_2023_BE,Computer,Tuesday,1,DCL,Lab,B2,101-B,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Tuesday,2,SMAL,Lab,B1,103,Dr.Anupam C
+3,Even_2023_BE,Computer,Tuesday,2,DCL,Lab,B2,101-B,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Tuesday,3,SMA,Theory,,110,Dr.Anupam C
+3,Even_2023_BE,Computer,Tuesday,4,DL,Theory,,110,Prof.Nirali A
+3,Even_2023_BE,Computer,Tuesday,4,ADS,Theory,,108,Prof.Reshma L
+3,Even_2023_BE,Computer,Tuesday,5,DC,Theory,,110,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Tuesday,6,EM,Theory,,110,Prof.M Juned
+3,Even_2023_BE,Computer,Tuesday,6,PM,Theory,,108,Prof.Madhvi D
+3,Even_2023_BE,Computer,Tuesday,7,EM,Theory,,110,Prof.M Juned
+3,Even_2023_BE,Computer,Tuesday,7,PM,Theory,,108,Prof.Madhvi D
+3,Even_2023_BE,Computer,Wednesday,1,SMAL,Lab,B2,103,Dr.Anupam C
+3,Even_2023_BE,Computer,Wednesday,1,DCL,Lab,B3,101-B,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Wednesday,2,SMAL,Lab,B2,103,Dr.Anupam C
+3,Even_2023_BE,Computer,Wednesday,2,DCL,Lab,B3,101-B,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Wednesday,3,Coding Club,Club,,,0
+3,Even_2023_BE,Computer,Wednesday,3,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Wednesday,3,NPTEL,Mooc,,,0
+3,Even_2023_BE,Computer,Wednesday,4,DC,Theory,,110,Prof.Ashfaque S
+3,Even_2023_BE,Computer,Wednesday,5,DL,Theory,,110,Prof.Nirali A
+3,Even_2023_BE,Computer,Wednesday,5,ADS,Theory,,108,Prof.Reshma L
+3,Even_2023_BE,Computer,Thursday,1,NPTEL,Mooc,,,0
+3,Even_2023_BE,Computer,Thursday,2,SMA,Theory,,110,Dr.Anupam C
+3,Even_2023_BE,Computer,Thursday,3,DL,Theory,,110,Prof.Nirali A
+3,Even_2023_BE,Computer,Thursday,3,ADS,Theory,,108,Prof.Reshma L
+3,Even_2023_BE,Computer,Thursday,4,Coding Club,Club,,,0
+3,Even_2023_BE,Computer,Thursday,4,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Thursday,4,NPTEL,Mooc,,,0
+3,Even_2023_BE,Computer,Thursday,4,Mentoring,Mentoring,,,0
+3,Even_2023_BE,Computer,Thursday,5,ADS L,Lab,B2,101-A,Prof.Reshma L
+3,Even_2023_BE,Computer,Thursday,6,ADS L,Lab,B2,101-A,Prof.Reshma L
+3,Even_2023_BE,Computer,Friday,1,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Friday,2,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Friday,3,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Friday,4,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Friday,5,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Friday,6,Major-Project,Project,,,0
+3,Even_2023_BE,Computer,Friday,7,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Monday,1,EM,Theory,,306,Prof.Jagruti R
+4,Even_2024_BE,Computer,Monday,1,PM,Theory,,501,Prof.Madhvi D
+4,Even_2024_BE,Computer,Monday,2,EM,Theory,,306,Prof.Jagruti R
+4,Even_2024_BE,Computer,Monday,2,PM,Theory,,501,Prof.Madhvi D
+4,Even_2024_BE,Computer,Monday,3,EM,Theory,,306,Prof.Jagruti R
+4,Even_2024_BE,Computer,Monday,3,PM,Theory,,501,Prof.Madhvi D
+4,Even_2024_BE,Computer,Monday,4,DC,Theory,,108,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Monday,5,ADS,Lab,B1,101-A,Prof.Reshma L
+4,Even_2024_BE,Computer,Monday,5,SMAL,Lab,B2,109,Dr.Anupam C
+4,Even_2024_BE,Computer,Monday,5,DCL,Lab,B3,102,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Monday,6,ADS L,Lab,B1,101-A,Prof.Reshma L
+4,Even_2024_BE,Computer,Monday,6,SMAL,Lab,B2,109,Dr.Anupam C
+4,Even_2024_BE,Computer,Monday,6,DCL,Lab,B3,102,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Monday,7,DC,Theory,,504,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Monday,8,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Tuesday,2,SMA,Theory,,504,Dr.Anupam C
+4,Even_2024_BE,Computer,Tuesday,3,SMAL,Lab,B1,109,Dr.Anupam C
+4,Even_2024_BE,Computer,Tuesday,3,DCL,Lab,B2,102,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Tuesday,3,ADS L,Lab,B3,101-B,Prof.Reshma L
+4,Even_2024_BE,Computer,Tuesday,4,SMAL,Lab,B1,109,Dr.Anupam C
+4,Even_2024_BE,Computer,Tuesday,4,DCL,Lab,B2,102,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Tuesday,4,ADS L,Lab,B3,101-B,Prof.Reshma L
+4,Even_2024_BE,Computer,Tuesday,5,DC,Theory,,110,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Tuesday,6,ADS,Theory,,108,Prof.Reshma L
+4,Even_2024_BE,Computer,Tuesday,7,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Tuesday,8,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Wednesday,1,DC,Theory,,110,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Wednesday,2,SMA,Theory,,110,Dr.Anupam C
+4,Even_2024_BE,Computer,Wednesday,3,DCL,Lab,B1,102,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Wednesday,3,ADS L,Lab,B2,101-B,Prof.Reshma L
+4,Even_2024_BE,Computer,Wednesday,3,SMAL,Lab,B3,109,Dr.Anupam C
+4,Even_2024_BE,Computer,Wednesday,4,DCL,Lab,B1,102,Prof.Ashfaque S
+4,Even_2024_BE,Computer,Wednesday,4,ADS L,Lab,B2,101-B,Prof.Reshma L
+4,Even_2024_BE,Computer,Wednesday,4,SMAL,Lab,B3,109,Dr.Anupam C
+4,Even_2024_BE,Computer,Wednesday,5,ADS,Theory,,110,Prof.Reshma L
+4,Even_2024_BE,Computer,Wednesday,6,SMA,Theory,,110,Dr.Anupam C
+4,Even_2024_BE,Computer,Wednesday,7,MOOC,Mooc,,,0
+4,Even_2024_BE,Computer,Wednesday,7,NPTEL,Mooc,,,0
+4,Even_2024_BE,Computer,Wednesday,7,Mentoring,Mentoring,,,0
+4,Even_2024_BE,Computer,Wednesday,8,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,1,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,2,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,3,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,4,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,5,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,6,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,7,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Thursday,8,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,1,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,2,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,3,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,4,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,5,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,6,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,7,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Friday,8,Major-Project,Project,,,0
+4,Even_2024_BE,Computer,Saturday,1,Application Security,Honours,,,0
+4,Even_2024_BE,Computer,Saturday,1,"Text, Web and Social Media analytics",Honours,,,0
+4,Even_2024_BE,Computer,Saturday,2,Application Security,Honours,,,0
+4,Even_2024_BE,Computer,Saturday,2,"Text, Web and Social Media analytics",Honours,,,0
+4,Even_2024_BE,Computer,Saturday,3,Application Security,Honours,,,0
+4,Even_2024_BE,Computer,Saturday,3,"Text, Web and Social Media analytics",Honours,,,0
+4,Even_2024_BE,Computer,Saturday,4,Application Security,Honours,,,0
+4,Even_2024_BE,Computer,Saturday,4,"Text, Web and Social Media analytics",Honours,,,0
+5,Even_2024_TE,Computer,Monday,1,CSS,Theory,,504,Prof.Manila G
+5,Even_2024_TE,Computer,Monday,2,CSS,Theory,,504,Prof.Manila G
+5,Even_2024_TE,Computer,Monday,3,MC,Theory,,504,Prof.Ayush K
+5,Even_2024_TE,Computer,Monday,4,QA,Theory,,504,Prof.Dinesh D
+5,Even_2024_TE,Computer,Monday,5,MCL,Lab,B1,112,Prof.Ayush K
+5,Even_2024_TE,Computer,Monday,5,AI L,Lab,B2,101-B,Prof.Dinesh D
+5,Even_2024_TE,Computer,Monday,5,SPCC L,Lab,B3,103,Prof.Ramaya K
+5,Even_2024_TE,Computer,Monday,6,MCL,Lab,B1,112,Prof.Ayush K
+5,Even_2024_TE,Computer,Monday,6,AI L,Lab,B2,101-B,Prof.Dinesh D
+5,Even_2024_TE,Computer,Monday,6,SPCC L,Lab,B2,103,Prof.Ramaya K
+5,Even_2024_TE,Computer,Monday,7,Major-Project,Project,,109,0
+5,Even_2024_TE,Computer,Tuesday,1,CSSL,Lab,B1,101-A,Prof.Manila G
+5,Even_2024_TE,Computer,Tuesday,1,CSSL,Lab,B2,101-A,Prof.Manila G
+5,Even_2024_TE,Computer,Tuesday,1,AI L,Lab,B3,101-B,Prof.Dinesh D
+5,Even_2024_TE,Computer,Tuesday,2,CSSL,Lab,B1,101-A,Prof.Manila G
+5,Even_2024_TE,Computer,Tuesday,2,CSSL,Lab,B2,101-A,Prof.Manila G
+5,Even_2024_TE,Computer,Tuesday,2,AI L,Lab,B3,101-B,Prof.Dinesh D
+5,Even_2024_TE,Computer,Tuesday,3,MC,Theory,,504,Prof.Ayush K
+5,Even_2024_TE,Computer,Tuesday,4,QA,Theory,,504,Prof.Dinesh D
+5,Even_2024_TE,Computer,Tuesday,5,CCL,Theory,,504,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Tuesday,6,CCL,Theory,,504,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Tuesday,7,Major-Project,Project,,109,0
+5,Even_2024_TE,Computer,Wednesday,1,CSS,Theory,,504,Prof.Manila G
+5,Even_2024_TE,Computer,Wednesday,2,AI,Theory,,504,Prof.Dinesh D
+5,Even_2024_TE,Computer,Wednesday,3,SPCC,Theory,,504,Prof.Ramaya K
+5,Even_2024_TE,Computer,Wednesday,4,MC,Theory,,504,Prof.Ayush K
+5,Even_2024_TE,Computer,Wednesday,5,AI L,Lab,B1,101-B,Prof.Dinesh D
+5,Even_2024_TE,Computer,Wednesday,5,SPCC L,Lab,B2,103,Prof.Ramaya K
+5,Even_2024_TE,Computer,Wednesday,5,MCL,Lab,B3,101-A,Prof.Ayush K
+5,Even_2024_TE,Computer,Wednesday,6,AI L,Lab,B1,101-B,Prof.Dinesh D
+5,Even_2024_TE,Computer,Wednesday,6,SPCC L,Lab,B2,103,Prof.Ramaya K
+5,Even_2024_TE,Computer,Wednesday,6,MCL,Lab,B3,101-A,Prof.Ayush K
+5,Even_2024_TE,Computer,Wednesday,7,Major-Project,Project,,109,0
+5,Even_2024_TE,Computer,Thursday,1,SPCC L,Lab,B1,103,Prof.Ramaya K
+5,Even_2024_TE,Computer,Thursday,1,MCL,Lab,B2,101-B,Prof.Ayush K
+5,Even_2024_TE,Computer,Thursday,1,CSSL,Lab,B3,101-A,Prof.Manila G
+5,Even_2024_TE,Computer,Thursday,2,SPCC L,Lab,B1,103,Prof.Ramaya K
+5,Even_2024_TE,Computer,Thursday,2,MCL,Lab,B2,101-B,Prof.Ayush K
+5,Even_2024_TE,Computer,Thursday,2,CSSL,Lab,B3,101-A,Prof.Manila G
+5,Even_2024_TE,Computer,Thursday,3,QA,Theory,,504,Prof.Dinesh D
+5,Even_2024_TE,Computer,Thursday,4,SPCC,Theory,,504,Prof.Ramaya K
+5,Even_2024_TE,Computer,Thursday,5,MC,Theory,,504,Prof.Ayush K
+5,Even_2024_TE,Computer,Thursday,6,AI,Theory,,504,Prof.Dinesh D
+5,Even_2024_TE,Computer,Thursday,7,Major-Project,Project,,109,0
+5,Even_2024_TE,Computer,Friday,1,CCL,Lab,B1,201,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Friday,1,CCL,Lab,B2,201,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Friday,1,CCL,Lab,B3,201,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Friday,2,CCL,Lab,B1,201,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Friday,2,CCL,Lab,B2,201,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Friday,2,CCL,Lab,B3,201,Prof.Shiburaj P
+5,Even_2024_TE,Computer,Friday,3,SPCC,Theory,,504,Prof.Ramaya K
+5,Even_2024_TE,Computer,Friday,4,AI,Theory,,504,Prof.Dinesh D
+5,Even_2024_TE,Computer,Friday,5,MOOC,Mooc,,,0
+5,Even_2024_TE,Computer,Friday,5,NPTEL,Mooc,,,0
+5,Even_2024_TE,Computer,Friday,5,Mentoring,Mentoring,,,0
+5,Even_2024_TE,Computer,Friday,6,Major-Project,Project,,109,0
+5,Even_2024_TE,Computer,Friday,7,Major-Project,Project,,109,0
+5,Even_2024_TE,Computer,Saturday,1,Blockchain Platform,Honours,,,Prof.Manila G
+5,Even_2024_TE,Computer,Saturday,2,Blockchain Platform,Honours,,,Prof.Manila G
+5,Even_2024_TE,Computer,Saturday,3,Blockchain Platform,Honours,,,Prof.Manila G
+5,Even_2024_TE,Computer,Saturday,4,Blockchain Platform,Honours,,,Prof.Manila G
+6,Even_2024_SE-A,Computer,Monday,1,MPL,Lab,B1,112,Prof. Juned M
+6,Even_2024_SE-A,Computer,Monday,1,OSL ,Lab,B2,103,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Monday,1,DBMSL,Lab,B3,102,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Monday,2,MPL,Lab,B1,112,Prof. Juned M
+6,Even_2024_SE-A,Computer,Monday,2,OSL ,Lab,B2,103,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Monday,2,DBMSL,Lab,B3,102,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Monday,3,OS,Theory,,110,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Monday,4,EM IV,Theory,,110,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Monday,5,AOA,Theory,,110,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Monday,6,DBMS,Theory,,110,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Monday,7,MOOC,Mooc,,,0
+6,Even_2024_SE-A,Computer,Monday,7,NPTEL,Mooc,,101-A,0
+6,Even_2024_SE-A,Computer,Monday,7,Major-Project,Project,,109,0
+6,Even_2024_SE-A,Computer,Tuesday,1,AOA,Theory,,,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Tuesday,2,MP,Theory,,,Prof. Juned M
+6,Even_2024_SE-A,Computer,Tuesday,3,OSL ,Lab,B1,103,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Tuesday,3,DBMSL,Lab,B2,112,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Tuesday,3,AOAL,Lab,B3,101-B,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Tuesday,4,OSL ,Lab,B1,103,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Tuesday,4,DBMSL,Lab,B2,112,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Tuesday,4,AOAL,Lab,B3,101-B,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Tuesday,5,EM IV (tutorial),Lab,B1,108,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Tuesday,5,MPL,Lab,B2,112,Prof. Juned M
+6,Even_2024_SE-A,Computer,Tuesday,5,OSL ,Lab,B3,103,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Tuesday,5,EM IV (tutorial),Lab,B1,108,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Tuesday,6,MPL,Lab,B2,112,Prof. Juned M
+6,Even_2024_SE-A,Computer,Tuesday,6,OSL ,Lab,B3,103,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Tuesday,7,Major-Project,Project,,109,0
+6,Even_2024_SE-A,Computer,Wednesday,1,AOA,Theory,,110,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Wednesday,2,EM IV,Theory,,110,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Wednesday,3,Mentoring,Mentoring,,,0
+6,Even_2024_SE-A,Computer,Wednesday,3,Major-Project,Project,,109,0
+6,Even_2024_SE-A,Computer,Wednesday,4,MP,Theory,,110,Prof. Juned M
+6,Even_2024_SE-A,Computer,Wednesday,5,AOAL,Lab,B1,102,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Wednesday,5,EM IV (tutorial),Lab,B2,504,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Wednesday,5,SKL-PP,Lab,B3,112,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Wednesday,6,AOAL,Lab,B1,102,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Wednesday,6,EM IV (tutorial),Lab,B2,504,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Wednesday,6,SKL-PP,Lab,B3,112,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Wednesday,7,Major-Project,Project,,109,0
+6,Even_2024_SE-A,Computer,Thursday,1,DBMS,Theory,,110,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Thursday,2,EM IV,Theory,,110,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Thursday,3,OS,Theory,,110,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Thursday,4,MP,Theory,,110,Prof. Juned M
+6,Even_2024_SE-A,Computer,Thursday,5,SKL-PP,Lab,B1,101-A,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Thursday,5,AOAL,Lab,B2,109,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Thursday,5,EM IV (tutorial),Lab,B3,108,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Thursday,6,SKL-PP,Lab,B1,101-A,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Thursday,6,AOAL,Lab,B2,109,Prof.Aishwarya M
+6,Even_2024_SE-A,Computer,Thursday,6,EM IV (tutorial),Lab,B3,108,Prof.Dipti P
+6,Even_2024_SE-A,Computer,Thursday,7,Major-Project,Project,,109,0
+6,Even_2024_SE-A,Computer,Friday,1,SKL-PP,Theory,,110,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Friday,2,SKL-PP,Theory,,110,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Friday,3,DBMS,Theory,,110,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Friday,4,OS,Theory,,110,Prof. Ramya K
+6,Even_2024_SE-A,Computer,Friday,5,DBMSL,Lab,B1,103,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Friday,5,SKL-PP,Lab,B2,101-A,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Friday,5,MPL,Lab,B3,112,Prof. Juned M
+6,Even_2024_SE-A,Computer,Friday,6,DBMSL,Lab,B1,103,Prof. Shahjahan S
+6,Even_2024_SE-A,Computer,Friday,6,SKL-PP,Lab,B2,101-A,Prof.Ashfaque S
+6,Even_2024_SE-A,Computer,Friday,6,MPL,Lab,B3,112,Prof. Juned M
+6,Even_2024_SE-A,Computer,Friday,7,Major-Project,Project,,109,0
+7,Even_2024_SE-B,Computer,Monday,1,DBMS,Theory,,108,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Monday,2,AOA,Theory,,108,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Monday,3,SKL-PP,Lab,B1,112,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Monday,3,MPL,Lab,B2,102,Prof. Juned M
+7,Even_2024_SE-B,Computer,Monday,3,EM IV (tutorial),Lab,B3,108,Prof.Meera B
+7,Even_2024_SE-B,Computer,Monday,4,SKL-PP,Lab,B1,112,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Monday,4,MPL,Lab,B2,102,Prof. Juned M
+7,Even_2024_SE-B,Computer,Monday,4,EM IV (tutorial),Lab,B3,108,Prof.Meera B
+7,Even_2024_SE-B,Computer,Monday,5,MP,Theory,,108,Prof. Juned M
+7,Even_2024_SE-B,Computer,Monday,6,EM IV,Theory,,108,Prof.Meera B
+7,Even_2024_SE-B,Computer,Monday,7,MOOC,Mooc,,101-A,0
+7,Even_2024_SE-B,Computer,Monday,7,NPTEL,Mooc,,101-A,0
+7,Even_2024_SE-B,Computer,Monday,7,Major-Project,Project,,109,0
+7,Even_2024_SE-B,Computer,Tuesday,1,AOA,Theory,,108,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Tuesday,2,OS,Theory,,108,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Tuesday,3,EM IV,Theory,,108,Prof.Meera B
+7,Even_2024_SE-B,Computer,Tuesday,4,MP,Theory,,108,Prof. Juned M
+7,Even_2024_SE-B,Computer,Tuesday,5,DBMSL,Lab,B2,102,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Tuesday,5,AOAL,Lab,B3,101-B,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Tuesday,6,DBMSL,Lab,B2,102,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Tuesday,6,AOAL,Lab,B3,101-B,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Tuesday,7,EM IV (tutorial),Lab,B2,,Prof.Meera B
+7,Even_2024_SE-B,Computer,Wednesday,1,OSL,Lab,B1,103,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Wednesday,1,MPL,Lab,B3,102,Prof. Juned M
+7,Even_2024_SE-B,Computer,Wednesday,2,OSL,Lab,B1,103,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Wednesday,2,MPL,Lab,B3,102,Prof. Juned M
+7,Even_2024_SE-B,Computer,Wednesday,3,EM IV,Theory,,108,Prof.Meera B
+7,Even_2024_SE-B,Computer,Wednesday,4,DBMS,Theory,,108,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Wednesday,5,SKL-PP,Theory,,108,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Wednesday,6,EM IV (tutorial),Lab,B1,108,Prof.Meera B
+7,Even_2024_SE-B,Computer,Wednesday,7,Major-Project,Project,,,0
+7,Even_2024_SE-B,Computer,Thursday,1,MP,Theory,,108,Prof. Juned M
+7,Even_2024_SE-B,Computer,Thursday,2,OS,Theory,,108,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Thursday,3,AOAL,Lab,B1,101-B,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Thursday,3,SKL-PP,Lab,B2,112,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Thursday,3,DBMSL,Lab,B3,103,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Thursday,4,AOAL,Lab,B1,101-B,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Thursday,4,SKL-PP,Lab,B2,112,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Thursday,4,DBMSL,Lab,B3,103,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Thursday,5,MPL,Lab,B1,102,Prof. Juned M
+7,Even_2024_SE-B,Computer,Thursday,5,OSL,Lab,B2,103,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Thursday,5,SKL-PP,Lab,B3,112,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Thursday,6,MPL,Lab,B1,102,Prof. Juned M
+7,Even_2024_SE-B,Computer,Thursday,6,OSL,Lab,B2,103,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Thursday,6,SKL-PP,Lab,B3,112,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Thursday,7,Major-Project,Project,,109,0
+7,Even_2024_SE-B,Computer,Friday,1,SKL-PP,Theory,,108,Prof.Ashfaque S
+7,Even_2024_SE-B,Computer,Friday,2,DBMS,Theory,,108,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Friday,3,DBMSL,Lab,B1,102,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Friday,3,AOAL,Lab,B2,101-B,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Friday,3,OSL,Lab,B3,103,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Friday,4,DBMSL,Lab,B1,102,Prof.Aishwarya M
+7,Even_2024_SE-B,Computer,Friday,4,AOAL,Lab,B2,101-B,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Friday,4,OSL,Lab,B3,103,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Friday,5,OS,Theory,,108,Prof.Reshma L
+7,Even_2024_SE-B,Computer,Friday,6,AOA,Theory,,108,Prof.Ayush Kumar
+7,Even_2024_SE-B,Computer,Friday,7,Major-Project,Project,,109,0
+8,Odd_2022_SE,Computer,Monday,1,DS L,Lab,B1,102,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Monday,1,SKL - Java,Lab,B2,101-A,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Monday,1,CG L,Lab,B3,103,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Monday,2,DS L,Lab,B1,102,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Monday,2,SKL - Java,Lab,B2,101-A,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Monday,2,CG L,Lab,B3,103,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Monday,3,DLCOA,Theory,,501,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Monday,4,DSGT,Theory,,304,Prof.Madhvi S.
+8,Odd_2022_SE,Computer,Monday,5,EM III,Theory,,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Monday,6,DS,Theory,,304,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Monday,7,Major-Project,Project,,,0
+8,Odd_2022_SE,Computer,Tuesday,1,SKL - Java,Lab,B1,101-A,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Tuesday,1,DS L,Lab,B3,102,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Tuesday,2,SKL - Java,Lab,B1,101-A,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Tuesday,2,DS L,Lab,B3,102,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Tuesday,3,CG,Theory,,304,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Tuesday,4,DLCOA,Theory,,501,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Tuesday,5,EM III,Theory,,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Tuesday,6,DSGT,Theory,,304,Prof.Madhvi S.
+8,Odd_2022_SE,Computer,Tuesday,7,Major-Project,Project,,,0
+8,Odd_2022_SE,Computer,Wednesday,1,CG L,Lab,B1,102,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Wednesday,1,DLCOA L,Lab,B2,207,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Wednesday,1,SKL - Java,Lab,B3,101-A,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Wednesday,2,CG L,Lab,B1,102,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Wednesday,2,DLCOA L,Lab,B2,207,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Wednesday,2,SKL - Java,Lab,B3,101-A,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Wednesday,3,EM III,Theory,,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Wednesday,4,DSGT,Theory,,304,Prof.Madhvi S.
+8,Odd_2022_SE,Computer,Wednesday,5,CG,Theory,,304,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Wednesday,6,EM III (tutorial),Lab,B2,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Wednesday,6,DLCOA L,Lab,B3,207,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Wednesday,7,EM III (tutorial),Lab,B2,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Wednesday,7,DLCOA L,Lab,B3,207,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Thursday,1,EM III (tutorial),Lab,B1,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Thursday,2,DS,Theory,,304,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Thursday,3,CG,Theory,,304,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Thursday,4,DLCOA,Theory,,304,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Thursday,5,DS,Theory,,304,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Thursday,6,EM III (tutorial),Lab,B3,304,Prof Dinesh C
+8,Odd_2022_SE,Computer,Thursday,7,Mentoring,Mentoring,,,0
+8,Odd_2022_SE,Computer,Friday,1,SKL - Java (th),Theory,,304,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Friday,2,SKL - Java (th),Theory,,304,Prof. Ashfaque
+8,Odd_2022_SE,Computer,Friday,3,DLCOA L,Lab,B1,207,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Friday,3,CG L,Lab,B2,101-A,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Friday,3,DS L,Lab,B3,103,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Friday,4,DLCOA L,Lab,B1,207,Prof.Dinesh Deore
+8,Odd_2022_SE,Computer,Friday,4,CG L,Lab,B2,101-A,Dr.Anupam C 
+8,Odd_2022_SE,Computer,Friday,4,DS L,Lab,B3,103,Prof. Ramkumar M
+8,Odd_2022_SE,Computer,Friday,5,Major-Project,Project,,,0
+8,Odd_2022_SE,Computer,Friday,6,Major-Project,Project,,,0
+9,Odd_2022_TE,Computer,Monday,1,TCS,Theory,,304,Prof.Nirali A 
+9,Odd_2022_TE,Computer,Monday,2,CN,Theory,,304,Prof.M Juned 
+9,Odd_2022_TE,Computer,Monday,3,CN L ,Lab,B1,102,Dr.Anupam C 
+9,Odd_2022_TE,Computer,Monday,3,DWM L,Lab,B2,101-A,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Monday,3,SE L,Lab,B3,103,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Monday,4,CN L ,Lab,B1,102,Dr.Anupam C 
+9,Odd_2022_TE,Computer,Monday,4,DWM L,Lab,B2,101-A,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Monday,4,SE L,Lab,B3,103,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Monday,5,PCE (TH),Theory,,305,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Monday,6,PCE (TH),Theory,,305,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,1,DWM,Theory,,304,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Tuesday,2,CN,Theory,,304,Prof.M Juned 
+9,Odd_2022_TE,Computer,Tuesday,3,PCE II,Lab,B1,110,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,3,PCE II,Lab,B2,310,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,3,PCE II,Lab,B3,312,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,4,PCE II,Lab,B1,110,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,4,PCE II,Lab,B2,310,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,4,PCE II,Lab,B3,312,Dr. Sharad T.
+9,Odd_2022_TE,Computer,Tuesday,5,SE,Theory,,305,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Tuesday,6,DWM,Theory,,305,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Tuesday,7,Major-Project,Project,,,0
+9,Odd_2022_TE,Computer,Wednesday,2,TCS,Theory,,304,Prof.Nirali A 
+9,Odd_2022_TE,Computer,Wednesday,3,DWM L,Lab,B1,101-A,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Wednesday,3,SE L,Lab,B2,103,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Wednesday,3,CN L ,Lab,B3,102,Dr.Anupam C 
+9,Odd_2022_TE,Computer,Wednesday,4,DWM L,Lab,B1,101-A,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Wednesday,4,SE L,Lab,B2,103,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Wednesday,4,CN L ,Lab,B3,102,Dr.Anupam C 
+9,Odd_2022_TE,Computer,Wednesday,5,DWM,Theory,,305,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Wednesday,6,SE,Theory,,305,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Wednesday,7,Major-Project,Project,,,0
+9,Odd_2022_TE,Computer,Thursday,1,SE,Theory,,305,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Thursday,2,CN,Theory,,305,Prof.M Juned 
+9,Odd_2022_TE,Computer,Thursday,3,SE L,Lab,B1,103,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Thursday,3,CN L ,Lab,B2,102,Dr.Anupam C 
+9,Odd_2022_TE,Computer,Thursday,3,DWM L,Lab,B3,101-A,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Thursday,4,SE L,Lab,B1,103,Prof.Reshma L 
+9,Odd_2022_TE,Computer,Thursday,4,CN L ,Lab,B2,102,Dr.Anupam C 
+9,Odd_2022_TE,Computer,Thursday,4,DWM L,Lab,B3,101-A,Dr.Vishal P 
+9,Odd_2022_TE,Computer,Thursday,5,TCS,Theory,,305,Prof.Nirali A 
+9,Odd_2022_TE,Computer,Thursday,6,Mentoring,Mentoring,,,0
+9,Odd_2022_TE,Computer,Thursday,7,NPTEL,Mooc,,,0
+9,Odd_2022_TE,Computer,Friday,1,IP,Theory,,305,Prof.Parinaz D.
+9,Odd_2022_TE,Computer,Friday,2,IP,Theory,,305,Prof.Parinaz D.
+9,Odd_2022_TE,Computer,Friday,3,IP,Theory,,305,Prof.Parinaz D.
+9,Odd_2022_TE,Computer,Friday,4,Major-Project,Project,,,0
+9,Odd_2022_TE,Computer,Friday,5,Major-Project,Project,,,0
+9,Odd_2022_TE,Computer,Friday,6,Major-Project,Project,,,0
+10,Odd_2022_BE,Computer,Monday,1,BC,Theory,,305,Dr.Vishal P
+10,Odd_2022_BE,Computer,Monday,2,NLP,Theory,,305,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Monday,3,BDA,Theory,,305,Prof.Reshma L 
+10,Odd_2022_BE,Computer,Monday,4,ML,Theory,,305,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Monday,5,NLP L,Lab,B1,102,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Monday,5,BC L,Lab,B2,101-A,Dr.Vishal P
+10,Odd_2022_BE,Computer,Monday,5,ML L,Lab,B3,103,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Monday,6,NLP L,Lab,B1,102,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Monday,6,BC L,Lab,B2,101-A,Dr.Vishal P
+10,Odd_2022_BE,Computer,Monday,6,ML L,Lab,B3,103,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Monday,7,NPTEL,Mooc,,,0
+10,Odd_2022_BE,Computer,Tuesday,2,NLP,Theory,,305,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Tuesday,3,BC,Theory,,305,Dr.Vishal P
+10,Odd_2022_BE,Computer,Tuesday,4,BDA,Theory,,305,Prof.Reshma L 
+10,Odd_2022_BE,Computer,Tuesday,5,ML L,Lab,B1,101-A,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Tuesday,5,BDA L,Lab,B2,102,Dr.Anupam C
+10,Odd_2022_BE,Computer,Tuesday,5,NLP L,Lab,B3,103,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Tuesday,6,ML L,Lab,B1,101-A,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Tuesday,6,BDA L,Lab,B2,102,Dr.Anupam C
+10,Odd_2022_BE,Computer,Tuesday,6,NLP L,Lab,B3,103,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Tuesday,7,DMMM,Theory,,305,Prof.Madhavi D 
+10,Odd_2022_BE,Computer,Wednesday,1,NLP,Theory,,305,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Wednesday,2,BDA,Theory,,305,Prof.Reshma L 
+10,Odd_2022_BE,Computer,Wednesday,3,BC,Theory,,305,Dr.Vishal P
+10,Odd_2022_BE,Computer,Wednesday,4,ML,Theory,,305,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Wednesday,5,Major-Project,Project,,,0
+10,Odd_2022_BE,Computer,Wednesday,6,DMMM,Theory,,204,Prof.Madhavi D 
+10,Odd_2022_BE,Computer,Wednesday,7,Mentoring,Mentoring,,,0
+10,Odd_2022_BE,Computer,Thursday,1,BDA L,Lab,B1,102,Dr.Anupam C
+10,Odd_2022_BE,Computer,Thursday,1,NLP L,Lab,B2,101-A,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Thursday,1,BC L,Lab,B3,103,Dr.Vishal P
+10,Odd_2022_BE,Computer,Thursday,2,BDA L,Lab,B1,102,Dr.Anupam C
+10,Odd_2022_BE,Computer,Thursday,2,NLP L,Lab,B2,101-A,Prof.Nirali A 
+10,Odd_2022_BE,Computer,Thursday,2,BC L,Lab,B3,103,Dr.Vishal P
+10,Odd_2022_BE,Computer,Thursday,3,ML,Theory,,305,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Thursday,4,Major-Project,Project,,,0
+10,Odd_2022_BE,Computer,Thursday,5,BC L,Lab,B1,103,Dr.Vishal P
+10,Odd_2022_BE,Computer,Thursday,5,ML L,Lab,B2,101-A,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Thursday,5,BDA L,Lab,B3,102,Dr.Anupam C
+10,Odd_2022_BE,Computer,Thursday,6,BC L,Lab,B1,103,Dr.Vishal P
+10,Odd_2022_BE,Computer,Thursday,6,ML L,Lab,B2,101-A,Prof.Ashfaque S
+10,Odd_2022_BE,Computer,Thursday,6,BDA L,Lab,B3,102,Dr.Anupam C
+10,Odd_2022_BE,Computer,Friday,1,CSL,Theory,,305, Dr.A K Sampath 
+10,Odd_2022_BE,Computer,Friday,2,CSL,Theory,,305, Dr.A K Sampath 
+10,Odd_2022_BE,Computer,Friday,3,CSL,Theory,,305, Dr.A K Sampath 
+10,Odd_2022_BE,Computer,Friday,4,Major-Project,Project,,,0
+10,Odd_2022_BE,Computer,Friday,5,Major-Project,Project,,,0
+10,Odd_2022_BE,Computer,Friday,6,Major-Project,Project,,,0
+10,Odd_2022_BE,Computer,Friday,7,Major-Project,Project,,,0
+11,Odd_2023_SE,Computer,Monday,1,DS,Theory,,412,Prof. Manila M
+11,Odd_2023_SE,Computer,Monday,2,DLCOA,Theory,,412,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Monday,3,DSGT,Theory,,412,Prof.Madhvi S.
+11,Odd_2023_SE,Computer,Monday,4,Major-Project,Project,,,0
+11,Odd_2023_SE,Computer,Monday,5,EM III,Theory,,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Monday,6,DS L,Lab,B1,102,Prof. Manila M
+11,Odd_2023_SE,Computer,Monday,6,SKL - Java,Lab,B2,101-A,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Monday,6,CG L,Lab,B3,103,Dr. Anupam C
+11,Odd_2023_SE,Computer,Monday,7,DS L,Lab,B1,102,Prof. Manila M
+11,Odd_2023_SE,Computer,Monday,7,SKL - Java,Lab,B2,101-A,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Monday,7,CG L,Lab,B3,103,Dr. Anupam C
+11,Odd_2023_SE,Computer,Tuesday,1,SKL - Java,Lab,B1,101-A,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Tuesday,1,DS L,Lab,B2,102,Prof. Manila M
+11,Odd_2023_SE,Computer,Tuesday,2,SKL - Java,Lab,B1,101-A,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Tuesday,2,DS L,Lab,B2,102,Prof. Manila M
+11,Odd_2023_SE,Computer,Tuesday,3,DSGT,Theory,,412,Prof.Madhvi S.
+11,Odd_2023_SE,Computer,Tuesday,4,EM III,Theory,,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Tuesday,5,DLCOA,Theory,,412,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Tuesday,6,CG,Theory,,412,Dr. Anupam C
+11,Odd_2023_SE,Computer,Tuesday,7,Major-Project,Project,,,0
+11,Odd_2023_SE,Computer,Tuesday,7,Mentoring,Mentoring,,,0
+11,Odd_2023_SE,Computer,Wednesday,1,CG L,Lab,B1,103,Dr. Anupam C
+11,Odd_2023_SE,Computer,Wednesday,1,DLCOA L,Lab,B2,207,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Wednesday,1,SKL - Java,Lab,B3,101-A,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Wednesday,2,CG L,Lab,B1,103,Dr. Anupam C
+11,Odd_2023_SE,Computer,Wednesday,2,DLCOA L,Lab,B2,207,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Wednesday,2,SKL - Java,Lab,B3,101-A,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Wednesday,3,DS,Theory,,412,Prof. Manila M
+11,Odd_2023_SE,Computer,Wednesday,4,DSGT,Theory,,412,Prof.Madhvi S.
+11,Odd_2023_SE,Computer,Wednesday,5,CG,Theory,,412,Dr. Anupam C
+11,Odd_2023_SE,Computer,Wednesday,6,EM III (tutorial),Lab,B2,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Wednesday,6,DLCOA L,Lab,B3,206,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Wednesday,7,EM III (tutorial),Lab,B2,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Wednesday,7,DLCOA L,Lab,B3,206,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Thursday,1,EM III (tutorial),Lab,B1,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Thursday,2,DLCOA,Theory,,412,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Thursday,3,CG,Theory,,412,Dr. Anupam C
+11,Odd_2023_SE,Computer,Thursday,4,DS,Theory,,412,Prof. Manila M
+11,Odd_2023_SE,Computer,Thursday,5,EM III,Theory,,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Thursday,6,EM III (tutorial),Lab,B3,412,Prof.Dinesh C 
+11,Odd_2023_SE,Computer,Friday,1,SKL - Java (th),Theory,,412,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Friday,2,SKL - Java (th),Theory,,412,Prof. Ashfaque
+11,Odd_2023_SE,Computer,Friday,3,DLCOA L,Lab,B1,206,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Friday,3,CG L,Lab,B2,103,Dr. Anupam C
+11,Odd_2023_SE,Computer,Friday,3,DS L,Lab,B3,102,Prof. Manila M
+11,Odd_2023_SE,Computer,Friday,4,DLCOA L,Lab,B1,206,Prof.Dinesh Deore
+11,Odd_2023_SE,Computer,Friday,4,CG L,Lab,B2,103,Dr. Anupam C
+11,Odd_2023_SE,Computer,Friday,4,DS L,Lab,B3,102,Prof. Manila M
+11,Odd_2023_SE,Computer,Friday,5,Major-Project,Project,,,0
+11,Odd_2023_SE,Computer,Friday,5,MOOC,Mooc,,,0
+11,Odd_2023_SE,Computer,Friday,6,Major-Project,Project,,,0
+11,Odd_2023_SE,Computer,Friday,6,MOOC,Mooc,,,0
+11,Odd_2023_SE,Computer,Friday,7,Major-Project,Project,,,0
+11,Odd_2023_SE,Computer,Friday,7,MOOC,Mooc,,,0
+12,Odd_2023_TE,Computer,Monday,1,DWM,Theory,,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Monday,2,CN,Theory,,210,Prof.M Juned 
+12,Odd_2023_TE,Computer,Monday,3,PCE II,Lab,B1,214,Prof.Rohit G
+12,Odd_2023_TE,Computer,Monday,3,CN L,Lab,B2,102,Prof.M Juned 
+12,Odd_2023_TE,Computer,Monday,3,SE L,Lab,B3,103,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Monday,4,PCE II,Lab,B1,214,Prof.Rohit G
+12,Odd_2023_TE,Computer,Monday,4,CN L,Lab,B2,102,Prof.M Juned 
+12,Odd_2023_TE,Computer,Monday,4,SE L,Lab,B3,103,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Monday,5,TCS,Theory,,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Monday,6,AWS,Theory,,210,Prof. Shiburaj P
+12,Odd_2023_TE,Computer,Monday,7,Major-Project,Project,,107,0
+12,Odd_2023_TE,Computer,Tuesday,1,ADBMS,Theory,,214,Prof. Ramya K
+12,Odd_2023_TE,Computer,Tuesday,1,IP,Theory,,210,Prof. Shiburaj P
+12,Odd_2023_TE,Computer,Tuesday,2,SE,Theory,,210,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Tuesday,3,CN L,Lab,B1,102,Prof.M Juned 
+12,Odd_2023_TE,Computer,Tuesday,3,DWM L,Lab,B2,101-A,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Tuesday,3,PCE II,Lab,B3,214,Prof.Rohit G
+12,Odd_2023_TE,Computer,Tuesday,4,CN L,Lab,B1,102,Prof.M Juned 
+12,Odd_2023_TE,Computer,Tuesday,4,DWM L,Lab,B2,101-A,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Tuesday,4,PCE II,Lab,B3,214,Prof.Rohit G
+12,Odd_2023_TE,Computer,Tuesday,5,DWM,Theory,,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Tuesday,6,CN,Theory,,210,Prof.M Juned 
+12,Odd_2023_TE,Computer,Tuesday,7,Major-Project,Project,,107,0
+12,Odd_2023_TE,Computer,Wednesday,1,ADBMS,Theory,,214,Prof. Ramya K
+12,Odd_2023_TE,Computer,Wednesday,1,IP,Theory,,210,Prof. Shiburaj P
+12,Odd_2023_TE,Computer,Wednesday,2,SE,Theory,,210,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Wednesday,3,DWM L,Lab,B1,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Wednesday,3,SE L,Lab,B2,103,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Wednesday,3,CN L,Lab,B3,102,Prof.M Juned 
+12,Odd_2023_TE,Computer,Wednesday,4,DWM L,Lab,B1,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Wednesday,4,SE L,Lab,B2,103,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Wednesday,4,CN L,Lab,B3,102,Prof.M Juned 
+12,Odd_2023_TE,Computer,Wednesday,5,Mentoring,Mentoring,,,0
+12,Odd_2023_TE,Computer,Wednesday,5,Coding Club,Club,,101-A,0
+12,Odd_2023_TE,Computer,Wednesday,6,TCS,Theory,,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Wednesday,7,Major-Project,Project,,107,0
+12,Odd_2023_TE,Computer,Thursday,1,DWM,Theory,,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Thursday,2,CN,Theory,,210,Prof.M Juned 
+12,Odd_2023_TE,Computer,Thursday,3,PCE (TH),Theory,,210,Prof.Rohit G
+12,Odd_2023_TE,Computer,Thursday,4,PCE (TH),Theory,,210,Prof.Rohit G
+12,Odd_2023_TE,Computer,Thursday,5,TCS,Theory,,210,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Thursday,6,Major-Project,Project,,107,0
+12,Odd_2023_TE,Computer,Thursday,7,NPTEL,Mooc,,,0
+12,Odd_2023_TE,Computer,Friday,1,SE L,Lab,B1,103,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Friday,1,PCE II,Lab,B2,210,Prof.Rohit G
+12,Odd_2023_TE,Computer,Friday,1,DWM L,Lab,B3,101-A,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Friday,2,SE L,Lab,B1,103,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Friday,2,PCE II,Lab,B2,210,Prof.Rohit G
+12,Odd_2023_TE,Computer,Friday,2,DWM L,Lab,B3,101-A,Prof. Nikhat S
+12,Odd_2023_TE,Computer,Friday,3,ADBMS,Theory,,412,Prof. Ramya K
+12,Odd_2023_TE,Computer,Friday,3,IP,Theory,,210,Prof. Shiburaj P
+12,Odd_2023_TE,Computer,Friday,4,SE,Theory,,210,Prof.Reshma L 
+12,Odd_2023_TE,Computer,Friday,5,MOOC,Mooc,,,0
+12,Odd_2023_TE,Computer,Friday,6,MOOC,Mooc,,,0
+12,Odd_2023_TE,Computer,Friday,7,MOOC,Mooc,,,0
+13,Odd_2023_BE,Computer,Monday,1,NLP L,Lab,B1,103,Prof.Ramya K
+13,Odd_2023_BE,Computer,Monday,1,BC L,Lab,B2,102,Prof. Manila G
+13,Odd_2023_BE,Computer,Monday,1,ML L,Lab,B3,101-A,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Monday,2,NLP L,Lab,B1,103,Prof.Ramya K
+13,Odd_2023_BE,Computer,Monday,2,BC L,Lab,B2,102,Prof. Manila G
+13,Odd_2023_BE,Computer,Monday,2,ML L,Lab,B3,101-A,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Monday,3,BC,Theory,,210,Prof. Manila G
+13,Odd_2023_BE,Computer,Monday,4,ML,Theory,,210,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Monday,5,NLP,Theory,,210,Prof.Ramya K
+13,Odd_2023_BE,Computer,Monday,6,BDA,Theory,,210,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Monday,7,NPTEL,Mooc,,101-B,0
+13,Odd_2023_BE,Computer,Tuesday,1,BDA,Theory,,412,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Tuesday,2,NLP,Theory,,412,Prof.Ramya K
+13,Odd_2023_BE,Computer,Tuesday,3,BC,Theory,,412,Prof. Manila G
+13,Odd_2023_BE,Computer,Tuesday,4,Mentoring,Mentoring,,,0
+13,Odd_2023_BE,Computer,Tuesday,5,DMMM,Theory,,310,Prof.Madhavi D 
+13,Odd_2023_BE,Computer,Tuesday,5,CSL,Theory,,214,Dr.Anupam C 
+13,Odd_2023_BE,Computer,Tuesday,6,BC L,Lab,B1,103,Prof. Manila G
+13,Odd_2023_BE,Computer,Tuesday,6,ML L,Lab,B2,101-B,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Tuesday,6,BDA L,Lab,B3,102,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Tuesday,7,BC L,Lab,B1,103,Prof. Manila G
+13,Odd_2023_BE,Computer,Tuesday,7,ML L,Lab,B2,101-B,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Tuesday,7,BDA L,Lab,B3,102,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Wednesday,1,BDA,Theory,,412,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Wednesday,2,BC,Theory,,,Prof. Manila G
+13,Odd_2023_BE,Computer,Wednesday,3,NLP,Theory,,,Prof.Ramya K
+13,Odd_2023_BE,Computer,Wednesday,4,ML,Theory,,,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Wednesday,5,ML L,Lab,B1,101-A,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Wednesday,5,BDA L,Lab,B2,102,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Wednesday,5,NLP L,Lab,B3,103,Prof.Ramya K
+13,Odd_2023_BE,Computer,Wednesday,6,ML L,Lab,B1,101-A,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Wednesday,6,BDA L,Lab,B2,102,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Wednesday,6,NLP L,Lab,B3,103,Prof.Ramya K
+13,Odd_2023_BE,Computer,Wednesday,7,Coding Club,Club,,101-A,0
+13,Odd_2023_BE,Computer,Thursday,1,BDA L,Lab,B1,102,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Thursday,1,NLP L,Lab,B2,103,Prof.Ramya K
+13,Odd_2023_BE,Computer,Thursday,1,BC L,Lab,B3,101-A,Prof. Manila G
+13,Odd_2023_BE,Computer,Thursday,2,BDA L,Lab,B1,102,Prof.Reshma L 
+13,Odd_2023_BE,Computer,Thursday,2,NLP L,Lab,B2,103,Prof.Ramya K
+13,Odd_2023_BE,Computer,Thursday,2,BC L,Lab,B3,101-A,Prof. Manila G
+13,Odd_2023_BE,Computer,Thursday,3,ML,Theory,,,Prof.Ashfaque S
+13,Odd_2023_BE,Computer,Thursday,4,Major-Project,Project,,,0
+13,Odd_2023_BE,Computer,Thursday,5,DMMM,Theory,,310,Prof.Madhavi D 
+13,Odd_2023_BE,Computer,Thursday,5,CSL,Theory,,214,Dr.Anupam C 
+13,Odd_2023_BE,Computer,Thursday,6,DMMM,Theory,,310,Prof.Madhavi D 
+13,Odd_2023_BE,Computer,Thursday,6,CSL,Theory,,214,Dr.Anupam C 
+13,Odd_2023_BE,Computer,Thursday,7,AWS,Theory,,,Prof.Shiburaj P
+13,Odd_2023_BE,Computer,Friday,1,VAPT (HONOURS),Theory,,102,Prof. Ramya K
+13,Odd_2023_BE,Computer,Friday,1,Major-Project,Project,,107,0
+13,Odd_2023_BE,Computer,Friday,2,VAPT (HONOURS),Theory,,102,Prof. Ramya K
+13,Odd_2023_BE,Computer,Friday,2,Major-Project,Project,,107,0
+13,Odd_2023_BE,Computer,Friday,3,VAPT (HONOURS),Theory,,102,Prof. Ramya K
+13,Odd_2023_BE,Computer,Friday,3,Major-Project,Project,,107,0
+13,Odd_2023_BE,Computer,Friday,4,VAPT (HONOURS),Theory,,102,Prof. Ramya K
+13,Odd_2023_BE,Computer,Friday,4,Major-Project,Project,,107,0
+13,Odd_2023_BE,Computer,Friday,5,MOOC,Mooc,,,0
+13,Odd_2023_BE,Computer,Friday,5,Major-Project,Project,,,0
+13,Odd_2023_BE,Computer,Friday,6,MOOC,Mooc,,,0
+13,Odd_2023_BE,Computer,Friday,6,Major-Project,Project,,,0
+13,Odd_2023_BE,Computer,Friday,7,MOOC,Mooc,,,0
+13,Odd_2023_BE,Computer,Friday,7,Major-Project,Project,,,0

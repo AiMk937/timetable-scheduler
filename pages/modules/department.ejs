@@ -1,0 +1,46 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Departments</h1>
+
+  <button id="toggleFormBtn" class="btn btn-primary mb-3">Add Department</button>
+
+  <!-- Form to add a new department (hidden by default) -->
+  <form id="addForm" action="/departments" method="POST" class="mb-5" style="display:none;">
+    <div class="form-group">
+      <label for="departmentName">Department Name:</label>
+      <input type="text" id="departmentName" name="departmentName" class="form-control" placeholder="Enter department name" required>
+    </div>
+    <button type="submit" class="btn btn-success">Add Department</button>
+  </form>
+
+  <!-- Display existing departments -->
+  <ul class="list-group">
+    <% departments.forEach(function(department) { %>
+      <li class="list-group-item mb-3">
+        <strong>Department Name:</strong> <%= department.departmentName %>
+
+        <!-- Inline Edit Form - Hidden initially, shown when "Edit" is clicked -->
+        <form action="/departments/<%= department._id %>?_method=PUT" method="POST" class="mt-2" style="display:none;" id="editForm-<%= department._id %>">
+          <div class="form-group">
+            <input type="text" name="departmentName" class="form-control" value="<%= department.departmentName %>" required>
+          </div>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="button" class="btn btn-secondary" onclick="toggleEditForm('<%= department._id %>')">Cancel</button>
+        </form>
+
+        <div class="mt-2">
+          <!-- Trigger the toggle to show the inline edit form -->
+          <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= department._id %>')">Edit</button>
+          
+          <!-- Delete Department -->
+          <form action="/departments/<%= department._id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<%- include('../layout/footer') %>

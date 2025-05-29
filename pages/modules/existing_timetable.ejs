@@ -1,0 +1,37 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">All Existing Timetables</h2>
+
+  <% if (timetables && timetables.length > 0) { %>
+    <% timetables.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); %>
+    <% timetables.forEach(tt => { %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5>
+            <%= tt.className %> | Academic Year: <%= tt.academicYear %>
+          </h5>
+          <br>
+          <!-- View Timetable: light blue (btn-info) -->
+          <a href="/timetable/view?tid=<%= tt._id %>" class="btn btn-sm btn-info">
+            View Timetable
+          </a>
+
+          <!-- Edit Timetable: orange/yellow (btn-warning) -->
+          <a href="/timetable/edit?tid=<%= tt._id %>" class="btn btn-sm btn-warning">
+            Edit Timetable
+          </a>
+
+          <!-- Delete Timetable: red (btn-danger) -->
+          <a href="#" class="btn btn-sm btn-danger" onclick="deleteTimetable('<%= tt._id %>'); return false;">
+            Delete Timetable
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>No timetables found.</p>
+  <% } %>
+</div>
+
+<%- include('../layout/footer') %>

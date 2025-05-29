@@ -1,0 +1,192 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Classes</h1>
+
+  <!-- Button to toggle Add Class form -->
+  <button id="toggleFormBtn" class="btn btn-primary mb-3">Add Class</button>
+
+  <!-- Form to add a new class -->
+  <form id="addForm" action="/classes" method="POST" class="mb-5" style="display: none;">
+    <div class="form-group">
+      <label for="className">Class Name:</label>
+      <input type="text" id="className" name="className" class="form-control" placeholder="Enter class name" required>
+    </div>
+
+    <!-- Dropdown for selecting department -->
+    <div class="form-group">
+      <label for="departmentId">Department Name:</label>
+      <select id="departmentId" name="departmentId" class="form-control" required>
+        <option value="" selected>Select a department</option>
+        <% departments.forEach(function(department) { %>
+          <option value="<%= department._id %>">
+            <%= department.departmentName %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <!-- Subjects selection displayed as cards -->
+    <div class="form-group">
+      <label for="subjects">Subjects:</label>
+      <div class="d-flex flex-wrap">
+        <% if (subjects && subjects.length > 0) { %>
+          <% subjects.forEach(function(subject) { %>
+            <div class="card m-2" style="width: 200px; height: 70px;">
+              <div class="card-body d-flex align-items-center justify-content-center">
+                <div class="form-check mb-0">
+                  <input type="checkbox" class="form-check-input" id="subject<%= subject._id %>" name="subjects" value="<%= subject._id %>">
+                  <label class="form-check-label" for="subject<%= subject._id %>">
+                    <%= subject.subjectName %>
+                  </label>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <div class="text-muted">No subjects available</div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Academic Year dropdown -->
+    <div class="form-group">
+      <label for="academicYear">Academic Year:</label>
+      <select id="academicYear" name="academicYear" class="form-control">
+        <% academicYears.forEach(function(academicYear) { %>
+          <option value="<%= academicYear._id %>">
+            <%= academicYear.academicYear %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Add Class</button>
+    </div>
+  </form>
+
+  <!-- Display existing classes -->
+  <ul class="list-group">
+    <% if (classes && classes.length > 0) { %>
+      <% classes.forEach(function(classItem) { %>
+        <li class="list-group-item mb-2">
+          <!-- Display class info -->
+          <div id="classInfo-<%= classItem._id %>">
+            <strong>Class Name:</strong> <%= classItem.className %><br>
+            <strong>Department:</strong>
+            <% if (classItem.departmentId) { %>
+              <span><%= classItem.departmentId.departmentName %></span>
+            <% } else { %>
+              <span class="text-muted">No department assigned</span>
+            <% } %>
+            <br>
+            <strong>Academic Year:</strong>
+            <%= classItem.academicYear ? classItem.academicYear.academicYear : 'No academic year assigned' %><br>
+            <strong>Subjects:</strong>
+            <% if (classItem.subjects && classItem.subjects.length > 0) { %>
+              <% classItem.subjects.forEach(function(subject) { %>
+                <span class="badge badge-primary"><%= subject.subjectName %></span>
+              <% }); %>
+            <% } else { %>
+              <span class="text-muted">No subjects assigned</span>
+            <% } %>
+            <br>
+            <!-- Edit and Delete buttons -->
+            <div class="mt-2">
+              <button class="btn btn-sm btn-warning" onclick="toggleEditForm('<%= classItem._id %>')">Edit</button>
+              <form action="/classes/<%= classItem._id %>?_method=DELETE" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Inline Edit Form (hidden by default) -->
+          <div id="editForm-<%= classItem._id %>" style="display: none;">
+            <form action="/classes/<%= classItem._id %>?_method=PUT" method="POST">
+              <div class="form-group">
+                <label for="className-<%= classItem._id %>">Class Name:</label>
+                <input type="text" id="className-<%= classItem._id %>" name="className" class="form-control" value="<%= classItem.className %>" required>
+              </div>
+
+              <!-- Department dropdown -->
+              <div class="form-group">
+                <label for="departmentId-<%= classItem._id %>">Department Name:</label>
+                <select id="departmentId-<%= classItem._id %>" name="departmentId" class="form-control" required>
+                  <% departments.forEach(function(department) { %>
+                    <option value="<%= department._id %>" <%= classItem.departmentId && department._id.equals(classItem.departmentId._id) ? 'selected' : '' %>>
+                      <%= department.departmentName %>
+                    </option>
+                  <% }); %>
+                </select>
+              </div>
+
+              <!-- Subjects selection as cards -->
+              <div class="form-group">
+                <label for="subjects">Subjects:</label>
+                <div class="d-flex flex-wrap">
+                  <% subjects.forEach(function(subject) { %>
+                    <div class="card m-2" style="width: 200px; height: 70px;">
+                      <div class="card-body d-flex align-items-center justify-content-center">
+                        <div class="form-check mb-0">
+                          <input type="checkbox" class="form-check-input" id="subject<%= subject._id %>" name="subjects" value="<%= subject._id %>" <%= classItem.subjects.some(s => s._id.equals(subject._id)) ? 'checked' : '' %>>
+                          <label class="form-check-label" for="subject<%= subject._id %>"><%= subject.subjectName %></label>
+                        </div>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+
+              <!-- Academic Year dropdown -->
+              <div class="form-group">
+                <label for="academicYear">Academic Year:</label>
+                <select id="academicYear" name="academicYear" class="form-control">
+                  <% academicYears.forEach(function(academicYear) { %>
+                    <option value="<%= academicYear._id %>" <%= classItem.academicYear && academicYear._id.equals(classItem.academicYear._id) ? 'selected' : '' %>>
+                      <%= academicYear.academicYear %>
+                    </option>
+                  <% }); %>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('<%= classItem._id %>')">Cancel</button>
+            </form>
+          </div>
+        </li>
+      <% }); %>
+    <% } else { %>
+      <li class="list-group-item text-center">No classes found.</li>
+    <% } %>
+  </ul>
+</div>
+
+<script>
+  // Toggle the Add Class form
+  document.getElementById("toggleFormBtn").addEventListener("click", function() {
+    var editForm = document.getElementById("addForm-" + classId);
+    if (editForm.style.display === "none") {
+      editForm.style.display = "block";
+      classInfo.style.display = "none";
+    } else {
+      editForm.style.display = "none";
+      classInfo.style.display = "block";
+    }
+  });
+
+  // Toggle inline edit form for a specific class
+  function toggleEditForm(classId) {
+    var editForm = document.getElementById("editForm-" + classId);
+    var classInfo = document.getElementById("classInfo-" + classId);
+    if (editForm.style.display === "none") {
+      editForm.style.display = "block";
+      classInfo.style.display = "none";
+    } else {
+      editForm.style.display = "none";
+      classInfo.style.display = "block";
+    }
+  }
+</script>
+
+<%- include('../layout/footer') %>

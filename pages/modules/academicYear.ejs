@@ -1,0 +1,128 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Academic Years</h1>
+
+  <!-- Button to toggle form to add a new academic year -->
+  <button class="btn btn-primary mb-4" onclick="toggleAddForm()">Add Academic Year</button>
+
+  <!-- Form to add a new academic year (hidden by default) -->
+  <div id="addAcademicYearForm" style="display: none;">
+    <form action="/academic-years" method="POST" class="mb-5">
+      <div class="form-group">
+        <label for="academicYear">Academic Year:</label>
+        <input type="text" id="academicYear" name="academicYear" class="form-control" placeholder="e.g. 2023-2024" required>
+      </div>
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="semester">Semester:</label>
+        <select id="semester" name="semester" class="form-control">
+          <option value="odd">Odd Semester</option>
+          <option value="even">Even Semester</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">Add Academic Year</button>
+    </form>
+  </div>
+
+  <!-- Display existing academic years -->
+  <ul class="list-group">
+    <% academicYears.forEach(function(academicYear) { %>
+      <li class="list-group-item">
+        <!-- Basic details -->
+        <strong>Academic Year:</strong> <%= academicYear.academicYear %><br>
+        <strong>Start Date:</strong> <%= new Date(academicYear.startDate).toLocaleDateString() %><br>
+        <strong>End Date:</strong> <%= new Date(academicYear.endDate).toLocaleDateString() %><br>
+        <strong>Semester:</strong> <%= academicYear.semester %><br>
+        
+        <!-- Action buttons -->
+        <div class="mt-2">
+          <!-- Button to toggle inline edit form -->
+          <button type="button" class="btn btn-warning btn-sm" onclick="toggleEditForm('<%= academicYear._id %>')">
+            Edit
+          </button>
+          <form action="/academic-years/<%= academicYear._id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+
+        <!-- Inline edit form (hidden by default) -->
+        <div id="editForm_<%= academicYear._id %>" style="display: none;" class="mt-3">
+          <form action="/academic-years/<%= academicYear._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+              <label for="editAcademicYear_<%= academicYear._id %>">Academic Year:</label>
+              <input
+                type="text"
+                id="editAcademicYear_<%= academicYear._id %>"
+                name="academicYear"
+                class="form-control"
+                value="<%= academicYear.academicYear %>"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="editStartDate_<%= academicYear._id %>">Start Date:</label>
+              <input
+                type="date"
+                id="editStartDate_<%= academicYear._id %>"
+                name="startDate"
+                class="form-control"
+                value="<%= academicYear.startDate.toISOString().split('T')[0] %>"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="editEndDate_<%= academicYear._id %>">End Date:</label>
+              <input
+                type="date"
+                id="editEndDate_<%= academicYear._id %>"
+                name="endDate"
+                class="form-control"
+                value="<%= academicYear.endDate.toISOString().split('T')[0] %>"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="editSemester_<%= academicYear._id %>">Semester:</label>
+              <select id="editSemester_<%= academicYear._id %>" name="semester" class="form-control">
+                <option value="odd" <%= (academicYear.semester === 'odd') ? 'selected' : '' %>>Odd Semester</option>
+                <option value="even" <%= (academicYear.semester === 'even') ? 'selected' : '' %>>Even Semester</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-sm">Update</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('<%= academicYear._id %>')">
+              Cancel
+            </button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<%- include('../layout/footer') %>
+
+<script>
+  // Show/hide the "Add Academic Year" form
+  function toggleAddForm() {
+    var form = document.getElementById('addAcademicYearForm');
+    form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+  }
+
+  // Show/hide the inline "Edit Academic Year" form
+  function toggleEditForm(id) {
+    var editForm = document.getElementById('editForm_' + id);
+    if (editForm.style.display === 'none') {
+      editForm.style.display = 'block';
+    } else {
+      editForm.style.display = 'none';
+    }
+  }
+</script>

@@ -1,0 +1,189 @@
+﻿classId,subject,Teachers,Key
+Even_2023_BE,DCL,Prof.Ashfaque S,Even_2023_BE|DCL
+Even_2023_BE,SMAL,Dr.Anupam C,Even_2023_BE|SMAL
+Even_2023_BE,DL,Prof.Nirali A,Even_2023_BE|DL
+Even_2023_BE,ADS,Prof.Reshma L,Even_2023_BE|ADS
+Even_2023_BE,DC,Prof.Ashfaque S,Even_2023_BE|DC
+Even_2023_BE,SMA,Dr.Anupam C,Even_2023_BE|SMA
+Even_2023_BE,EM,Prof.M Juned,Even_2023_BE|EM
+Even_2023_BE,PM,Prof.Madhvi D,Even_2023_BE|PM
+Even_2023_BE,Coding Club,,Even_2023_BE|Coding Club
+Even_2023_BE,Major-Project,,Even_2023_BE|Major-Project
+Even_2023_BE,NPTEL,,Even_2023_BE|NPTEL
+Even_2023_BE,Mentoring,,Even_2023_BE|Mentoring
+Even_2023_BE,ADS L,Prof.Reshma L,Even_2023_BE|ADS L
+Even_2023_SE,AOA,Prof.Arpita R,Even_2023_SE|AOA
+Even_2023_SE,EM IV,Prof.Dinesh C ,Even_2023_SE|EM IV
+Even_2023_SE,EM IV (tutorial),Prof.M Juned,Even_2023_SE|EM IV (tutorial)
+Even_2023_SE,AOAL,Prof.Arpita R,Even_2023_SE|AOAL
+Even_2023_SE,OSL ,Dr.Anupam C,Even_2023_SE|OSL 
+Even_2023_SE,DBMS,Prof.Arpita R,Even_2023_SE|DBMS
+Even_2023_SE,MP,Prof.M Juned,Even_2023_SE|MP
+Even_2023_SE,Major-Project,,Even_2023_SE|Major-Project
+Even_2023_SE,SKL-PP,Prof.Ashfaque S,Even_2023_SE|SKL-PP
+Even_2023_SE,MPL,Prof.M Juned,Even_2023_SE|MPL
+Even_2023_SE,OS,Dr.Anupam C,Even_2023_SE|OS
+Even_2023_SE,Mentoring,,Even_2023_SE|Mentoring
+Even_2023_SE,DBMSL,Prof.Arpita R,Even_2023_SE|DBMSL
+Even_2023_SE,Coding Club,,Even_2023_SE|Coding Club
+Even_2023_SE,NPTEL,,Even_2023_SE|NPTEL
+Even_2023_TE,SPCC,Prof.Nirali A,Even_2023_TE|SPCC
+Even_2023_TE,MC,Prof.Anuja K,Even_2023_TE|MC
+Even_2023_TE,QA,Prof.Meera B,Even_2023_TE|QA
+Even_2023_TE,IOT,Prof.M Juned,Even_2023_TE|IOT
+Even_2023_TE,CSS,Prof.Manila G,Even_2023_TE|CSS
+Even_2023_TE,CCL,Prof.Shiburaj P,Even_2023_TE|CCL
+Even_2023_TE,SPCC L,Prof.Nirali A,Even_2023_TE|SPCC L
+Even_2023_TE,AI,Prof.Reshma L,Even_2023_TE|AI
+Even_2023_TE,Coding Club,,Even_2023_TE|Coding Club
+Even_2023_TE,Major-Project,,Even_2023_TE|Major-Project
+Even_2023_TE,NPTEL,,Even_2023_TE|NPTEL
+Even_2023_TE,Mentoring,,Even_2023_TE|Mentoring
+Even_2023_TE,MCL,Prof.Anuja K,Even_2023_TE|MCL
+Even_2023_TE,CSSL,Prof.Manila G,Even_2023_TE|CSSL
+Even_2023_TE,CSL,,Even_2023_TE|CSL
+Even_2024_BE,EM,Prof.Jagruti R,Even_2024_BE|EM
+Even_2024_BE,PM,Prof.Madhvi D,Even_2024_BE|PM
+Even_2024_BE,DC,Prof.Ashfaque S,Even_2024_BE|DC
+Even_2024_BE,ADS,Prof.Reshma L,Even_2024_BE|ADS
+Even_2024_BE,SMAL,Dr.Anupam C,Even_2024_BE|SMAL
+Even_2024_BE,DCL,Prof.Ashfaque S,Even_2024_BE|DCL
+Even_2024_BE,ADS L,Prof.Reshma L,Even_2024_BE|ADS L
+Even_2024_BE,Major-Project,,Even_2024_BE|Major-Project
+Even_2024_BE,SMA,Dr.Anupam C,Even_2024_BE|SMA
+Even_2024_BE,MOOC,,Even_2024_BE|MOOC
+Even_2024_BE,NPTEL,,Even_2024_BE|NPTEL
+Even_2024_BE,Mentoring,,Even_2024_BE|Mentoring
+Even_2024_BE,Application Security,,Even_2024_BE|Application Security
+Even_2024_BE,"Text, Web and Social Media analytics",,"Even_2024_BE|Text, Web and Social Media analytics"
+Even_2024_SE-A,MPL,Prof. Juned M,Even_2024_SE-A|MPL
+Even_2024_SE-A,OSL ,Prof. Ramya K,Even_2024_SE-A|OSL 
+Even_2024_SE-A,DBMSL,Prof. Shahjahan S,Even_2024_SE-A|DBMSL
+Even_2024_SE-A,OS,Prof. Ramya K,Even_2024_SE-A|OS
+Even_2024_SE-A,EM IV,Prof.Dipti P,Even_2024_SE-A|EM IV
+Even_2024_SE-A,AOA,Prof.Aishwarya M,Even_2024_SE-A|AOA
+Even_2024_SE-A,DBMS,Prof. Shahjahan S,Even_2024_SE-A|DBMS
+Even_2024_SE-A,MOOC,,Even_2024_SE-A|MOOC
+Even_2024_SE-A,NPTEL,,Even_2024_SE-A|NPTEL
+Even_2024_SE-A,Major-Project,,Even_2024_SE-A|Major-Project
+Even_2024_SE-A,MP,Prof. Juned M,Even_2024_SE-A|MP
+Even_2024_SE-A,AOAL,Prof.Aishwarya M,Even_2024_SE-A|AOAL
+Even_2024_SE-A,EM IV (tutorial),Prof.Dipti P,Even_2024_SE-A|EM IV (tutorial)
+Even_2024_SE-A,Mentoring,,Even_2024_SE-A|Mentoring
+Even_2024_SE-A,SKL-PP,Prof.Ashfaque S,Even_2024_SE-A|SKL-PP
+Even_2024_SE-B,DBMS,Prof.Aishwarya M,Even_2024_SE-B|DBMS
+Even_2024_SE-B,AOA,Prof.Ayush Kumar,Even_2024_SE-B|AOA
+Even_2024_SE-B,SKL-PP,Prof.Ashfaque S,Even_2024_SE-B|SKL-PP
+Even_2024_SE-B,MPL,Prof. Juned M,Even_2024_SE-B|MPL
+Even_2024_SE-B,EM IV (tutorial),Prof.Meera B,Even_2024_SE-B|EM IV (tutorial)
+Even_2024_SE-B,MP,Prof. Juned M,Even_2024_SE-B|MP
+Even_2024_SE-B,EM IV,Prof.Meera B,Even_2024_SE-B|EM IV
+Even_2024_SE-B,MOOC,,Even_2024_SE-B|MOOC
+Even_2024_SE-B,NPTEL,,Even_2024_SE-B|NPTEL
+Even_2024_SE-B,Major-Project,,Even_2024_SE-B|Major-Project
+Even_2024_SE-B,OS,Prof.Reshma L,Even_2024_SE-B|OS
+Even_2024_SE-B,DBMSL,Prof.Aishwarya M,Even_2024_SE-B|DBMSL
+Even_2024_SE-B,AOAL,Prof.Ayush Kumar,Even_2024_SE-B|AOAL
+Even_2024_SE-B,OSL,Prof.Reshma L,Even_2024_SE-B|OSL
+Even_2024_TE,CSS,Prof.Manila G,Even_2024_TE|CSS
+Even_2024_TE,MC,Prof.Ayush K,Even_2024_TE|MC
+Even_2024_TE,QA,Prof.Dinesh D,Even_2024_TE|QA
+Even_2024_TE,MCL,Prof.Ayush K,Even_2024_TE|MCL
+Even_2024_TE,AI L,Prof.Dinesh D,Even_2024_TE|AI L
+Even_2024_TE,SPCC L,Prof.Ramaya K,Even_2024_TE|SPCC L
+Even_2024_TE,Major-Project,,Even_2024_TE|Major-Project
+Even_2024_TE,CSSL,Prof.Manila G,Even_2024_TE|CSSL
+Even_2024_TE,CCL,Prof.Shiburaj P,Even_2024_TE|CCL
+Even_2024_TE,AI,Prof.Dinesh D,Even_2024_TE|AI
+Even_2024_TE,SPCC,Prof.Ramaya K,Even_2024_TE|SPCC
+Even_2024_TE,MOOC,,Even_2024_TE|MOOC
+Even_2024_TE,NPTEL,,Even_2024_TE|NPTEL
+Even_2024_TE,Mentoring,,Even_2024_TE|Mentoring
+Even_2024_TE,Blockchain Platform,Prof.Manila G,Even_2024_TE|Blockchain Platform
+Odd_2022_BE,BC,Dr.Vishal P,Odd_2022_BE|BC
+Odd_2022_BE,NLP,Prof.Nirali A ,Odd_2022_BE|NLP
+Odd_2022_BE,BDA,Prof.Reshma L ,Odd_2022_BE|BDA
+Odd_2022_BE,ML,Prof.Ashfaque S,Odd_2022_BE|ML
+Odd_2022_BE,NLP L,Prof.Nirali A ,Odd_2022_BE|NLP L
+Odd_2022_BE,BC L,Dr.Vishal P,Odd_2022_BE|BC L
+Odd_2022_BE,ML L,Prof.Ashfaque S,Odd_2022_BE|ML L
+Odd_2022_BE,NPTEL,,Odd_2022_BE|NPTEL
+Odd_2022_BE,BDA L,Dr.Anupam C,Odd_2022_BE|BDA L
+Odd_2022_BE,DMMM,Prof.Madhavi D ,Odd_2022_BE|DMMM
+Odd_2022_BE,Major-Project,,Odd_2022_BE|Major-Project
+Odd_2022_BE,Mentoring,,Odd_2022_BE|Mentoring
+Odd_2022_BE,CSL, Dr.A K Sampath ,Odd_2022_BE|CSL
+Odd_2022_SE,DS L,Prof. Ramkumar M,Odd_2022_SE|DS L
+Odd_2022_SE,SKL - Java,Prof. Ashfaque,Odd_2022_SE|SKL - Java
+Odd_2022_SE,CG L,Dr.Anupam C ,Odd_2022_SE|CG L
+Odd_2022_SE,DLCOA,Prof.Dinesh Deore,Odd_2022_SE|DLCOA
+Odd_2022_SE,DSGT,Prof.Madhvi S.,Odd_2022_SE|DSGT
+Odd_2022_SE,EM III,Prof Dinesh C,Odd_2022_SE|EM III
+Odd_2022_SE,DS,Prof. Ramkumar M,Odd_2022_SE|DS
+Odd_2022_SE,Major-Project,,Odd_2022_SE|Major-Project
+Odd_2022_SE,CG,Dr.Anupam C ,Odd_2022_SE|CG
+Odd_2022_SE,DLCOA L,Prof.Dinesh Deore,Odd_2022_SE|DLCOA L
+Odd_2022_SE,EM III (tutorial),Prof Dinesh C,Odd_2022_SE|EM III (tutorial)
+Odd_2022_SE,Mentoring,,Odd_2022_SE|Mentoring
+Odd_2022_SE,SKL - Java (th),Prof. Ashfaque,Odd_2022_SE|SKL - Java (th)
+Odd_2022_TE,TCS,Prof.Nirali A ,Odd_2022_TE|TCS
+Odd_2022_TE,CN,Prof.M Juned ,Odd_2022_TE|CN
+Odd_2022_TE,CN L ,Dr.Anupam C ,Odd_2022_TE|CN L 
+Odd_2022_TE,DWM L,Dr.Vishal P ,Odd_2022_TE|DWM L
+Odd_2022_TE,SE L,Prof.Reshma L ,Odd_2022_TE|SE L
+Odd_2022_TE,PCE (TH),Dr. Sharad T.,Odd_2022_TE|PCE (TH)
+Odd_2022_TE,DWM,Dr.Vishal P ,Odd_2022_TE|DWM
+Odd_2022_TE,PCE II,Dr. Sharad T.,Odd_2022_TE|PCE II
+Odd_2022_TE,SE,Prof.Reshma L ,Odd_2022_TE|SE
+Odd_2022_TE,Major-Project,,Odd_2022_TE|Major-Project
+Odd_2022_TE,Mentoring,,Odd_2022_TE|Mentoring
+Odd_2022_TE,NPTEL,,Odd_2022_TE|NPTEL
+Odd_2022_TE,IP,Prof.Parinaz D.,Odd_2022_TE|IP
+Odd_2023_BE,NLP L,Prof.Ramya K,Odd_2023_BE|NLP L
+Odd_2023_BE,BC L,Prof. Manila G,Odd_2023_BE|BC L
+Odd_2023_BE,ML L,Prof.Ashfaque S,Odd_2023_BE|ML L
+Odd_2023_BE,BC,Prof. Manila G,Odd_2023_BE|BC
+Odd_2023_BE,ML,Prof.Ashfaque S,Odd_2023_BE|ML
+Odd_2023_BE,NLP,Prof.Ramya K,Odd_2023_BE|NLP
+Odd_2023_BE,BDA,Prof.Reshma L ,Odd_2023_BE|BDA
+Odd_2023_BE,NPTEL,,Odd_2023_BE|NPTEL
+Odd_2023_BE,Mentoring,,Odd_2023_BE|Mentoring
+Odd_2023_BE,DMMM,Prof.Madhavi D ,Odd_2023_BE|DMMM
+Odd_2023_BE,CSL,Dr.Anupam C ,Odd_2023_BE|CSL
+Odd_2023_BE,BDA L,Prof.Reshma L ,Odd_2023_BE|BDA L
+Odd_2023_BE,Coding Club,,Odd_2023_BE|Coding Club
+Odd_2023_BE,Major-Project,,Odd_2023_BE|Major-Project
+Odd_2023_BE,AWS,Prof.Shiburaj P,Odd_2023_BE|AWS
+Odd_2023_BE,VAPT (HONOURS),Prof. Ramya K,Odd_2023_BE|VAPT (HONOURS)
+Odd_2023_BE,MOOC,,Odd_2023_BE|MOOC
+Odd_2023_SE,DS,Prof. Manila M,Odd_2023_SE|DS
+Odd_2023_SE,DLCOA,Prof.Dinesh Deore,Odd_2023_SE|DLCOA
+Odd_2023_SE,DSGT,Prof.Madhvi S.,Odd_2023_SE|DSGT
+Odd_2023_SE,Major-Project,,Odd_2023_SE|Major-Project
+Odd_2023_SE,EM III,Prof.Dinesh C ,Odd_2023_SE|EM III
+Odd_2023_SE,DS L,Prof. Manila M,Odd_2023_SE|DS L
+Odd_2023_SE,SKL - Java,Prof. Ashfaque,Odd_2023_SE|SKL - Java
+Odd_2023_SE,CG L,Dr. Anupam C,Odd_2023_SE|CG L
+Odd_2023_SE,CG,Dr. Anupam C,Odd_2023_SE|CG
+Odd_2023_SE,Mentoring,,Odd_2023_SE|Mentoring
+Odd_2023_SE,DLCOA L,Prof.Dinesh Deore,Odd_2023_SE|DLCOA L
+Odd_2023_SE,EM III (tutorial),Prof.Dinesh C ,Odd_2023_SE|EM III (tutorial)
+Odd_2023_SE,SKL - Java (th),Prof. Ashfaque,Odd_2023_SE|SKL - Java (th)
+Odd_2023_SE,MOOC,,Odd_2023_SE|MOOC
+Odd_2023_TE,DWM,Prof. Nikhat S,Odd_2023_TE|DWM
+Odd_2023_TE,CN,Prof.M Juned ,Odd_2023_TE|CN
+Odd_2023_TE,PCE II,Prof.Rohit G,Odd_2023_TE|PCE II
+Odd_2023_TE,CN L,Prof.M Juned ,Odd_2023_TE|CN L
+Odd_2023_TE,SE L,Prof.Reshma L ,Odd_2023_TE|SE L
+Odd_2023_TE,TCS,Prof. Nikhat S,Odd_2023_TE|TCS
+Odd_2023_TE,AWS,Prof. Shiburaj P,Odd_2023_TE|AWS
+Odd_2023_TE,Major-Project,,Odd_2023_TE|Major-Project
+Odd_2023_TE,ADBMS,Prof. Ramya K,Odd_2023_TE|ADBMS
+Odd_2023_TE,IP,Prof. Shiburaj P,Odd_2023_TE|IP
+Odd_2023_TE,SE,Prof.Reshma L ,Odd_2023_TE|SE
+Odd_2023_TE,DWM L,Prof. Nikhat S,Odd_2023_TE|DWM L
+Odd_2023_TE,Mentoring,,Odd_2023_TE|Mentoring
+Odd_2023_TE,Coding Club,,Odd_2023_TE|Coding Club
+Odd_2023_TE,PCE (TH),Prof.Rohit G,Odd_2023_TE|PCE (TH)
+Odd_2023_TE,NPTEL,,Odd_2023_TE|NPTEL
+Odd_2023_TE,MOOC,,Odd_2023_TE|MOOC

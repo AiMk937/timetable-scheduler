@@ -1,0 +1,47 @@
+<%- include('layout/header') %>
+
+<div class="container mt-5">
+  <!-- Jumbotron for welcome message -->
+  <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+    <div class="container-fluid py-5 text-center">
+      <h1 class="display-4 fw-bold">Welcome to the Timetable Scheduler Dashboard</h1>
+      <p class="fs-5">Manage your schedules, generate new timetables, and review existing ones all in one place.</p>
+      <a href="/generate-timetable" class="btn btn-primary btn-lg">Generate Timetable</a>
+    </div>
+  </div>
+
+  <!-- Dashboard Cards -->
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">View Timetables</h5>
+          <p class="card-text">Browse your existing timetables and manage them with ease.</p>
+          <a href="/timetable/existing" class="btn btn-outline-primary">View Timetables</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Manage Classes</h5>
+          <p class="card-text">Add, edit, or remove class details to keep your schedules updated.</p>
+          <a href="/classes" class="btn btn-outline-primary">Manage Classes</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Manage Teachers</h5>
+          <p class="card-text">Assign teachers, update subjects, and configure room allocations.</p>
+          <a href="/teachers" class="btn btn-outline-primary">Manage Teachers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- You can add more rows/cards as needed -->
+</div>
+
+<%- include('layout/footer') %>
