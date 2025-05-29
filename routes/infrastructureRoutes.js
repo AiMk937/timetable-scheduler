@@ -1,84 +1,99 @@
+// routes/infrastructureRoutes.js
 const express = require('express');
-const router = express.Router();
+const router  = express.Router();
 const Infrastructure = require('../models/Infrastructure');
-const Department = require('../models/Department');  // Assuming you have a Department model
-const Class = require('../models/Class');  // Assuming you have a Class model
-const Subject = require('../models/Subject');  // Include the Subject model
+const Department     = require('../models/Department');
+const ClassModel     = require('../models/Class');
+const Subject        = require('../models/Subject');
 
-// GET route to display all rooms
+// GET /infrastructure
+// — fetch all rooms, populate the three ref-arrays,
+//   plus load all depts/classes/subjects for the form
 router.get('/', async (req, res) => {
-    try {
-        const infrastructures = await Infrastructure.find()
-            .populate('departmentId')
-            .populate('classId')
-            .populate('labSubjectId'); // This populates an array of subjects
-        const departments = await Department.find();  // Fetch all departments
-        const classes = await Class.find();  // Fetch all classes
-        const subjects = await Subject.find();  // Fetch all subjects
-        res.render('modules/infrastructure', { infrastructures, departments, classes, subjects });
-    } catch (err) {
-        console.error('Error fetching infrastructure:', err.message);
-        res.status(400).render('error', { error: err.message });
-    }
+  try {
+    const infrastructures = await Infrastructure.find()
+      .populate('departmentIds')
+      .populate('classIds')
+      .populate('labSubjectIds');
+    const departments = await Department.find();
+    const classes     = await ClassModel.find();
+    const subjects    = await Subject.find();
+
+    res.render('modules/infrastructure', {
+      infrastructures,
+      departments,
+      classes,
+      subjects
+    });
+  } catch (err) {
+    console.error('Error fetching infrastructure:', err);
+    res.status(400).render('error', { message: err.message });
+  }
 });
 
-// POST route to add a new room
+// POST /infrastructure
+// — create a new room, pulling the checkbox arrays from req.body
 router.post('/', async (req, res) => {
-    try {
-        const newInfrastructure = new Infrastructure({
-            roomNo: req.body.roomNo,
-            type: req.body.type,
-            departmentId: req.body.departmentId,  // Add department ID
-            classId: req.body.classId  // Add class ID
-        });
+  try {
+    const { roomNo, type } = req.body;
 
-        // If the room is a lab, convert labSubjectId into an array (handles no, one, or multiple selections)
-        if (req.body.type === 'lab') {
-            newInfrastructure.labSubjectId = [].concat(req.body.labSubjectId || []);
-        }
+    // always treat these as arrays, even if only one was checked
+    const departmentIds  = [].concat(req.body.departmentIds  || []);
+    const classIds       = [].concat(req.body.classIds       || []);
+    // only assign labs if this is a lab
+    const labSubjectIds  = type === 'lab'
+      ? [].concat(req.body.labSubjectIds || [])
+      : [];
 
-        await newInfrastructure.save();
-        res.redirect('/infrastructure');
-    } catch (err) {
-        console.error('Error adding infrastructure:', err.message);
-        res.status(400).render('error', { error: err.message });
-    }
+    await new Infrastructure({
+      roomNo,
+      type,
+      departmentIds,
+      classIds,
+      labSubjectIds
+    }).save();
+
+    res.redirect('/infrastructure');
+  } catch (err) {
+    console.error('Error adding infrastructure:', err);
+    res.status(400).render('error', { message: err.message });
+  }
 });
 
-// PUT route to update an infrastructure item
+// PUT /infrastructure/:id
+// — update an existing room
 router.put('/:id', async (req, res) => {
-    try {
-        const { roomNo, type, departmentId, classId, labSubjectId } = req.body;
-        const updateData = { roomNo, type, departmentId, classId };
+  try {
+    const { roomNo, type } = req.body;
 
-        // If the room is a lab, update labSubjectId as an array; otherwise, clear it.
-        if (type === 'lab') {
-            updateData.labSubjectId = [].concat(labSubjectId || []);
-        } else {
-            updateData.labSubjectId = [];
-        }
+    const departmentIds = [].concat(req.body.departmentIds || []);
+    const classIds      = [].concat(req.body.classIds      || []);
+    const labSubjectIds = type === 'lab'
+      ? [].concat(req.body.labSubjectIds || [])
+      : [];
 
-        await Infrastructure.findByIdAndUpdate(
-            req.params.id,
-            updateData,
-            { new: true }
-        );
-        res.redirect('/infrastructure');
-    } catch (err) {
-        console.error('Error updating infrastructure:', err.message);
-        res.status(400).render('error', { error: err.message });
-    }
+    await Infrastructure.findByIdAndUpdate(
+      req.params.id,
+      { roomNo, type, departmentIds, classIds, labSubjectIds },
+      { new: true }
+    );
+
+    res.redirect('/infrastructure');
+  } catch (err) {
+    console.error('Error updating infrastructure:', err);
+    res.status(400).render('error', { message: err.message });
+  }
 });
 
-// DELETE route to delete a room
+// DELETE /infrastructure/delete/:id
 router.delete('/delete/:id', async (req, res) => {
-    try {
-        await Infrastructure.findByIdAndDelete(req.params.id);
-        res.redirect('/infrastructure');
-    } catch (err) {
-        console.error('Error deleting infrastructure:', err.message);
-        res.status(400).render('error', { error: err.message });
-    }
+  try {
+    await Infrastructure.findByIdAndDelete(req.params.id);
+    res.redirect('/infrastructure');
+  } catch (err) {
+    console.error('Error deleting infrastructure:', err);
+    res.status(400).render('error', { message: err.message });
+  }
 });
 
 module.exports = router;

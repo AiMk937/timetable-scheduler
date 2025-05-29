@@ -1,35 +1,57 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-// Define a schema for rooms with department and class reference
-const infrastructureSchema = new mongoose.Schema({
-  roomNo: {
-    type: String,
-    required: true
-  }, // Room number is required
+const InfrastructureSchema = new Schema(
+  {
+    roomNo: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    type: {
+      type: String,
+      enum: ['classroom', 'lab'],
+      required: true
+    },
 
-  type: {
-    type: String,
-    required: true,
-    enum: ['classroom', 'lab']
-  }, // Type to distinguish between classroom and lab
+    // **If you want to allow a single department per room**, keep this:
+    // departmentId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Department',
+    //   required: true
+    // },
+    // **Or** if you want to allow multiple departments, use this instead:
+    departmentIds: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+      required: true
+    }],
 
-  departmentId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Department',
-    required: true
-  }, // Reference to Department
+    // same for Class:
+    // classId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Class',
+    //   required: true
+    // },
+    // OR for multiple classes:
+    classIds: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Class',
+      required: true
+    }],
 
-  classId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Class',
-    required: true
-  }, // Reference to Class
+    // labSubjectIds is already an array of refs to Subject
+    labSubjectIds: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Subject'
+    }],
 
-  // Now an array to allow multiple lab subjects for a single lab
-  labSubjectId: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Subject'
-  }]
-});
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  },
+  { strictPopulate: false } // if you ever need to override populates
+);
 
-module.exports = mongoose.model('Infrastructure', infrastructureSchema);
+module.exports = mongoose.model('Infrastructure', InfrastructureSchema);

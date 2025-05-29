@@ -1,0 +1,14 @@
+<%- include('layout/header') %>
+
+<div class="container mt-5">
+  <div class="alert alert-danger">
+    <h4 class="alert-heading">Something went wrong</h4>
+    <p><%= (typeof message !== 'undefined' ? message : 'An unexpected error occurred.') %></p>
+    <hr>
+    <a href="javascript:history.back()" class="btn btn-secondary">
+      ← Go Back
+    </a>
+  </div>
+</div>
+
+<%- include('layout/footer') %>
