@@ -8,7 +8,7 @@
 - **PALLAR SIDDHARTH RAMCHANDRAN**
 
 ## Project Guides
-- **PROF. SHIBURAJ PAPPU** — Primary Guide
+- **NONE** — 
 
 ## Deployment Steps
 Please follow the steps below to run this project:
