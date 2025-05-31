@@ -1,80 +1,98 @@
 // routes/timetableRoutes.js
-const express = require("express");
-const router = express.Router();
-const { exec } = require("child_process");
-const path = require("path");
-const mongoose = require("mongoose");
 
-// Import your Mongoose models
-const Timetable = require("../models/Timetable");
-const Class = require("../models/Class");
+const express     = require("express");
+const router      = express.Router();
+const mongoose    = require("mongoose");
+
+// Import your Mongoose models:
+const Timetable    = require("../models/Timetable");
+const Class        = require("../models/Class");
 const AcademicYear = require("../models/AcademicYear");
+const Department   = require("../models/Department");
+
+// --------------------------------------------------------
+// Helper: call FastAPI POST /generate-timetable
+// --------------------------------------------------------
+async function callPythonGenerate(academicYearId, departmentId) {
+  const { default: fetch } = await import("node-fetch");
+
+  const payload = {
+    academicYearId,
+    departmentId
+  };
+
+  const response = await fetch("http://localhost:8000/generate-timetable", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Python service returned HTTP ${response.status}`);
+  }
+  return response.json();
+}
 
 // =========================================================
 // 1) Generate Timetable (GET /timetable/generate)
-//    Calls your Python service to generate a timetable.
+//    Calls the FastAPI batch endpoint, which now returns:
+//       { schedules: [...], profTables: [...] }
 // =========================================================
 router.get("/generate", async (req, res) => {
   try {
     const { academicYearId, departmentId } = req.query;
+
     if (!academicYearId || !departmentId) {
       return res.status(400).send("Both academicYearId and departmentId are required.");
     }
 
-    // Call the FastAPI batch endpoint
-    const apiRes = await fetch("http://localhost:8000/generate-timetable", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ departmentId, academicYearId }),
+    // 1a) Look up AcademicYear document to get a human-readable string
+    let academicYearName = academicYearId; // fallback to the ID string
+    if (mongoose.Types.ObjectId.isValid(academicYearId)) {
+      const yearDoc = await AcademicYear.findById(academicYearId).lean();
+      if (yearDoc && yearDoc.academicYear) {
+        academicYearName = yearDoc.academicYear;
+      }
+    }
+
+    // 1b) Look up Department document to get a human-readable name
+    let departmentName = departmentId; // fallback to the ID string
+    if (mongoose.Types.ObjectId.isValid(departmentId)) {
+      const deptDoc = await Department.findById(departmentId).lean();
+      if (deptDoc && deptDoc.departmentName) {
+        departmentName = deptDoc.departmentName;
+      }
+    }
+
+    // 2) Call the FastAPI service to generate batch timetables
+    const apiData = await callPythonGenerate(academicYearId, departmentId);
+    // We expect apiData to look like: { schedules: [ { className, schedule }, … ], profTables: [ … ] }
+    const schedules  = Array.isArray(apiData.schedules) ? apiData.schedules : [];
+    const profTables = Array.isArray(apiData.profTables) ? apiData.profTables : [];
+
+    // 3) Render EJS template, passing everything:
+    return res.render("modules/timetable", {
+      schedules,
+      profTables,
+      departmentId,
+      academicYearId,
+      departmentName,
+      academicYearName
     });
-
-    if (!apiRes.ok) {
-      const err = await apiRes.json().catch(() => ({}));
-      console.error("Python service error:", err);
-      return res.status(apiRes.status).send(err.detail || "Failed to generate timetables");
-    }
-
-    // **Destructure the correct field** here:
-    const { timetables } = await apiRes.json();
-    if (!timetables || typeof timetables !== "object") {
-      return res.status(500).send("Invalid response format from timetable service.");
-    }
-
-    // Now only class IDs (no "message" key)!
-    const classIds = Object.keys(timetables);
-    if (classIds.length === 0) {
-      return res.render("modules/timetable", { schedules: [] });
-    }
-
-    // Fetch class names
-    const objectIds = classIds.map((id) => new mongoose.Types.ObjectId(id));
-    const classes = await Class.find({ _id: { $in: objectIds } })
-      .lean()
-      .select("className");
-
-    // Build schedules array
-    const schedules = classes.map(c => ({
-      classId: c._id.toString(),
-      className: c.className,
-      schedule: timetables[c._id.toString()]
-    }));
-
-    // Render your batch view
-    res.render("modules/timetable", { schedules });
 
   } catch (error) {
     console.error("Error generating timetable:", error);
-    res.status(500).send("Server error generating timetables.");
+    return res.status(500).send("Server error while generating timetables.");
   }
 });
 
+
 // =========================================================
 // 2) List Existing Timetables (GET /timetable/existing)
-//    Shows all Timetable docs with minimal info (class name, year).
+//    (unchanged from before)
 // =========================================================
 router.get("/existing", async (req, res) => {
   try {
-    // Fetch all Timetable docs from DB
     const rawTimetables = await Timetable.find({}).lean();
     const results = [];
 
@@ -83,9 +101,6 @@ router.get("/existing", async (req, res) => {
       let academicYearStr = "No Academic Year";
       let possibleClassId = null;
 
-      // If doc.timetable is an object like:
-      // { "someClassId": { Monday: [...], Tuesday: [...], ... } }
-      // we pick the first key to guess which class it belongs to.
       if (doc.timetable && typeof doc.timetable === "object") {
         const keys = Object.keys(doc.timetable);
         if (keys.length > 0) {
@@ -93,7 +108,6 @@ router.get("/existing", async (req, res) => {
         }
       }
 
-      // Attempt to find the Class doc
       if (possibleClassId && mongoose.Types.ObjectId.isValid(possibleClassId)) {
         const classDoc = await Class.findById(possibleClassId).lean();
         if (classDoc) {
@@ -107,7 +121,6 @@ router.get("/existing", async (req, res) => {
         }
       }
 
-      // If the Timetable doc itself has doc.academicYearId, we can override
       if (doc.academicYearId) {
         const altYearDoc = await AcademicYear.findById(doc.academicYearId).lean();
         if (altYearDoc && altYearDoc.academicYear) {
@@ -123,7 +136,6 @@ router.get("/existing", async (req, res) => {
       });
     }
 
-    // Render a listing page
     res.render("modules/existing_timetable", { timetables: results });
   } catch (error) {
     console.error("Error fetching timetables:", error);
@@ -133,11 +145,11 @@ router.get("/existing", async (req, res) => {
 
 // ===========================================================
 // 3) Editable Timetable Page (GET /timetable/edit)
-//    Loads a single timetable for editing (chatbot or otherwise).
+//    (unchanged from before)
 // ===========================================================
 router.get("/edit", async (req, res) => {
   try {
-    const timetableId = req.query.tid; // e.g. /timetable/edit?tid=63f7...
+    const timetableId = req.query.tid;
     if (!timetableId) {
       return res.status(400).send("Timetable ID is required");
     }
@@ -145,7 +157,6 @@ router.get("/edit", async (req, res) => {
       return res.status(400).send("Invalid Timetable ID.");
     }
 
-    // Populate classId so we know which key to pick from doc.timetable
     const timetableDoc = await Timetable.findById(timetableId)
       .populate("classId")
       .lean();
@@ -154,9 +165,6 @@ router.get("/edit", async (req, res) => {
       return res.status(404).send("Timetable not found.");
     }
 
-    // The DB doc might look like:
-    // { timetable: { "67caa161296d203bad514450": { Monday: [...], Tuesday: [...], ... } },
-    //   classId: { _id: 67caa161296d203bad514450, className: "Computer BE SEM 7", ... }, ... }
     let actualTimetable = null;
     if (timetableDoc.classId && timetableDoc.classId._id) {
       const strClassId = timetableDoc.classId._id.toString();
@@ -165,7 +173,6 @@ router.get("/edit", async (req, res) => {
       }
     }
 
-    // Render the EJS page
     res.render("modules/edit_timetable", {
       timetable: actualTimetable,
       timetableId: timetableDoc._id,
@@ -179,9 +186,8 @@ router.get("/edit", async (req, res) => {
 
 // ===========================================================
 // 4) POST /timetable/edit-command
-//    Swaps two slots based on the user's command via chatbot.
-//    (This route persists changes immediately. It remains available as original functionality.)
-// ==========================================================
+//    (unchanged from before)
+// ===========================================================
 router.post("/edit-command", async (req, res) => {
   try {
     let commandText = req.body.command;
@@ -192,33 +198,24 @@ router.post("/edit-command", async (req, res) => {
       return res.status(400).send("No timetable ID in the form data.");
     }
 
-    // Example: standardize user text
     commandText = commandText.replace(/ to subject /gi, " with subject ");
-    console.log("Processed command text:", commandText);
-
     const pythonScript = path.join(__dirname, "../ai-service/parse_command.py");
     const execCommand = `python "${pythonScript}" "${commandText}"`;
-    console.log("Executing command:", execCommand);
 
     exec(execCommand, async (error, stdout) => {
       if (error) {
         console.error("Error executing Python script:", error);
         return res.status(500).send("Error processing command.");
       }
-      console.log("Raw Python output:", stdout);
 
       try {
         const parsedOutput = JSON.parse(stdout);
-        console.log("Parsed Output:", parsedOutput);
-
-        // Attempt to find day, slot source, slot target
         const dayEntity = parsedOutput.entities.find(e => e.label === "DAY_SOURCE")
           || parsedOutput.entities.find(e => e.label === "DAY_TARGET");
         const slotSourceEntity = parsedOutput.entities.find(e => e.label === "SLOT_SOURCE");
         const slotTargetEntity = parsedOutput.entities.find(e => e.label === "SLOT_TARGET");
 
         if (!dayEntity || !slotSourceEntity || !slotTargetEntity) {
-          console.warn("Missing required entities in parsed output.");
           return res.status(400).send("Command missing required day/slot info.");
         }
 
@@ -227,10 +224,9 @@ router.post("/edit-command", async (req, res) => {
           return match ? parseInt(match[0], 10) : NaN;
         };
 
-        const day = dayEntity.text;  // e.g. "Monday"
+        const day = dayEntity.text;
         const slotSource = extractSlotNumber(slotSourceEntity.text);
         const slotTarget = extractSlotNumber(slotTargetEntity.text);
-        console.log("Extracted day:", day, "slotSource:", slotSource, "slotTarget:", slotTarget);
 
         if (isNaN(slotSource) || isNaN(slotTarget)) {
           return res.status(400).send("Could not extract valid slot numbers from command.");
@@ -238,11 +234,9 @@ router.post("/edit-command", async (req, res) => {
 
         const doc = await Timetable.findById(timetableId).populate("classId");
         if (!doc) {
-          console.error("Timetable not found for id:", timetableId);
           return res.status(404).send("Timetable not found.");
         }
 
-        // doc.timetable might be { "classIdString": { Monday: [...], ... } }
         let actualTimetable = null;
         if (doc.classId && doc.classId._id) {
           const strClassId = doc.classId._id.toString();
@@ -254,28 +248,22 @@ router.post("/edit-command", async (req, res) => {
           return res.status(400).send("Cannot find the class-based timetable data to edit.");
         }
 
-        // Now we do dayTimetable = actualTimetable[day]
         if (actualTimetable[day]) {
           const dayTimetable = actualTimetable[day];
           if (Array.isArray(dayTimetable) && dayTimetable.length >= Math.max(slotSource, slotTarget)) {
-            // Perform the swap
             const temp = dayTimetable[slotSource - 1];
             dayTimetable[slotSource - 1] = dayTimetable[slotTarget - 1];
             dayTimetable[slotTarget - 1] = temp;
 
             actualTimetable[day] = dayTimetable;
             doc.timetable[doc.classId._id.toString()] = actualTimetable;
-
             await doc.save();
-            console.log("Timetable updated successfully.");
 
             return res.redirect("/timetable/edit?tid=" + timetableId);
           } else {
-            console.warn("Slots out of range for day:", day);
             return res.status(400).send("Specified slots are out of range for the given day.");
           }
         } else {
-          console.warn("Day not found in timetable:", day);
           return res.status(400).send("Invalid day specified in command.");
         }
       } catch (err) {
@@ -291,7 +279,7 @@ router.post("/edit-command", async (req, res) => {
 
 // ===========================================================
 // 4.5) Save Draft Timetable (POST /timetable/save-draft)
-//    Persists draft changes when the user explicitly saves.
+//    (unchanged from before)
 // ===========================================================
 router.post("/save-draft", async (req, res) => {
   try {
@@ -307,7 +295,6 @@ router.post("/save-draft", async (req, res) => {
     if (!classKey) {
       return res.status(400).json({ error: "Timetable document missing classId." });
     }
-    // Update the timetable for the specific class.
     doc.timetable[classKey] = updatedTimetable;
     doc.markModified("timetable");
     await doc.save();
@@ -320,7 +307,8 @@ router.post("/save-draft", async (req, res) => {
 
 // =========================================================
 // 5) Chatbot Page (GET /timetable/chat)
-// =========================================================
+//    (unchanged from before)
+// ===========================================================
 router.get("/chat", async (req, res) => {
   try {
     const timetableId = req.query.tid;
@@ -334,7 +322,7 @@ router.get("/chat", async (req, res) => {
     if (!doc) {
       return res.status(404).send("Timetable not found.");
     }
-    // Extract the sub-timetable using the class key
+
     let actualTimetable = null;
     if (doc.classId && doc.classId._id) {
       const strClassId = doc.classId._id.toString();
@@ -354,7 +342,8 @@ router.get("/chat", async (req, res) => {
 
 // =========================================================
 // 6) View Timetable (GET /timetable/view)
-// =========================================================
+//    (unchanged from before)
+// ===========================================================
 router.get("/view", async (req, res) => {
   try {
     const timetableId = req.query.tid;
@@ -373,6 +362,7 @@ router.get("/view", async (req, res) => {
     }
     const className = doc.classId ? doc.classId.className : "No Class Name";
     const academicYear = doc.academicYearId ? doc.academicYearId.academicYear : "No Academic Year";
+
     let actualTimetable = null;
     if (doc.classId && doc.classId._id) {
       const strClassId = doc.classId._id.toString();
@@ -395,7 +385,8 @@ router.get("/view", async (req, res) => {
 
 // =========================================================
 // 7) DELETE /timetable/delete
-// =========================================================
+//    (unchanged from before)
+// ===========================================================
 router.delete("/delete", async (req, res) => {
   try {
     const timetableId = req.query.tid;
@@ -416,7 +407,5 @@ router.delete("/delete", async (req, res) => {
     return res.status(500).json({ error: "Server error." });
   }
 });
-
-
 
 module.exports = router;
