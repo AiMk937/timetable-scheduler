@@ -108,26 +108,29 @@ router.post("/converse", async (req, res) => {
 
       const timetableDoc = await Timetable.findById(timetableId);
       if (!timetableDoc) return res.status(404).json({ error: "Timetable not found." });
-      const timetableObj = timetableDoc.timetable || {};
-      const classKey = timetableDoc.classId ? timetableDoc.classId.toString() : null;
-      if (!classKey) return res.status(400).json({ error: "Timetable document missing classId." });
-      if (!timetableObj[classKey]) {
-        return res.status(400).json({ error: `No timetable data found for class key: ${classKey}` });
-      }
-      const dayArr = timetableObj[classKey][day];
+      // In the new schema, doc.timetable is already { Monday: [...], Tuesday: [...], … }
+      const scheduleObj = timetableDoc.timetable || {};
+
+      // We no longer index by classKey. Just read scheduleObj[day].
+      const dayArr = scheduleObj[day];
       if (!dayArr || !Array.isArray(dayArr) || dayArr.length < slot) {
         return res.status(400).json({ error: `Slot ${slot} out of range for ${day}.` });
       }
       const slotVal = dayArr[slot - 1];
       let reply;
-      if (typeof slotVal === "object") {
+      if (typeof slotVal === "object" && slotVal !== null) {
         if (slotVal.subject) {
+          // single-theory-session object
           reply = `Slot ${slot} on ${day} has "${slotVal.subject}" taught by ${slotVal.teacher || "someone"}.`;
-        } else {
-          const subjectsList = Object.values(slotVal).map(item => item.subject).join(", ");
+        } else if (Array.isArray(slotVal)) {
+          // lab-block array
+          const subjectsList = slotVal.map(item => item.subject).join(", ");
           reply = `Slot ${slot} on ${day} has labs: ${subjectsList}.`;
+        } else {
+          reply = `Slot ${slot} on ${day} is occupied by something I cannot interpret.`;
         }
       } else {
+        // e.g. string “Free slot” or null
         reply = `Slot ${slot} on ${day} is "${slotVal}".`;
       }
       return res.json({ reply });
@@ -143,7 +146,7 @@ router.post("/converse", async (req, res) => {
     console.log("Combined command for update:", combinedCommand);
 
     const pythonScript = path.join(__dirname, "../ai-service/parse_command.py");
-    const execCommand = `python3 "${pythonScript}" "${combinedCommand}"`;
+    const execCommand = `python3 "${pythonScript}" "${combinedCommand.replace(/"/g, '\\"')}"`;
     console.log("Executing command:", execCommand);
 
     exec(execCommand, async (error, stdout) => {
@@ -163,6 +166,9 @@ router.post("/converse", async (req, res) => {
         return res.json({ reply: geminiReply });
       }
 
+      // ---------------------------
+      // 2a) Assignment commands (no SLOT_TARGET but has PERSON)
+      // ---------------------------
       let dayEntity = parsed.entities.find(e => e.label === "DAY_SOURCE") ||
                       parsed.entities.find(e => e.label === "DATE");
       let slotSourceEntity = parsed.entities.find(e => e.label === "SLOT_SOURCE");
@@ -183,59 +189,58 @@ router.post("/converse", async (req, res) => {
           return res.status(400).json({ error: "Missing day information for assignment." });
         }
         const day = normalizeDay(dayEntity.text);
-        const slot = slotSourceEntity ? extractSlotNumber(slotSourceEntity.text)
-                                      : (cardinalSlots[0] ? extractSlotNumber(cardinalSlots[0].text) : NaN);
+        const slot = slotSourceEntity
+          ? extractSlotNumber(slotSourceEntity.text)
+          : (cardinalSlots[0] ? extractSlotNumber(cardinalSlots[0].text) : NaN);
         if (isNaN(slot)) {
           return res.status(400).json({ error: "Missing or invalid slot number for assignment." });
         }
         console.log(`Assignment command: assign ${teacherEntity.text} to ${day} slot ${slot}`);
 
         // Query the Teacher model for this professor.
-        const teacherDoc = await Teacher.findOne({ name: new RegExp(teacherEntity.text.trim(), "i") }).populate("subjects");
+        const teacherDoc = await Teacher
+          .findOne({ name: new RegExp(teacherEntity.text.trim(), "i") })
+          .populate("subjects")
+          .lean();
         if (!teacherDoc) return res.status(404).json({ error: "Teacher not found." });
         // From teacherDoc.subjects, choose a subject that the teacher teaches.
-        // (In a more advanced implementation, you could intersect with the class subjects.)
-        const subjectId = teacherDoc.subjects && teacherDoc.subjects.length > 0 ? teacherDoc.subjects[0] : null;
+        const subjectId = teacherDoc.subjects && teacherDoc.subjects.length > 0
+                         ? teacherDoc.subjects[0]
+                         : null;
         if (!subjectId) {
           return res.status(400).json({ error: "Teacher has no subject assigned." });
         }
-        const subjectDoc = await Subject.findById(subjectId);
+        const subjectDoc = await Subject.findById(subjectId).lean();
         if (!subjectDoc) {
           return res.status(400).json({ error: "Subject not found for teacher." });
         }
+
         // Now, assign an appropriate infrastructure.
         // For theory subjects, choose a classroom; for labs, choose a lab with this subject.
-        const timetableDoc = await Timetable.findById(timetableId);
+        const timetableDoc = await Timetable.findById(timetableId).lean();
         if (!timetableDoc) return res.status(404).json({ error: "Timetable not found." });
-        const timetableObj = timetableDoc.timetable || {};
-        const classKey = timetableDoc.classId ? timetableDoc.classId.toString() : null;
-        if (!classKey || !timetableObj[classKey]) {
-          return res.status(400).json({ error: "No timetable data for this class." });
-        }
-        // Query Infrastructure based on subject type.
+        const scheduleObj = timetableDoc.timetable || {};
+
         let infraDoc;
         if (subjectDoc.subjectType === "Theory") {
           infraDoc = await Infrastructure.findOne({
             classId: timetableDoc.classId,
             type: "classroom"
-          });
+          }).lean();
         } else {
           infraDoc = await Infrastructure.findOne({
             classId: timetableDoc.classId,
             type: "lab",
             labSubjectId: subjectId
-          });
+          }).lean();
         }
         const room = infraDoc ? infraDoc.roomNo : "Unknown Room";
 
-        // Update the draft timetable.
-        let actualTimetable = timetableObj[classKey];
-        if (!actualTimetable[day] || actualTimetable[day].length < slot) {
+        // Update the draft timetable (directly on scheduleObj).
+        if (!Array.isArray(scheduleObj[day]) || scheduleObj[day].length < slot) {
           return res.status(400).json({ error: `Slot ${slot} out of range for ${day}.` });
         }
-
-        // Directly update the slot with the subject, teacher, and room info.
-        actualTimetable[day][slot - 1] = {
+        scheduleObj[day][slot - 1] = {
           subject: subjectDoc.subjectName,
           teacher: teacherDoc.name,
           room: room
@@ -246,12 +251,14 @@ router.post("/converse", async (req, res) => {
         if (dialogueContexts[sessionId]) delete dialogueContexts[sessionId];
         return res.json({
           message: "Timetable updated successfully (draft assignment).",
-          updatedTimetable: actualTimetable,
+          updatedTimetable: scheduleObj,
           changedSlots
         });
       }
 
-      // Fallback: If required entities are missing for a swap, fallback to Gemini.
+      // ---------------------------
+      // 2b) Swap/Update Handling (requires DAY_SOURCE, SLOT_SOURCE, SLOT_TARGET)
+      // ---------------------------
       if (!dayEntity || !slotSourceEntity || !slotTargetEntity) {
         dialogueContexts[sessionId] = {
           partialCommand: combinedCommand,
@@ -294,16 +301,16 @@ router.post("/converse", async (req, res) => {
         });
       }
 
-      const doc = await Timetable.findById(timetableId);
+      // Fetch Timetable doc and directly use doc.timetable
+      const doc = await Timetable.findById(timetableId).lean();
       if (!doc) return res.status(404).json({ error: "Timetable not found." });
-      const timetableObj = doc.timetable || {};
-      const classKey = doc.classId ? doc.classId.toString() : null;
-      if (!classKey || !timetableObj[classKey]) {
-        return res.status(400).json({ error: "No timetable data for this class." });
-      }
+      const scheduleObj = doc.timetable || {};
 
-      const sourceArr = timetableObj[classKey][daySource];
-      const targetArr = timetableObj[classKey][dayTarget];
+      if (!scheduleObj[daySource] || !scheduleObj[dayTarget]) {
+        return res.status(400).json({ error: "One of the specified days has no data." });
+      }
+      const sourceArr = scheduleObj[daySource];
+      const targetArr = scheduleObj[dayTarget];
       if (!sourceArr || !targetArr) {
         return res.status(400).json({ error: "No timetable data found for one of the specified days." });
       }
@@ -318,12 +325,12 @@ router.post("/converse", async (req, res) => {
       const temp = sourceArr[slotSource - 1];
       sourceArr[slotSource - 1] = targetArr[slotTarget - 1];
       targetArr[slotTarget - 1] = temp;
-      timetableObj[classKey][daySource] = sourceArr;
-      timetableObj[classKey][dayTarget] = targetArr;
+      scheduleObj[daySource] = sourceArr;
+      scheduleObj[dayTarget] = targetArr;
 
       console.log(`Draft swap updated => from ${daySource}[${slotSource}] to ${dayTarget}[${slotTarget}]`);
 
-      const updatedSubTimetable = timetableObj[classKey];
+      const updatedSubTimetable = scheduleObj;
       const changedSlots = [
         { day: daySource, slot: slotSource },
         { day: dayTarget, slot: slotTarget }

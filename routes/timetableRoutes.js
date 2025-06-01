@@ -1,10 +1,10 @@
 // routes/timetableRoutes.js
 
-const express  = require("express");
-const router   = express.Router();
-const mongoose = require("mongoose");
-const path     = require("path");
-const { exec } = require("child_process");
+const express      = require("express");
+const router       = express.Router();
+const mongoose     = require("mongoose");
+const path         = require("path");
+const { exec }     = require("child_process");
 
 // Import your Mongoose models:
 const Timetable    = require("../models/Timetable");
@@ -189,7 +189,6 @@ router.post("/save-generated", async (req, res) => {
  *    Shows a summary of all (department, year) documents
  * --------------------------------------------------------
  */
-// GET /timetable/existing
 router.get("/existing", async (req, res) => {
   try {
     const rawDocs = await Timetable.find({}).lean();
@@ -209,101 +208,128 @@ router.get("/existing", async (req, res) => {
  *    NO LONGER REQUIRES classId. Renders ALL classes in that document.
  * ========================================================
  */
-router.get('/view', async (req, res) => {
+router.get("/view", async (req, res) => {
   try {
     const { tid } = req.query;
     if (!tid || !mongoose.Types.ObjectId.isValid(tid)) {
-      return res.status(400).send('Valid timetable document ID (tid) is required.');
+      return res
+        .status(400)
+        .send("Valid timetable document ID (tid) is required.");
     }
 
-    // Find the timetable doc:
+    // 1) Fetch the Timetable document
     const doc = await Timetable.findById(tid).lean();
     if (!doc) {
-      return res.status(404).send('Timetable document not found.');
+      return res.status(404).send("Timetable document not found.");
     }
 
-    // Look up className:
-    let className = '';
+    // 2) Look up the single Class’s name via doc.classId
+    let className = "";
+    let classId   = null;
     if (mongoose.Types.ObjectId.isValid(doc.classId)) {
-      const c = await Class.findById(doc.classId).lean();
+      classId = doc.classId.toString();
+      const c = await Class.findById(doc.classId, "className").lean();
       if (c && c.className) className = c.className;
     }
 
-    // Look up academicYearName:
-    let academicYearName = '';
-    if (mongoose.Types.ObjectId.isValid(doc.academicYearId)) {
-      const ay = await AcademicYear.findById(doc.academicYearId).lean();
+    // 3) Look up AcademicYear name (in case doc.academicYearName is missing)
+    let academicYearName = "";
+    if (doc.academicYearName) {
+      academicYearName = doc.academicYearName;
+    } else if (mongoose.Types.ObjectId.isValid(doc.academicYearId)) {
+      const ay = await AcademicYear.findById(doc.academicYearId, "academicYear").lean();
       if (ay && ay.academicYear) academicYearName = ay.academicYear;
     }
 
-    // Look up departmentName:
-    let departmentName = '';
-    if (mongoose.Types.ObjectId.isValid(doc.departmentId)) {
-      const dp = await Department.findById(doc.departmentId).lean();
+    // 4) Look up Department name (in case doc.departmentName is missing)
+    let departmentName = "";
+    if (doc.departmentName) {
+      departmentName = doc.departmentName;
+    } else if (mongoose.Types.ObjectId.isValid(doc.departmentId)) {
+      const dp = await Department.findById(doc.departmentId, "departmentName").lean();
       if (dp && dp.departmentName) departmentName = dp.departmentName;
     }
 
-    // Finally, render the single‐timetable view:
-    return res.render('modules/view_timetable', {
+    // 5) Finally, render the EJS and pass tid + classId + everything else
+    return res.render("modules/view_timetable", {
+      tid,                 // so EJS can render the “Edit” button
+      classId,             // ditto
+      className,           // for header display
       departmentName,
       academicYearName,
-      className,
       createdAt: doc.createdAt,
       timetable: doc.timetable
     });
   } catch (err) {
-    console.error('Error in GET /timetable/view:', err);
-    return res.status(500).send('Server error.');
+    console.error("Error in GET /timetable/view:", err);
+    return res.status(500).send("Server error.");
   }
 });
-
 
 /**
  * ========================================================
  * 4) Edit Class Timetable (GET /timetable/edit)
  *
- *    Still requires tid & classId, because editing is per‐class
+ *    Still requires tid (because editing is per‐document which holds exactly one classId)
  * ========================================================
  */
 router.get("/edit", async (req, res) => {
   try {
-    const { tid, classId } = req.query;
-    if (!tid || !classId) {
+    const { tid } = req.query;
+    if (!tid || !mongoose.Types.ObjectId.isValid(tid)) {
       return res
         .status(400)
-        .send("Both tid and classId are required to edit a class timetable.");
-    }
-    if (
-      !mongoose.Types.ObjectId.isValid(tid) ||
-      !mongoose.Types.ObjectId.isValid(classId)
-    ) {
-      return res.status(400).send("Invalid tid or classId.");
+        .send("A valid timetable document ID (tid) is required.");
     }
 
-    const parentDoc = await Timetable.findById(tid)
-      .populate("classes.classId", "className")
-      .lean();
-    if (!parentDoc) {
+    // 1) Fetch the Timetable document
+    const doc = await Timetable.findById(tid).lean();
+    if (!doc) {
       return res.status(404).send("Timetable document not found.");
     }
 
-    const classEntry = parentDoc.classes.find(
-      (c) => c.classId.toString() === classId
-    );
-    if (!classEntry) {
-      return res.status(404).send("Class timetable not found in this document.");
+    // 2) Extract the single classId that this document represents
+    const theClassId = doc.classId ? doc.classId.toString() : null;
+    if (!theClassId) {
+      return res
+        .status(400)
+        .send("This timetable document has no associated classId.");
     }
 
-    const timetable = convertMatrixToScheduleObject(classEntry.timetable);
+    // 3) Look up the Class name (to show in the “Edit” header)
+    let className = "";
+    if (mongoose.Types.ObjectId.isValid(theClassId)) {
+      const classDoc = await Class.findById(theClassId).lean();
+      if (classDoc && classDoc.className) {
+        className = classDoc.className;
+      }
+    }
+
+    // 4) Look up the Academic Year name (to show in the “Edit” header)
+    let academicYearName = "";
+    if (doc.academicYearId && mongoose.Types.ObjectId.isValid(doc.academicYearId)) {
+      const ayDoc = await AcademicYear.findById(doc.academicYearId).lean();
+      if (ayDoc && ayDoc.academicYear) {
+        academicYearName = ayDoc.academicYear;
+      }
+    }
+
+    // 5) doc.timetable is already in “schedule‐object” form:
+    //    { Monday: [ … ], Tuesday: [ … ], … }
+    //    So we can pass it directly to EJS. No conversion needed.
+    const scheduleObj = doc.timetable;
+
+    // 6) Render the “edit_timetable” EJS with all needed variables:
     return res.render("modules/edit_timetable", {
-      timetable,
-      timetableId: tid,
-      classId,
-      className: classEntry.className,
-      createdAt: parentDoc.createdAt
+      timetable:         scheduleObj,
+      timetableId:       tid,
+      classId:           theClassId,
+      className,         // looked up above
+      academicYearName,  // looked up above
+      createdAt:         doc.createdAt
     });
   } catch (error) {
-    console.error("Error fetching class timetable for edit:", error);
+    console.error("Error in GET /timetable/edit:", error);
     return res.status(500).send("Server error.");
   }
 });
