@@ -1,37 +1,79 @@
+<!-- views/modules/existing_timetable.ejs -->
 <%- include('../layout/header') %>
 
 <div class="container mt-5">
-  <h2 class="text-center mb-4">All Existing Timetables</h2>
+  <h2 class="text-center mb-4">Existing Timetables</h2>
 
   <% if (timetables && timetables.length > 0) { %>
-    <% timetables.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); %>
-    <% timetables.forEach(tt => { %>
-      <div class="card mb-3">
+    <% 
+      // Sort by creation date (newest first)
+      timetables.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
+    %>
+
+    <% timetables.forEach(function(tt) { %>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-light">
+          <strong>Department:</strong> <%= tt.departmentName %> &nbsp;|&nbsp;
+          <strong>Academic Year:</strong> <%= tt.academicYearName %>
+          <% if (tt.createdAt) { %>
+            <span class="text-muted float-end">Generated on: <%= new Date(tt.createdAt).toLocaleString() %></span>
+          <% } %>
+        </div>
         <div class="card-body">
-          <h5>
-            <%= tt.className %> | Academic Year: <%= tt.academicYear %>
-          </h5>
-          <br>
-          <!-- View Timetable: light blue (btn-info) -->
-          <a href="/timetable/view?tid=<%= tt._id %>" class="btn btn-sm btn-info">
-            View Timetable
+          <!-- VIEW: We only need tid=<%= tt._id %> -->
+          <a href="/timetable/view?tid=<%= tt._id %>" class="btn btn-sm btn-info me-2">
+            <i class="bi bi-eye"></i> View Timetable
           </a>
 
-          <!-- Edit Timetable: orange/yellow (btn-warning) -->
-          <a href="/timetable/edit?tid=<%= tt._id %>" class="btn btn-sm btn-warning">
-            Edit Timetable
-          </a>
+          <!-- EDIT: Only show if there is at least one class in this document -->
+          <% if (tt.classes && tt.classes.length > 0) { %>
+            <a 
+              href="/timetable/edit?tid=<%= tt._id %>&classId=<%= tt.classes[0].classId %>" 
+              class="btn btn-sm btn-warning me-2"
+            >
+              <i class="bi bi-pencil-square"></i> Edit First Class
+            </a>
+          <% } else { %>
+            <button class="btn btn-sm btn-warning me-2" disabled>
+              <i class="bi bi-pencil-square"></i> No Classes to Edit
+            </button>
+          <% } %>
 
-          <!-- Delete Timetable: red (btn-danger) -->
-          <a href="#" class="btn btn-sm btn-danger" onclick="deleteTimetable('<%= tt._id %>'); return false;">
-            Delete Timetable
-          </a>
+          <!-- DELETE: Delete the entire (department, year) document -->
+          <button 
+            class="btn btn-sm btn-danger" 
+            onclick="if(confirm('Delete this entire timetable?')) deleteTimetable('<%= tt._id %>');"
+          >
+            <i class="bi bi-trash"></i> Delete Timetable
+          </button>
         </div>
       </div>
     <% }); %>
   <% } else { %>
-    <p>No timetables found.</p>
+    <div class="alert alert-warning text-center">
+      No timetables have been saved yet.
+    </div>
   <% } %>
 </div>
 
 <%- include('../layout/footer') %>
+
+<script>
+  // This function sends a DELETE request to /timetable/delete?tid=<...>
+  function deleteTimetable(tid) {
+    fetch(`/timetable/delete?tid=${tid}`, { method: 'DELETE' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // Reload the page to reflect the deletion
+          window.location.reload();
+        } else {
+          alert(data.error || 'Failed to delete timetable.');
+        }
+      })
+      .catch(err => {
+        console.error('Error deleting timetable:', err);
+        alert('Server error while deleting timetable.');
+      });
+  }
+</script>

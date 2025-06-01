@@ -1,3 +1,4 @@
+<!-- views/modules/edit_timetable.ejs -->
 <%- include('../layout/header') %>
 
 <style>
@@ -5,37 +6,62 @@
     font-size: 0.95rem;
     table-layout: fixed;
     width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    overflow: hidden;
   }
-  .timetable-compact th, .timetable-compact td {
+  .timetable-compact th,
+  .timetable-compact td {
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
     padding: 0.6rem;
+    vertical-align: middle;
+  }
+  .timetable-compact th {
+    background-color: #343a40;
+    color: #ffffff;
+  }
+  .timetable-compact tr:nth-child(odd) td {
+    background-color: #f8f9fa;
+  }
+  .timetable-compact tr:nth-child(even) td {
+    background-color: #ffffff;
+  }
+  .timetable-compact tbody tr:hover td {
+    background-color: #e9ecef;
   }
   .lab-session {
-    background-color: #f0f9ff;
-    border: 1px solid #bce8f1;
-    border-radius: 4px;
-    padding: 0.4rem;
-    margin-bottom: 0.4rem;
+    background-color: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .lab-session .batch-badge {
+    background-color: #1976d2;
+    color: #ffffff;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.2rem;
   }
   .theory-session {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0.4rem;
-    margin-bottom: 0.4rem;
+    background-color: #f1f3f5;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
   }
   .free-slot {
-    color: #888;
+    color: #6c757d;
     font-style: italic;
   }
-  /* Highlight color for changed slots */
   .highlight-changed {
     background-color: #ccffcc !important; /* light green */
     transition: background-color 1s ease;
   }
-  /* Chat styles */
   .chat-container {
     margin-top: 2rem;
     border: 1px solid #ccc;
@@ -68,64 +94,75 @@
   <% if (!timetable) { %>
     <p class="text-center text-muted">No timetable data available for editing.</p>
   <% } else { %>
-    <h2 class="text-center mb-4">Edit Timetable: Conversational Interface</h2>
-    <% if (createdAt) { %>
-      <p class="text-center text-muted">Generated on: <%= createdAt.toLocaleString() %></p>
-    <% } %>
+    <h2 class="text-center mb-2">Edit Timetable</h2>
+    <div class="text-center mb-3">
+      <% if (className) { %>
+        <h4>Class: <%= className %></h4>
+      <% } %>
+      <% if (academicYearName) { %>
+        <h5>Academic Year: <%= academicYearName %></h5>
+      <% } %>
+      <% if (createdAt) { %>
+        <p class="text-muted">Generated on: <%= new Date(createdAt).toLocaleString() %></p>
+      <% } %>
+    </div>
 
-    <!-- Timetable Display (read-only, but updated dynamically) -->
+    <!-- ============================
+         1) Render the editable timetable
+         ============================ -->
     <div class="table-responsive mb-4">
       <table class="table table-sm table-bordered table-hover timetable-compact">
         <thead class="thead-dark">
           <tr>
             <th style="width: 60px;">Slot</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
+            <% const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]; %>
+            <% daysOrder.forEach(day => { %>
+              <th><%= day %></th>
+            <% }); %>
           </tr>
         </thead>
         <tbody>
-          <% const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]; %>
-          <% for (let slotIndex = 0; slotIndex < 6; slotIndex++) { %>
+          <% 
+            // Compute how many slots each day has (assume uniform length across days)
+            const numSlots = Array.isArray(timetable[daysOrder[0]]) 
+                              ? timetable[daysOrder[0]].length 
+                              : 0;
+            for (let slotIndex = 0; slotIndex < numSlots; slotIndex++) { 
+          %>
             <tr>
-              <td class="text-center align-middle">
-                <strong>Slot <%= slotIndex + 1 %></strong>
-              </td>
-              <% days.forEach(day => { %>
-                <!-- Unique ID so we can update this cell later -->
-                <td class="align-middle" id="cell-<%= day %>-<%= slotIndex %>">
-                  <% const slotVal = timetable[day] ? timetable[day][slotIndex] : null; %>
-                  <% if (!slotVal) { %>
+              <td class="text-center align-middle"><strong>Slot <%= slotIndex + 1 %></strong></td>
+              <% daysOrder.forEach(day => { 
+                   // This “slotCell” can be:
+                   //   • null (free)
+                   //   • { subject, teacher, room } 
+                   //   • an array of { batch, subject, teacher, room } (lab‐batch block)
+                   const slotCell = (timetable[day] || [])[slotIndex];
+              %>
+                <td class="align-top" id="cell-<%= day %>-<%= slotIndex %>">
+                  <% if (!slotCell) { %>
                     <span class="text-muted">-</span>
-                  <% } else if (typeof slotVal === "object") { %>
-                    <% if (slotVal.subject) { %>
-                      <div class="theory-session">
-                        <strong><%= slotVal.subject %></strong><br>
-                        <% if (slotVal.teacher) { %>
-                          Teacher: <%= slotVal.teacher %><br>
+                  <% } else if (typeof slotCell === 'object' && slotCell.subject) { %>
+                    <!-- Single-theory session -->
+                    <div class="theory-session">
+                      <strong><%= slotCell.subject %></strong><br>
+                      <% if (slotCell.teacher) { %>Teacher: <%= slotCell.teacher %><br><% } %>
+                      <% if (slotCell.room)    { %>Room: <%= slotCell.room %><% } %>
+                    </div>
+                  <% } else if (Array.isArray(slotCell) && slotCell.length > 0) { %>
+                    <!-- Lab-batch block -->
+                    <% slotCell.forEach((item, idx) => { %>
+                      <div class="lab-session">
+                        <% if (item.batch) { %>
+                          <span class="batch-badge"><%= item.batch %></span><br>
                         <% } %>
-                        <% if (slotVal.room) { %>
-                          Room: <%= slotVal.room %>
-                        <% } %>
+                        <%= item.subject %><br>
+                        Teacher: <%= item.teacher %><br>
+                        Room: <%= item.room %>
                       </div>
-                    <% } else { %>
-                      <% Object.values(slotVal).forEach(item => { %>
-                        <div class="lab-session">
-                          <% if (item.batch) { %>
-                            <strong><%= item.batch %>:</strong>
-                          <% } %>
-                          <%= item.subject %><br>
-                          Teacher: <%= item.teacher %><br>
-                          Room: <%= item.room %>
-                        </div>
-                      <% }); %>
-                    <% } %>
+                      <% if (idx < slotCell.length - 1) { %><hr class="my-1"><% } %>
+                    <% }); %>
                   <% } else { %>
-                    <span class="<%= slotVal === 'Free slot' ? 'free-slot' : '' %>">
-                      <%= slotVal %>
-                    </span>
+                    <span class="free-slot"><%= (typeof slotCell === 'string' ? slotCell : 'FREE') %></span>
                   <% } %>
                 </td>
               <% }); %>
@@ -135,7 +172,10 @@
       </table>
     </div>
 
-    <!-- Chat Container -->
+
+    <!-- ============================
+         2) Chat interface & Save button
+         ============================ -->
     <div class="chat-container">
       <h4>Conversation</h4>
       <div id="chat-window"></div>
@@ -148,14 +188,19 @@
             id="chatInput"
             name="message"
             class="form-control"
-            placeholder="Ask me to switch subjects, or generate a new schedule..."
+            placeholder="e.g., 'Switch Physics slot 2 with Chemistry slot 4 on Tuesday'"
             required
           />
         </div>
         <input type="hidden" id="timetableId" value="<%= timetableId %>">
         <div class="d-flex">
           <button type="submit" class="btn btn-success mr-2">Send</button>
-          <button type="button" id="save-button" class="btn btn-primary ml-2">Save Timetable</button>
+          <button 
+            type="button" 
+            id="save-button" 
+            class="btn btn-primary ml-2"
+            <% if (!timetableId) { %> disabled <% } %>
+          >Save Timetable</button>
         </div>
       </form>
     </div>
@@ -163,16 +208,11 @@
 </div>
 
 <script>
-  const chatForm = document.getElementById('chat-form');
-  const chatWindow = document.getElementById('chat-window');
-  const chatInput = document.getElementById('chatInput');
-  const timetableId = document.getElementById('timetableId') ? document.getElementById('timetableId').value : null;
-  const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-  
-  // Global variable to store the draft (updated) sub-timetable
-  let draftTimetable = null;
-
+  // —————————————————————————————————————————————————————
+  //  Utility to append chat messages:
+  // —————————————————————————————————————————————————————
   function appendMessage(text, sender) {
+    const chatWindow = document.getElementById('chat-window');
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('chat-message', sender);
     msgDiv.textContent = text;
@@ -180,26 +220,30 @@
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
+  // —————————————————————————————————————————————————————
+  // Build inner HTML for a single cell (day + slotIndex):
+  // —————————————————————————————————————————————————————
   function buildSlotHTML(slotVal) {
-    if (!slotVal) return '<span class="text-muted">-</span>';
+    if (!slotVal) {
+      return '<span class="text-muted">-</span>';
+    }
     if (typeof slotVal === 'string') {
-      return slotVal === 'Free slot'
-        ? '<span class="free-slot">Free slot</span>'
-        : slotVal;
+      return `<span class="free-slot">${slotVal === 'Free slot' ? 'Free slot' : slotVal}</span>`;
     }
     if (slotVal.subject) {
+      // Single theory session
       let html = '<div class="theory-session">';
       html += `<strong>${slotVal.subject}</strong><br>`;
       if (slotVal.teacher) html += `Teacher: ${slotVal.teacher}<br>`;
-      if (slotVal.room) html += `Room: ${slotVal.room}`;
+      if (slotVal.room)    html += `Room: ${slotVal.room}`;
       html += '</div>';
       return html;
     }
+    // Lab block (array of objects)
     let labHTML = '';
-    for (const key in slotVal) {
-      const item = slotVal[key];
+    for (const item of slotVal) {
       labHTML += '<div class="lab-session">';
-      if (item.batch) labHTML += `<strong>${item.batch}:</strong> `;
+      if (item.batch) labHTML += `<span class="batch-badge">${item.batch}</span><br>`;
       labHTML += `${item.subject}<br>`;
       labHTML += `Teacher: ${item.teacher}<br>`;
       labHTML += `Room: ${item.room}`;
@@ -208,6 +252,9 @@
     return labHTML;
   }
 
+  // —————————————————————————————————————————————————————
+  // Update a single cell in the table and highlight it:
+  // —————————————————————————————————————————————————————
   function updateSlotCell(day, slotIndex, newVal, highlight = false) {
     const cellId = `cell-${day}-${slotIndex}`;
     const cell = document.getElementById(cellId);
@@ -219,32 +266,39 @@
     }
   }
 
+  // —————————————————————————————————————————————————————
+  // Called whenever the backend returns an updated timetable + changedSlots:
+  // —————————————————————————————————————————————————————
   function updateTimetable(updatedTimetable, changedSlots) {
-    // Store the draft timetable so it can later be saved
-    draftTimetable = updatedTimetable;
+    window.draftTimetable = updatedTimetable;
     changedSlots.forEach(cs => {
       const { day, slot } = cs;
       const slotIndex = slot - 1;
       if (updatedTimetable[day] && updatedTimetable[day][slotIndex] !== undefined) {
-        const newVal = updatedTimetable[day][slotIndex];
-        updateSlotCell(day, slotIndex, newVal, true);
+        updateSlotCell(day, slotIndex, updatedTimetable[day][slotIndex], true);
       }
     });
   }
 
-  chatForm.addEventListener('submit', async (e) => {
+  // —————————————————————————————————————————————————————
+  // Handle “Send” in the chat form:
+  // —————————————————————————————————————————————————————
+  document.getElementById('chat-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const userMsg = chatInput.value.trim();
-    if (!userMsg) return;
-    appendMessage(userMsg, 'user');
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    if (!message) return;
+    appendMessage(message, 'user');
     chatInput.value = '';
+
+    const timetableId = document.getElementById('timetableId').value;
     try {
-      const response = await fetch('/chatbot/converse', {
+      const res = await fetch('/chatbot/converse', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, timetableId })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ message, timetableId })
       });
-      const data = await response.json();
+      const data = await res.json();
       if (data.error) {
         appendMessage("Error: " + data.error, 'system');
       } else {
@@ -255,29 +309,36 @@
         }
       }
     } catch (err) {
-      appendMessage("Failed to send message. " + err.toString(), 'system');
+      appendMessage("Failed to send message: " + err.toString(), 'system');
     }
   });
 
+  // —————————————————————————————————————————————————————
+  // Handle “Save Timetable” button click:
+  // —————————————————————————————————————————————————————
   document.getElementById('save-button').addEventListener('click', async () => {
-    if (!draftTimetable) {
+    if (!window.draftTimetable) {
       appendMessage("No changes to save.", 'system');
       return;
     }
+    const timetableId = document.getElementById('timetableId').value;
     try {
-      const response = await fetch('/timetable/save-draft', {
+      const res = await fetch('/timetable/save-draft', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ timetableId, updatedTimetable: draftTimetable })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          timetableId,
+          updatedTimetable: window.draftTimetable
+        })
       });
-      const result = await response.json();
+      const result = await res.json();
       if (result.error) {
         appendMessage("Error saving timetable: " + result.error, 'system');
       } else {
         appendMessage("Timetable saved successfully!", 'system');
       }
     } catch (err) {
-      appendMessage("Failed to save timetable. " + err.toString(), 'system');
+      appendMessage("Failed to save timetable: " + err.toString(), 'system');
     }
   });
 </script>

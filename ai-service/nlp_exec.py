@@ -42,7 +42,7 @@ def generate_modification_plan(prompt: str) -> str:
     return response.text
 
 def main():
-    print("Welcome to the Gemini-based Timetable Modification Chat Interface!")
+    print("Welcome to Timetable Modification Chat Interface!")
     print("Type your command (e.g., 'swap the subject ...') or 'exit' to quit.")
     
     while True:

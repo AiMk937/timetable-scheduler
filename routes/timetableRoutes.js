@@ -1,53 +1,55 @@
 // routes/timetableRoutes.js
 
-const express     = require("express");
-const router      = express.Router();
-const mongoose    = require("mongoose");
+const express  = require("express");
+const router   = express.Router();
+const mongoose = require("mongoose");
+const path     = require("path");
+const { exec } = require("child_process");
 
 // Import your Mongoose models:
 const Timetable    = require("../models/Timetable");
 const Class        = require("../models/Class");
-const AcademicYear = require("../models/AcademicYear");
+const Teacher      = require("../models/Teachers");
 const Department   = require("../models/Department");
+const AcademicYear = require("../models/AcademicYear");
 
-// --------------------------------------------------------
-// Helper: call FastAPI POST /generate-timetable
-// --------------------------------------------------------
+/**
+ * --------------------------------------------------------
+ * Helper: call FastAPI POST /generate-timetable
+ * --------------------------------------------------------
+ */
 async function callPythonGenerate(academicYearId, departmentId) {
   const { default: fetch } = await import("node-fetch");
-
-  const payload = {
-    academicYearId,
-    departmentId
-  };
+  const payload = { academicYearId, departmentId };
 
   const response = await fetch("http://localhost:8000/generate-timetable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-
   if (!response.ok) {
     throw new Error(`Python service returned HTTP ${response.status}`);
   }
   return response.json();
 }
 
-// =========================================================
-// 1) Generate Timetable (GET /timetable/generate)
-//    Calls the FastAPI batch endpoint, which now returns:
-//       { schedules: [...], profTables: [...] }
-// =========================================================
+/**
+ * ========================================================
+ * 1) Generate Timetable (GET /timetable/generate)
+ *    Calls the FastAPI batch endpoint { schedules: [...], profTables: [...] }
+ * ========================================================
+ */
 router.get("/generate", async (req, res) => {
   try {
     const { academicYearId, departmentId } = req.query;
-
     if (!academicYearId || !departmentId) {
-      return res.status(400).send("Both academicYearId and departmentId are required.");
+      return res
+        .status(400)
+        .send("Both academicYearId and departmentId are required.");
     }
 
-    // 1a) Look up AcademicYear document to get a human-readable string
-    let academicYearName = academicYearId; // fallback to the ID string
+    // 1a) Look up AcademicYear name
+    let academicYearName = academicYearId;
     if (mongoose.Types.ObjectId.isValid(academicYearId)) {
       const yearDoc = await AcademicYear.findById(academicYearId).lean();
       if (yearDoc && yearDoc.academicYear) {
@@ -55,8 +57,8 @@ router.get("/generate", async (req, res) => {
       }
     }
 
-    // 1b) Look up Department document to get a human-readable name
-    let departmentName = departmentId; // fallback to the ID string
+    // 1b) Look up Department name
+    let departmentName = departmentId;
     if (mongoose.Types.ObjectId.isValid(departmentId)) {
       const deptDoc = await Department.findById(departmentId).lean();
       if (deptDoc && deptDoc.departmentName) {
@@ -64,13 +66,12 @@ router.get("/generate", async (req, res) => {
       }
     }
 
-    // 2) Call the FastAPI service to generate batch timetables
+    // 2) Call Python service to generate batch timetables
     const apiData = await callPythonGenerate(academicYearId, departmentId);
-    // We expect apiData to look like: { schedules: [ { className, schedule }, … ], profTables: [ … ] }
-    const schedules  = Array.isArray(apiData.schedules) ? apiData.schedules : [];
+    const schedules  = Array.isArray(apiData.schedules)  ? apiData.schedules  : [];
     const profTables = Array.isArray(apiData.profTables) ? apiData.profTables : [];
 
-    // 3) Render EJS template, passing everything:
+    // 3) Render EJS template (modules/timetable.ejs)
     return res.render("modules/timetable", {
       schedules,
       profTables,
@@ -79,329 +80,456 @@ router.get("/generate", async (req, res) => {
       departmentName,
       academicYearName
     });
-
   } catch (error) {
     console.error("Error generating timetable:", error);
     return res.status(500).send("Server error while generating timetables.");
   }
 });
 
-
-// =========================================================
-// 2) List Existing Timetables (GET /timetable/existing)
-//    (unchanged from before)
-// =========================================================
-router.get("/existing", async (req, res) => {
+/**
+ * ========================================================
+ * 1.5) Save All Generated Timetables (POST /timetable/save-generated)
+ *
+ *    Expects JSON body:
+ *    {
+ *      departmentId,
+ *      academicYearId,
+ *      departmentName?,      // optional
+ *      academicYearName?,    // optional
+ *      schedules: [
+ *        { classId, className, schedule: { Monday: [...], … } },
+ *        …
+ *      ],
+ *      profTables: [
+ *        { teacherId, teacherName, schedule: { Monday: […], … } },
+ *        …
+ *      ]
+ *    }
+ * ========================================================
+ */
+router.post("/save-generated", async (req, res) => {
   try {
-    const rawTimetables = await Timetable.find({}).lean();
-    const results = [];
+    const {
+      departmentId,
+      academicYearId,
+      departmentName: providedDeptName,
+      academicYearName: providedYearName,
+      schedules,
+      profTables
+    } = req.body;
 
-    for (const doc of rawTimetables) {
-      let className = "No Class Name";
-      let academicYearStr = "No Academic Year";
-      let possibleClassId = null;
-
-      if (doc.timetable && typeof doc.timetable === "object") {
-        const keys = Object.keys(doc.timetable);
-        if (keys.length > 0) {
-          possibleClassId = keys[0];
-        }
-      }
-
-      if (possibleClassId && mongoose.Types.ObjectId.isValid(possibleClassId)) {
-        const classDoc = await Class.findById(possibleClassId).lean();
-        if (classDoc) {
-          className = classDoc.className || "No Class Name";
-          if (classDoc.academicYear) {
-            const yearDoc = await AcademicYear.findById(classDoc.academicYear).lean();
-            if (yearDoc && yearDoc.academicYear) {
-              academicYearStr = yearDoc.academicYear;
-            }
-          }
-        }
-      }
-
-      if (doc.academicYearId) {
-        const altYearDoc = await AcademicYear.findById(doc.academicYearId).lean();
-        if (altYearDoc && altYearDoc.academicYear) {
-          academicYearStr = altYearDoc.academicYear;
-        }
-      }
-
-      results.push({
-        _id: doc._id,
-        className,
-        academicYear: academicYearStr,
-        createdAt: doc.createdAt
-      });
+    // 1) Validate required fields
+    if (!departmentId || !academicYearId) {
+      return res
+        .status(400)
+        .json({ error: "departmentId and academicYearId are required." });
+    }
+    if (!Array.isArray(schedules) || !Array.isArray(profTables)) {
+      return res
+        .status(400)
+        .json({ error: "Both schedules and profTables must be arrays." });
     }
 
-    res.render("modules/existing_timetable", { timetables: results });
-  } catch (error) {
-    console.error("Error fetching timetables:", error);
-    res.status(500).send("Server error.");
-  }
-});
-
-// ===========================================================
-// 3) Editable Timetable Page (GET /timetable/edit)
-//    (unchanged from before)
-// ===========================================================
-router.get("/edit", async (req, res) => {
-  try {
-    const timetableId = req.query.tid;
-    if (!timetableId) {
-      return res.status(400).send("Timetable ID is required");
-    }
-    if (!mongoose.Types.ObjectId.isValid(timetableId)) {
-      return res.status(400).send("Invalid Timetable ID.");
+    // 2) Look up Department name if not provided
+    let deptName = providedDeptName;
+    if (!deptName && mongoose.Types.ObjectId.isValid(departmentId)) {
+      const deptDoc = await Department.findById(departmentId).lean();
+      if (deptDoc) deptName = deptDoc.departmentName;
     }
 
-    const timetableDoc = await Timetable.findById(timetableId)
-      .populate("classId")
-      .lean();
-
-    if (!timetableDoc) {
-      return res.status(404).send("Timetable not found.");
+    // 3) Look up AcademicYear name if not provided
+    let yearName = providedYearName;
+    if (!yearName && mongoose.Types.ObjectId.isValid(academicYearId)) {
+      const yearDoc = await AcademicYear.findById(academicYearId).lean();
+      if (yearDoc) yearName = yearDoc.academicYear;
     }
 
-    let actualTimetable = null;
-    if (timetableDoc.classId && timetableDoc.classId._id) {
-      const strClassId = timetableDoc.classId._id.toString();
-      if (timetableDoc.timetable && typeof timetableDoc.timetable === "object") {
-        actualTimetable = timetableDoc.timetable[strClassId] || null;
-      }
-    }
+    // 4) Convert each schedule into classTimetableSchema
+    const classEntries = schedules.map((sch) => ({
+      classId:   sch.classId,
+      className: sch.className,
+      timetable: convertScheduleObjectToMatrix(sch.schedule)
+    }));
 
-    res.render("modules/edit_timetable", {
-      timetable: actualTimetable,
-      timetableId: timetableDoc._id,
-      createdAt: timetableDoc.createdAt
-    });
-  } catch (error) {
-    console.error("Error fetching timetable for edit:", error);
-    res.status(500).send("Server error.");
-  }
-});
+    // 5) Convert each profTable into teacherTimetableSchema
+    const teacherEntries = profTables.map((pt) => ({
+      teacherId:   pt.teacherId,
+      teacherName: pt.teacherName,
+      timetable:   convertScheduleObjectToMatrix(pt.schedule)
+    }));
 
-// ===========================================================
-// 4) POST /timetable/edit-command
-//    (unchanged from before)
-// ===========================================================
-router.post("/edit-command", async (req, res) => {
-  try {
-    let commandText = req.body.command;
-    const timetableId = req.body.timetableId;
-    console.log("Received command:", commandText, "for timetableId:", timetableId);
+    // 6) Upsert into Timetable collection
+    const filter = { departmentId, academicYearId };
+    const update = {
+      departmentId,
+      academicYearId,
+      departmentName:   deptName || "",
+      academicYearName: yearName || "",
+      classes:          classEntries,
+      teachers:         teacherEntries,
+      createdAt:        new Date()
+    };
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-    if (!timetableId) {
-      return res.status(400).send("No timetable ID in the form data.");
-    }
-
-    commandText = commandText.replace(/ to subject /gi, " with subject ");
-    const pythonScript = path.join(__dirname, "../ai-service/parse_command.py");
-    const execCommand = `python "${pythonScript}" "${commandText}"`;
-
-    exec(execCommand, async (error, stdout) => {
-      if (error) {
-        console.error("Error executing Python script:", error);
-        return res.status(500).send("Error processing command.");
-      }
-
-      try {
-        const parsedOutput = JSON.parse(stdout);
-        const dayEntity = parsedOutput.entities.find(e => e.label === "DAY_SOURCE")
-          || parsedOutput.entities.find(e => e.label === "DAY_TARGET");
-        const slotSourceEntity = parsedOutput.entities.find(e => e.label === "SLOT_SOURCE");
-        const slotTargetEntity = parsedOutput.entities.find(e => e.label === "SLOT_TARGET");
-
-        if (!dayEntity || !slotSourceEntity || !slotTargetEntity) {
-          return res.status(400).send("Command missing required day/slot info.");
-        }
-
-        const extractSlotNumber = txt => {
-          const match = txt.match(/\d+/);
-          return match ? parseInt(match[0], 10) : NaN;
-        };
-
-        const day = dayEntity.text;
-        const slotSource = extractSlotNumber(slotSourceEntity.text);
-        const slotTarget = extractSlotNumber(slotTargetEntity.text);
-
-        if (isNaN(slotSource) || isNaN(slotTarget)) {
-          return res.status(400).send("Could not extract valid slot numbers from command.");
-        }
-
-        const doc = await Timetable.findById(timetableId).populate("classId");
-        if (!doc) {
-          return res.status(404).send("Timetable not found.");
-        }
-
-        let actualTimetable = null;
-        if (doc.classId && doc.classId._id) {
-          const strClassId = doc.classId._id.toString();
-          if (doc.timetable && typeof doc.timetable === "object") {
-            actualTimetable = doc.timetable[strClassId] || null;
-          }
-        }
-        if (!actualTimetable) {
-          return res.status(400).send("Cannot find the class-based timetable data to edit.");
-        }
-
-        if (actualTimetable[day]) {
-          const dayTimetable = actualTimetable[day];
-          if (Array.isArray(dayTimetable) && dayTimetable.length >= Math.max(slotSource, slotTarget)) {
-            const temp = dayTimetable[slotSource - 1];
-            dayTimetable[slotSource - 1] = dayTimetable[slotTarget - 1];
-            dayTimetable[slotTarget - 1] = temp;
-
-            actualTimetable[day] = dayTimetable;
-            doc.timetable[doc.classId._id.toString()] = actualTimetable;
-            await doc.save();
-
-            return res.redirect("/timetable/edit?tid=" + timetableId);
-          } else {
-            return res.status(400).send("Specified slots are out of range for the given day.");
-          }
-        } else {
-          return res.status(400).send("Invalid day specified in command.");
-        }
-      } catch (err) {
-        console.error("Error parsing Python output or updating doc:", err);
-        return res.status(500).send("Error processing command.");
-      }
+    const savedDoc = await Timetable.findOneAndUpdate(filter, update, options);
+    return res.json({
+      message:     "Timetable saved successfully.",
+      timetableId: savedDoc._id
     });
   } catch (err) {
-    console.error("Error in POST /edit-command:", err);
-    return res.status(500).send("Server error.");
-  }
-});
-
-// ===========================================================
-// 4.5) Save Draft Timetable (POST /timetable/save-draft)
-//    (unchanged from before)
-// ===========================================================
-router.post("/save-draft", async (req, res) => {
-  try {
-    const { timetableId, updatedTimetable } = req.body;
-    if (!timetableId || !updatedTimetable) {
-      return res.status(400).json({ error: "Missing timetableId or updatedTimetable." });
-    }
-    const doc = await Timetable.findById(timetableId);
-    if (!doc) {
-      return res.status(404).json({ error: "Timetable not found." });
-    }
-    const classKey = doc.classId ? doc.classId.toString() : null;
-    if (!classKey) {
-      return res.status(400).json({ error: "Timetable document missing classId." });
-    }
-    doc.timetable[classKey] = updatedTimetable;
-    doc.markModified("timetable");
-    await doc.save();
-    return res.json({ message: "Timetable saved successfully." });
-  } catch (err) {
-    console.error(err);
+    console.error("Error in /timetable/save-generated:", err);
     return res.status(500).json({ error: "Internal server error." });
   }
 });
 
-// =========================================================
-// 5) Chatbot Page (GET /timetable/chat)
-//    (unchanged from before)
-// ===========================================================
-router.get("/chat", async (req, res) => {
+/**
+ * --------------------------------------------------------
+ * 2) List Existing Timetables (GET /timetable/existing)
+ *
+ *    Shows a summary of all (department, year) documents
+ * --------------------------------------------------------
+ */
+// GET /timetable/existing
+router.get("/existing", async (req, res) => {
   try {
-    const timetableId = req.query.tid;
-    if (!timetableId) {
-      return res.status(400).send("Timetable ID is required");
-    }
-    if (!mongoose.Types.ObjectId.isValid(timetableId)) {
-      return res.status(400).send("Invalid Timetable ID.");
-    }
-    const doc = await Timetable.findById(timetableId).populate("classId").lean();
-    if (!doc) {
-      return res.status(404).send("Timetable not found.");
-    }
-
-    let actualTimetable = null;
-    if (doc.classId && doc.classId._id) {
-      const strClassId = doc.classId._id.toString();
-      if (doc.timetable && typeof doc.timetable === "object") {
-        actualTimetable = doc.timetable[strClassId] || null;
-      }
-    }
-    res.render("modules/chatbot_edit", {
-      timetable: actualTimetable,
-      timetableId: doc._id,
-    });
+    const rawDocs = await Timetable.find({}).lean();
+    return res.render("modules/existing_timetable", { timetables: rawDocs });
   } catch (error) {
-    console.error("Error fetching timetable for chatbot edit:", error);
-    res.status(500).send("Server error.");
+    console.error("Error fetching timetables:", error);
+    return res.status(500).send("Server error.");
   }
 });
 
-// =========================================================
-// 6) View Timetable (GET /timetable/view)
-//    (unchanged from before)
-// ===========================================================
-router.get("/view", async (req, res) => {
+/**
+ * ========================================================
+ * 3) View Timetable (GET /timetable/view)
+ *
+ *    Query param: tid=<timetableDocId>
+ *
+ *    NO LONGER REQUIRES classId. Renders ALL classes in that document.
+ * ========================================================
+ */
+router.get('/view', async (req, res) => {
   try {
-    const timetableId = req.query.tid;
-    if (!timetableId) {
-      return res.status(400).send("Timetable ID is required");
+    const { tid } = req.query;
+    if (!tid || !mongoose.Types.ObjectId.isValid(tid)) {
+      return res.status(400).send('Valid timetable document ID (tid) is required.');
     }
-    if (!mongoose.Types.ObjectId.isValid(timetableId)) {
-      return res.status(400).send("Invalid Timetable ID.");
-    }
-    const doc = await Timetable.findById(timetableId)
-      .populate("classId")
-      .populate("academicYearId")
-      .lean();
-    if (!doc) {
-      return res.status(404).send("Timetable not found.");
-    }
-    const className = doc.classId ? doc.classId.className : "No Class Name";
-    const academicYear = doc.academicYearId ? doc.academicYearId.academicYear : "No Academic Year";
 
-    let actualTimetable = null;
-    if (doc.classId && doc.classId._id) {
-      const strClassId = doc.classId._id.toString();
-      if (doc.timetable && typeof doc.timetable === "object") {
-        actualTimetable = doc.timetable[strClassId] || null;
-      }
+    // Find the timetable doc:
+    const doc = await Timetable.findById(tid).lean();
+    if (!doc) {
+      return res.status(404).send('Timetable document not found.');
     }
-    res.render("modules/view_timetable", {
-      timetable: actualTimetable,
-      timetableId: doc._id,
+
+    // Look up className:
+    let className = '';
+    if (mongoose.Types.ObjectId.isValid(doc.classId)) {
+      const c = await Class.findById(doc.classId).lean();
+      if (c && c.className) className = c.className;
+    }
+
+    // Look up academicYearName:
+    let academicYearName = '';
+    if (mongoose.Types.ObjectId.isValid(doc.academicYearId)) {
+      const ay = await AcademicYear.findById(doc.academicYearId).lean();
+      if (ay && ay.academicYear) academicYearName = ay.academicYear;
+    }
+
+    // Look up departmentName:
+    let departmentName = '';
+    if (mongoose.Types.ObjectId.isValid(doc.departmentId)) {
+      const dp = await Department.findById(doc.departmentId).lean();
+      if (dp && dp.departmentName) departmentName = dp.departmentName;
+    }
+
+    // Finally, render the single‐timetable view:
+    return res.render('modules/view_timetable', {
+      departmentName,
+      academicYearName,
       className,
-      academicYear,
-      createdAt: doc.createdAt
+      createdAt: doc.createdAt,
+      timetable: doc.timetable
     });
-  } catch (error) {
-    console.error("Error fetching timetable for view:", error);
-    res.status(500).send("Server error.");
+  } catch (err) {
+    console.error('Error in GET /timetable/view:', err);
+    return res.status(500).send('Server error.');
   }
 });
 
-// =========================================================
-// 7) DELETE /timetable/delete
-//    (unchanged from before)
-// ===========================================================
+
+/**
+ * ========================================================
+ * 4) Edit Class Timetable (GET /timetable/edit)
+ *
+ *    Still requires tid & classId, because editing is per‐class
+ * ========================================================
+ */
+router.get("/edit", async (req, res) => {
+  try {
+    const { tid, classId } = req.query;
+    if (!tid || !classId) {
+      return res
+        .status(400)
+        .send("Both tid and classId are required to edit a class timetable.");
+    }
+    if (
+      !mongoose.Types.ObjectId.isValid(tid) ||
+      !mongoose.Types.ObjectId.isValid(classId)
+    ) {
+      return res.status(400).send("Invalid tid or classId.");
+    }
+
+    const parentDoc = await Timetable.findById(tid)
+      .populate("classes.classId", "className")
+      .lean();
+    if (!parentDoc) {
+      return res.status(404).send("Timetable document not found.");
+    }
+
+    const classEntry = parentDoc.classes.find(
+      (c) => c.classId.toString() === classId
+    );
+    if (!classEntry) {
+      return res.status(404).send("Class timetable not found in this document.");
+    }
+
+    const timetable = convertMatrixToScheduleObject(classEntry.timetable);
+    return res.render("modules/edit_timetable", {
+      timetable,
+      timetableId: tid,
+      classId,
+      className: classEntry.className,
+      createdAt: parentDoc.createdAt
+    });
+  } catch (error) {
+    console.error("Error fetching class timetable for edit:", error);
+    return res.status(500).send("Server error.");
+  }
+});
+
+/**
+ * ========================================================
+ * 5) POST /timetable/edit-command
+ *
+ *    Uses NLP to swap two slots in a single class’s “draft” timetable.
+ *    Expects JSON body: { timetableId, classId, command }
+ *    Returns { updatedTimetable, changedSlots } on success.
+ * ========================================================
+ */
+router.post("/edit-command", async (req, res) => {
+  try {
+    const { timetableId, classId, command } = req.body;
+    if (!timetableId || !classId || !command) {
+      return res.status(400).json({
+        error: "timetableId, classId, and command are all required."
+      });
+    }
+    if (
+      !mongoose.Types.ObjectId.isValid(timetableId) ||
+      !mongoose.Types.ObjectId.isValid(classId)
+    ) {
+      return res.status(400).json({ error: "Invalid timetableId or classId." });
+    }
+
+    // 1) Find the parent document and the specific class entry
+    const parentDoc = await Timetable.findById(timetableId).lean();
+    if (!parentDoc) {
+      return res
+        .status(404)
+        .json({ error: "Timetable document not found." });
+    }
+    const classIndex = parentDoc.classes.findIndex(
+      (c) => c.classId.toString() === classId
+    );
+    if (classIndex < 0) {
+      return res
+        .status(404)
+        .json({ error: "Class timetable not found in this document." });
+    }
+
+    // 2) Convert the stored 5×7 matrix into a schedule‐object form for slot lookup
+    const currentMatrix = parentDoc.classes[classIndex].timetable; // a 5×7 array or null
+    const currentSched  = convertMatrixToScheduleObject(currentMatrix);
+
+    // 3) Invoke your NLP parser (parse_command.py) to extract DAY_SOURCE, SLOT_SOURCE, SLOT_TARGET, etc.
+    const pythonScript = path.join(__dirname, "../ai-service/parse_command.py");
+    const safelyEscaped = command.replace(/"/g, '\\"');
+    const execCommand   = `python "${pythonScript}" "${safelyEscaped}"`;
+
+    exec(execCommand, async (error, stdout) => {
+      if (error) {
+        console.error("Error executing parse_command.py:", error);
+        return res
+          .status(500)
+          .json({ error: "Error processing NLP command." });
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(stdout);
+      } catch (e) {
+        console.error("Failed to parse NLP output:", e);
+        return res
+          .status(500)
+          .json({ error: "Invalid NLP response." });
+      }
+
+      // 4) Extract entities
+      const dayEntity        =
+        parsed.entities.find((e) => e.label === "DAY_SOURCE") ||
+        parsed.entities.find((e) => e.label === "DAY_TARGET");
+      const slotSourceEntity = parsed.entities.find(
+        (e) => e.label === "SLOT_SOURCE"
+      );
+      const slotTargetEntity = parsed.entities.find(
+        (e) => e.label === "SLOT_TARGET"
+      );
+
+      if (!dayEntity || !slotSourceEntity || !slotTargetEntity) {
+        return res
+          .status(400)
+          .json({ error: "Missing day/slot info in NLP command." });
+      }
+
+      // Helper to pull an integer out of “slot X”
+      const extractSlotNumber = (txt) => {
+        const m = txt.match(/\d+/);
+        return m ? parseInt(m[0], 10) : NaN;
+      };
+
+      const dayName    = normalizeDay(dayEntity.text);
+      const slotSource = extractSlotNumber(slotSourceEntity.text);
+      const slotTarget = extractSlotNumber(slotTargetEntity.text);
+
+      if (!dayName || isNaN(slotSource) || isNaN(slotTarget)) {
+        return res
+          .status(400)
+          .json({ error: "Invalid day or slot number." });
+      }
+
+      // 5) Perform the swap in our “currentSched” object (not yet saved)
+      if (
+        !Array.isArray(currentSched[dayName]) ||
+        currentSched[dayName].length < Math.max(slotSource, slotTarget)
+      ) {
+        return res
+          .status(400)
+          .json({ error: "Slot index out of range." });
+      }
+
+      // Zero-based indices for internal swap:
+      const sIdx = slotSource - 1,
+        tIdx = slotTarget - 1;
+      const temp = currentSched[dayName][sIdx];
+      currentSched[dayName][sIdx] = currentSched[dayName][tIdx];
+      currentSched[dayName][tIdx] = temp;
+
+      // 6) Convert updated “currentSched” back into a 5×7 matrix
+      const updatedMatrix = convertScheduleObjectToMatrix(currentSched);
+
+      // 7) Return draft result (but do NOT save to DB yet)
+      return res.json({
+        message:          "Draft swap applied.",
+        updatedTimetable: currentSched,
+        changedSlots: [
+          { day: dayName, slot: slotSource },
+          { day: dayName, slot: slotTarget }
+        ]
+      });
+    });
+  } catch (err) {
+    console.error("Error in POST /edit-command:", err);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+/**
+ * ========================================================
+ * 6) Save Draft (POST /timetable/save-draft)
+ *
+ *    Expects JSON: { timetableId, classId, updatedTimetable }
+ *    Overwrites only that one class’s matrix in the parent document.
+ * ========================================================
+ */
+router.post("/save-draft", async (req, res) => {
+  try {
+    const { timetableId, classId, updatedTimetable } = req.body;
+    if (!timetableId || !classId || !updatedTimetable) {
+      return res.status(400).json({
+        error: "timetableId, classId, and updatedTimetable are all required."
+      });
+    }
+    if (
+      !mongoose.Types.ObjectId.isValid(timetableId) ||
+      !mongoose.Types.ObjectId.isValid(classId)
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Invalid timetableId or classId." });
+    }
+
+    // 1) Find parent doc
+    const parentDoc = await Timetable.findById(timetableId);
+    if (!parentDoc) {
+      return res
+        .status(404)
+        .json({ error: "Timetable document not found." });
+    }
+
+    // 2) Locate index of that class in classes[]
+    const idx = parentDoc.classes.findIndex(
+      (c) => c.classId.toString() === classId
+    );
+    if (idx < 0) {
+      return res
+        .status(404)
+        .json({ error: "Class timetable not found in this document." });
+    }
+
+    // 3) Convert updatedTimetable (object form) back into 5×7 matrix
+    const newMatrix = convertScheduleObjectToMatrix(updatedTimetable);
+
+    // 4) Overwrite the matrix for that class
+    parentDoc.classes[idx].timetable = newMatrix;
+    parentDoc.markModified(`classes.${idx}.timetable`);
+    await parentDoc.save();
+
+    return res.json({ message: "Timetable saved successfully." });
+  } catch (err) {
+    console.error("Error in POST /save-draft:", err);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+/**
+ * ========================================================
+ * 7) Delete an entire (department, year) document
+ *
+ *    DELETE /timetable/delete?tid=<timetableDocId>
+ * ========================================================
+ */
 router.delete("/delete", async (req, res) => {
   try {
-    const timetableId = req.query.tid;
-    if (!timetableId) {
-      return res.status(400).json({ error: "Timetable ID is required for deletion." });
+    const { tid } = req.query;
+    if (!tid) {
+      return res
+        .status(400)
+        .json({ error: "timetableId (tid) is required for deletion." });
     }
-    if (!mongoose.Types.ObjectId.isValid(timetableId)) {
-      return res.status(400).json({ error: "Invalid Timetable ID." });
+    if (!mongoose.Types.ObjectId.isValid(tid)) {
+      return res.status(400).json({ error: "Invalid timetableId." });
     }
-    const result = await Timetable.findByIdAndDelete(timetableId);
+    const result = await Timetable.findByIdAndDelete(tid);
     if (!result) {
-      return res.status(404).json({ error: "Timetable not found or already deleted." });
+      return res
+        .status(404)
+        .json({ error: "Timetable document not found or already deleted." });
     }
-    console.log("Timetable deleted successfully:", timetableId);
-    return res.status(200).json({ success: true, message: "Timetable deleted successfully." });
+    return res.json({
+      success: true,
+      message: "Timetable document deleted successfully."
+    });
   } catch (error) {
     console.error("Error deleting timetable:", error);
     return res.status(500).json({ error: "Server error." });
@@ -409,3 +537,125 @@ router.delete("/delete", async (req, res) => {
 });
 
 module.exports = router;
+
+/**
+ * ========================================================
+ * Helper Functions Below
+ * ========================================================
+ */
+
+/**
+ * 1) Convert from { Monday: [slot0, slot1, …, slot6], … }
+ *    into a 5×7 matrix of sessionSchema objects
+ *
+ *    sessionSchema shape = { day, slot, subject, teacher, room, batch, type }
+ *    We assume each scheduleObj[day] is length 7 (or fewer; fill missing with null).
+ */
+function convertScheduleObjectToMatrix(scheduleObj) {
+  const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  // Initialize 5×7 matrix of nulls
+  const matrix = Array(5)
+    .fill()
+    .map(() => Array(7).fill(null));
+
+  DAYS.forEach((dayName, dIdx) => {
+    const daySlots = Array.isArray(scheduleObj[dayName])
+      ? scheduleObj[dayName]
+      : [];
+    for (let sIdx = 0; sIdx < 7; sIdx++) {
+      const rawVal = daySlots[sIdx] || null;
+      if (!rawVal) {
+        matrix[dIdx][sIdx] = null;
+      } else if (Array.isArray(rawVal) && rawVal.length) {
+        // Lab block: take the first entry for subject/teacher/room, mark type="Lab"
+        const entry = rawVal[0];
+        matrix[dIdx][sIdx] = {
+          day:     dayName,
+          slot:    sIdx,
+          subject: entry.subject,
+          teacher: entry.teacher || null,
+          room:    entry.room    || null,
+          batch:   entry.batch   || null,
+          type:    "Lab"
+        };
+      } else if (typeof rawVal === "object" && rawVal.subject) {
+        // Single‐lecture or MOOC: rawVal has subject, teacher, room, maybe type
+        matrix[dIdx][sIdx] = {
+          day:     dayName,
+          slot:    sIdx,
+          subject: rawVal.subject,
+          teacher: rawVal.teacher || null,
+          room:    rawVal.room    || null,
+          batch:   rawVal.batch   || null,
+          type:    rawVal.type    || "Theory"
+        };
+      } else if (typeof rawVal === "string") {
+        // A string like "Free slot" or "MOOC"
+        matrix[dIdx][sIdx] = {
+          day:     dayName,
+          slot:    sIdx,
+          subject: rawVal,
+          teacher: null,
+          room:    null,
+          batch:   null,
+          type:    rawVal === "MOOC" ? "MOOC" : "Free"
+        };
+      } else {
+        matrix[dIdx][sIdx] = null;
+      }
+    }
+  });
+
+  return matrix;
+}
+
+/**
+ * 2) Convert from a 5×7 matrix of sessionSchema objects
+ *    back into { Monday: [ … ], … } form.
+ */
+function convertMatrixToScheduleObject(matrix) {
+  const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const scheduleObj = {};
+  DAYS.forEach((dayName, dIdx) => {
+    scheduleObj[dayName] = [];
+    for (let sIdx = 0; sIdx < 7; sIdx++) {
+      const sess = matrix[dIdx][sIdx];
+      if (!sess) {
+        scheduleObj[dayName].push(null);
+      } else if (sess.type === "Lab") {
+        // Reconstruct as an array of one element (batched lab)
+        scheduleObj[dayName].push([
+          {
+            batch:   sess.batch,
+            subject: sess.subject,
+            teacher: sess.teacher,
+            room:    sess.room
+          }
+        ]);
+      } else {
+        // Single‐lecture or MOOC
+        scheduleObj[dayName].push({
+          subject: sess.subject,
+          teacher: sess.teacher,
+          room:    sess.room,
+          batch:   sess.batch,
+          type:    sess.type
+        });
+      }
+    }
+  });
+  return scheduleObj;
+}
+
+/**
+ * 3) Normalize day string (“monday” → “Monday”)
+ */
+function normalizeDay(dayStr) {
+  if (!dayStr) return "";
+  dayStr = dayStr.trim().toLowerCase();
+  const cap = dayStr.charAt(0).toUpperCase() + dayStr.slice(1);
+  if (["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].includes(cap)) {
+    return cap;
+  }
+  return "";
+}

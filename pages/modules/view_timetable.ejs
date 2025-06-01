@@ -1,135 +1,188 @@
-<!-- views/modules/view_timetable.ejs -->
 <%- include('../layout/header') %>
 
 <style>
-  /* Example custom styling for timetable improvements */
+  /* 1) Base table styling */
   .timetable-compact {
     font-size: 0.95rem;
     table-layout: fixed;
     width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    overflow: hidden;
   }
   .timetable-compact th,
   .timetable-compact td {
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    padding: 0.6rem;
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
   }
-  .timetable-compact th:nth-child(n+2),
-  .timetable-compact td:nth-child(n+2) {
-    max-width: 150px;
+  .timetable-compact th {
+    background-color: #343a40;
+    color: #ffffff;
+    border-bottom: 2px solid #495057;
   }
+  .timetable-compact tr:nth-child(odd) td {
+    background-color: #f8f9fa;
+  }
+  .timetable-compact tr:nth-child(even) td {
+    background-color: #ffffff;
+  }
+  .timetable-compact tbody tr:hover td {
+    background-color: #e9ecef;
+  }
+
+  /* 2) “Lab” vs “Theory” session blocks */
   .lab-session {
-    background-color: #f0f9ff; /* Light blue background for labs */
-    border: 1px solid #bce8f1;
-    border-radius: 4px;
-    padding: 0.4rem;
-    margin-bottom: 0.4rem;
+    background-color: #e3f2fd;       /* Light blue */
+    border: 1px solid #90caf9;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
   }
+  .lab-session .batch-badge {
+    background-color: #1976d2;
+    color: #ffffff;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
   .theory-session {
-    background-color: #f9f9f9; /* Light gray for single theory sessions */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0.4rem;
-    margin-bottom: 0.4rem;
+    background-color: #f1f3f5;       /* Light gray */
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
   }
+
   .free-slot {
-    color: #888;
+    color: #6c757d;
     font-style: italic;
+  }
+
+  /* 3) Card header styling */
+  .tt-header-card {
+    background-color: #007bff;
+    color: #ffffff;
+    border-bottom: none;
+    font-weight: 500;
+  }
+
+  .tt-header-card h4,
+  .tt-header-card h5 {
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+  }
+
+  /* 4) Responsive tweaks */
+  @media (max-width: 576px) {
+    .timetable-compact th,
+    .timetable-compact td {
+      font-size: 0.8rem;
+      padding: 0.5rem 0.25rem;
+    }
+    .lab-session, .theory-session {
+      padding: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
   }
 </style>
 
-<div class="container mt-5">
-  <h2 class="text-center mb-4">View Timetable</h2>
+<div class="container my-5">
+  
 
-  <!-- Display Class Name and Academic Year -->
-  <div class="text-center mb-4">
-    <h4>Class: <%= className %></h4>
-    <h5>Academic Year: <%= academicYear %></h5>
-    <% if (createdAt) { %>
-      <p class="text-muted">Generated on: <%= createdAt.toLocaleString() %></p>
-    <% } %>
+  <!-- 1) Header Card: Department / Class / Academic Year -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body tt-header-card text-center">
+      <h4 class="mb-1">Department: <%= departmentName %></h4>
+      <h5 class="mb-1">Class: <%= className %></h5>
+      <h5 class="mb-2">Academic Year: <%= academicYearName %></h5>
+      <% if (createdAt) { %>
+        <small>Generated on: <%= new Date(createdAt).toLocaleString() %></small>
+      <% } %>
+    </div>
   </div>
 
-  <% if (!timetable) { %>
-    <!-- If no timetable data, show a friendly message -->
-    <p class="text-center text-muted">No timetable data available.</p>
-  <% } else { %>
-    <!-- Timetable data exists, so show the table -->
-    <div class="table-responsive">
-      <table class="table table-sm table-bordered table-striped table-hover timetable-compact">
-        <thead class="thead-dark">
-          <tr>
-            <th style="width: 60px;">Slot</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- We assume 6 slots per day -->
-          <% for (let i = 0; i < 6; i++) { %>
-            <tr>
-              <td class="text-center align-middle">
-                <strong>Slot <%= i + 1 %></strong>
-              </td>
-              <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].forEach(day => { %>
-                <td class="align-middle">
-                  <!-- Attempt to retrieve the slot object for day i -->
-                  <% const slotVal = timetable[day] ? timetable[day][i] : null; %>
+  <!-- 2) Timetable Card -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white text-center">
+      <strong>Weekly Timetable</strong>
+    </div>
+    <div class="card-body">
+      <% 
+        const daysOrder = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+        const numSlots = Array.isArray(timetable[daysOrder[0]]) 
+                          ? timetable[daysOrder[0]].length 
+                          : 0;
+      %>
 
-                  <% if (!slotVal) { %>
-                    <!-- If no slot info, just show a dash -->
-                    <span class="text-muted">-</span>
-                  <% } else if (typeof slotVal === "object") { %>
-                    <!-- If it's an object, check if it has 'subject' (single) or multiple labs -->
-                    <% if (slotVal.subject) { %>
-                      <!-- Single subject (theory or single-lab) -->
-                      <div class="theory-session">
-                        <strong><%= slotVal.subject %></strong><br>
-                        <% if (slotVal.teacher) { %>
-                          Teacher: <%= slotVal.teacher %><br>
-                        <% } %>
-                        <% if (slotVal.room) { %>
-                          Room: <%= slotVal.room %>
-                        <% } %>
-                      </div>
-                    <% } else { %>
-                      <!-- Possibly a grouped lab session with multiple keys (B1, B2, B3, etc.) -->
-                      <% Object.values(slotVal).forEach(item => { %>
-                        <div class="lab-session">
-                          <% if (item.batch) { %>
-                            <strong><%= item.batch %>:</strong>
+      <% if (numSlots === 0) { %>
+        <div class="alert alert-warning text-center mb-0">
+          This class has no timetable data for the selected week.
+        </div>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table timetable-compact mb-0">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Slot</th>
+                <% daysOrder.forEach(function(day) { %>
+                  <th><%= day %></th>
+                <% }); %>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let slotIndex = 0; slotIndex < numSlots; slotIndex++) { %>
+                <tr>
+                  <td class="text-center font-weight-bold">Slot <%= slotIndex+1 %></td>
+                  <% daysOrder.forEach(function(day) { 
+                       const cell = (timetable[day] || [])[slotIndex]; 
+                  %>
+                    <td>
+                      <% if (Array.isArray(cell) && cell.length > 0) { %>
+                        <!-- CASE A: Lab‐batch block -->
+                        <% cell.forEach(function(entry, idx) { %>
+                          <div class="lab-session">
+                            <% if (entry.batch) { %>
+                              <span class="batch-badge badge"><%= entry.batch %></span><br>
+                            <% } %>
+                            <span class="d-block font-weight-bold"><%= entry.subject %></span>
+                            <small class="text-muted">
+                              Teacher: <%= entry.teacher || 'TBA' %><br>
+                              Room:    <%= entry.room %>
+                            </small>
+                          </div>
+                          <% if (idx < cell.length - 1) { %>
+                            <hr class="my-1">
                           <% } %>
-                          <%= item.subject %><br>
-                          Teacher: <%= item.teacher %><br>
-                          Room: <%= item.room %>
-                        </div>
-                      <% }); %>
-                    <% } %>
-                  <% } else { %>
-                    <!-- If the slot is a primitive (string/number), display it (e.g., "Free slot") -->
-                    <span class="<%= slotVal === 'Free slot' ? 'free-slot' : '' %>">
-                      <%= slotVal %>
-                    </span>
-                  <% } %>
-                </td>
-              <% }); %>
-            </tr>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
+                        <% }); %>
 
-    <!-- Button to edit this timetable (goes to /timetable/edit?tid=...) -->
-    <div class="mt-4 text-center">
-      <a href="/timetable/edit?tid=<%= timetableId %>" class="btn btn-primary">
-        Edit This Timetable
-      </a>
+                      <% } else if (cell && cell.subject) { %>
+                        <!-- CASE B: Single Lecture -->
+                        <div class="theory-session">
+                          <span class="d-block font-weight-bold"><%= cell.subject %></span>
+                          <small class="text-muted">
+                            Teacher: <%= cell.teacher || 'TBA' %><br>
+                            Room:    <%= cell.room %>
+                          </small>
+                        </div>
+
+                      <% } else { %>
+                        <!-- CASE C: Free -->
+                        <div class="free-slot">FREE</div>
+                      <% } %>
+                    </td>
+                  <% }); %>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
     </div>
-  <% } %>
+  </div>
+
 </div>
 
 <%- include('../layout/footer') %>
