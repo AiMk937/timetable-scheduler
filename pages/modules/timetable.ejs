@@ -126,7 +126,7 @@
             Professor:&nbsp;
             <% 
               // Capitalize each word in pt.teacherName
-              const parts = (pt.teacherName || "").split(" ");
+              const parts = (pt.profName || "").split(" ");
               const capitalName = parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(" ");
             %>
             <%= capitalName %>
