@@ -1,4 +1,3 @@
-<!-- views/modules/existing_timetable.ejs -->
 <%- include('../layout/header') %>
 
 <div class="container mt-5">
@@ -13,19 +12,23 @@
     <% timetables.forEach(function(tt) { %>
       <div class="card mb-4 shadow-sm">
         <div class="card-header bg-light">
-          <strong>Department:</strong> <%= tt.departmentName %> &nbsp;|&nbsp;
-          <strong>Academic Year:</strong> <%= tt.academicYearName %>
+          <strong>Department:</strong> <%= tt.departmentName || 'Computer' %> &nbsp;|&nbsp;
+          <strong>Academic Year:</strong> <%= tt.academicYearName || '2024-2025' %>
+
           <% if (tt.createdAt) { %>
-            <span class="text-muted float-end">Generated on: <%= new Date(tt.createdAt).toLocaleString() %></span>
+            <span class="text-muted float-end">
+              Generated on: <%= new Date(tt.createdAt).toLocaleString() %>
+            </span>
           <% } %>
         </div>
+
         <div class="card-body">
-          <!-- VIEW: We only need tid=<%= tt._id %> -->
+          <!-- VIEW TIMETABLE -->
           <a href="/timetable/view?tid=<%= tt._id %>" class="btn btn-sm btn-info me-2">
             <i class="bi bi-eye"></i> View Timetable
           </a>
 
-          <!-- EDIT: Only show if there is at least one class in this document -->
+          <!-- EDIT FIRST CLASS -->
           <% if (tt.classes && tt.classes.length > 0) { %>
             <a 
               href="/timetable/edit?tid=<%= tt._id %>&classId=<%= tt.classes[0].classId %>" 
@@ -39,13 +42,27 @@
             </button>
           <% } %>
 
-          <!-- DELETE: Delete the entire (department, year) document -->
+          <!-- DELETE BUTTON -->
           <button 
             class="btn btn-sm btn-danger" 
             onclick="if(confirm('Delete this entire timetable?')) deleteTimetable('<%= tt._id %>');"
           >
             <i class="bi bi-trash"></i> Delete Timetable
           </button>
+
+          <!-- LIST OF CLASSES -->
+          <% if (tt.classes && tt.classes.length > 0) { %>
+            <hr>
+            <strong>Classes in this timetable:</strong>
+            <ul class="mt-2">
+              <% tt.classes.forEach(cls => { %>
+                <li>
+                  <strong><%= cls.className || 'Unnamed Class' %></strong>
+                  - <a href="/timetable/edit?tid=<%= tt._id %>&classId=<%= cls.classId %>" class="btn btn-sm btn-link">Edit</a>
+                </li>
+              <% }) %>
+            </ul>
+          <% } %>
         </div>
       </div>
     <% }); %>
@@ -59,13 +76,11 @@
 <%- include('../layout/footer') %>
 
 <script>
-  // This function sends a DELETE request to /timetable/delete?tid=<...>
   function deleteTimetable(tid) {
     fetch(`/timetable/delete?tid=${tid}`, { method: 'DELETE' })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          // Reload the page to reflect the deletion
           window.location.reload();
         } else {
           alert(data.error || 'Failed to delete timetable.');

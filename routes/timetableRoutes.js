@@ -192,6 +192,21 @@ router.post("/save-generated", async (req, res) => {
 router.get("/existing", async (req, res) => {
   try {
     const rawDocs = await Timetable.find({}).lean();
+
+    // Safely populate class names if classes array exists
+    for (let doc of rawDocs) {
+      if (Array.isArray(doc.classes)) {
+        for (let cls of doc.classes) {
+          if (cls.classId && mongoose.Types.ObjectId.isValid(cls.classId)) {
+            const classDoc = await Class.findById(cls.classId).lean();
+            cls.className = classDoc?.className || "Unnamed Class";
+          }
+        }
+      } else {
+        doc.classes = []; // Prevents template errors
+      }
+    }
+
     return res.render("modules/existing_timetable", { timetables: rawDocs });
   } catch (error) {
     console.error("Error fetching timetables:", error);
