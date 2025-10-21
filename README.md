@@ -5,7 +5,6 @@
 ## Project Members
 - **KHAN AIMAAN JAVED**  — Team Leader
 - **SIDDIQUE MARIYUM SHARIF AHMED**
-- **PALLAR SIDDHARTH RAMCHANDRAN**
 
 ## Project Guides
 - **NONE** — 
