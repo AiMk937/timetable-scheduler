@@ -6,9 +6,6 @@
 - **KHAN AIMAAN JAVED**  — Team Leader
 - **SIDDIQUE MARIYUM SHARIF AHMED**
 
-## Project Guides
-- **NONE** — 
-
 ## Deployment Steps
 Please follow the steps below to run this project:
 
