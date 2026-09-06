@@ -28,20 +28,6 @@
             <i class="bi bi-eye"></i> View Timetable
           </a>
 
-          <!-- EDIT FIRST CLASS -->
-          <% if (tt.classes && tt.classes.length > 0) { %>
-            <a 
-              href="/timetable/edit?tid=<%= tt._id %>&classId=<%= tt.classes[0].classId %>" 
-              class="btn btn-sm btn-warning me-2"
-            >
-              <i class="bi bi-pencil-square"></i> Edit First Class
-            </a>
-          <% } else { %>
-            <button class="btn btn-sm btn-warning me-2" disabled>
-              <i class="bi bi-pencil-square"></i> No Classes to Edit
-            </button>
-          <% } %>
-
           <!-- DELETE BUTTON -->
           <button 
             class="btn btn-sm btn-danger" 
