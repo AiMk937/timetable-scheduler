@@ -1,8 +1,9 @@
+import os
 # insert_training_prompts.py
 import pymongo
 import json
 
-MONGO_URI = "mongodb://localhost:27017/"
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 DB_NAME = "test"  # Change if necessary
 
 client = pymongo.MongoClient(MONGO_URI)

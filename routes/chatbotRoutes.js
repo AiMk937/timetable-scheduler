@@ -1,7 +1,8 @@
 // routes/chatbotRoutes.js
 const express = require("express");
 const router = express.Router();
-const { exec } = require("child_process");
+const { execFile } = require("child_process");
+const PYTHON_BIN = process.env.PYTHON_BIN || "python3";
 const path = require("path");
 const Timetable = require("../models/Timetable");
 const Teacher = require("../models/Teachers");
@@ -12,7 +13,7 @@ const Infrastructure = require("../models/Infrastructure");
 const dialogueContexts = {};
 
 // Your Gemini endpoint with an API key parameter
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "YOUR_GEMINI_API_KEY_HERE";
+const GEMINI_API_KEY = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 /**
@@ -146,10 +147,8 @@ router.post("/converse", async (req, res) => {
     console.log("Combined command for update:", combinedCommand);
 
     const pythonScript = path.join(__dirname, "../ai-service/parse_command.py");
-    const execCommand = `python3 "${pythonScript}" "${combinedCommand.replace(/"/g, '\\"')}"`;
-    console.log("Executing command:", execCommand);
-
-    exec(execCommand, async (error, stdout) => {
+    // execFile passes the text as a single argument without a shell, so user input can't run commands
+    execFile(PYTHON_BIN, [pythonScript, combinedCommand], async (error, stdout) => {
       if (error) {
         console.error("Error executing parse_command:", error);
         const geminiReply = await callGemini(userMessage);

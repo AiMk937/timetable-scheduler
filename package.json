@@ -1,15 +1,15 @@
 {
-  "name": "untitled-folder",
+  "name": "timetable-scheduler",
   "version": "1.0.0",
-  "description": "",
+  "description": "AI-powered academic timetable scheduler with conflict-free generation and natural-language edits",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "ai-service": "cd ai-service && uvicorn main:app --port 8000 --reload"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Aimaan Khan, Mariyum Siddique",
+  "license": "MIT",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.9",

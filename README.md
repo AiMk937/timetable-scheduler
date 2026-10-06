@@ -1,38 +1,134 @@
-# AI-Powered Timetable Scheduler and Management
+# :calendar: AI-Powered Timetable Scheduler
 
-> **Abstract**: This project aims to develop an AI-powered application that generates timetables based on constraints specified by teachers for lectures and laboratory work. The application utilizes a combination of Random Forest and Genetic Algorithm for optimized scheduling, ensuring efficient management of resources and minimizing scheduling conflicts.
+A web app that generates **conflict-free academic timetables** for every class in a department, and lets staff **edit them in plain English** - for example *"Swap the NLP lecture in slot 1 on Tuesday with the BC lecture in slot 2"*.
 
-## Project Members
-- **KHAN AIMAAN JAVED**  — Team Leader
-- **SIDDIQUE MARIYUM SHARIF AHMED**
+:page_facing_up: **Published research:** *AI-Powered Timetable Scheduler and Management* - JETIR, Vol. 11, Issue 10, October 2024 - [Read paper](https://www.jetir.org/view?paper=JETIR2410528)
 
-## Deployment Steps
-Please follow the steps below to run this project:
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![spaCy](https://img.shields.io/badge/spaCy-09A3D5?logo=spacy&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-2. Set up the MongoDB database and configure the environment variables.
-3. Run the server:
-   ```bash
-   node server.js
-5. **Access the application** at [http://localhost:3000](http://localhost:3000).
-6. **Additional configurations** as needed...
+---
 
-## Subject Details
-- **Class**: BE (COMP) Div A - 2024-2025
-- **Subject**: Major Project 1 (MajPrj-1)
-- **Project Type**: Major Project
+## :sparkles: Features
 
-## Platforms, Libraries, and Frameworks Used
-- [Node.js](https://nodejs.org) - for server-side development
-- [Express.js](https://expressjs.com) - as a web framework for building APIs
-- [TensorFlow.js](https://tensorflowjs.org) - for implementing machine learning algorithms
-- [MongoDB](https://mongodb.com) - for database management
+- **Data management** - departments, academic years, classes, subjects, teachers, and rooms/labs (CRUD pages)
+- **Conflict-free generation** - schedules every class in a department at once, with no teacher or room double-booked across classes
+- **Lab handling** - labs take two consecutive slots and are split into batches (B1-B3)
+- **Teacher timetables** - per-teacher weekly views built from the class schedules
+- **Excel export** - one workbook with a sheet per class and per teacher
+- **Natural-language edits** - a custom spaCy NER model extracts subjects, days, slots, teachers and rooms from typed commands; Gemini handles general chat and fallback
 
-## References
-1. A. Latpate, N. Sayyad, C. Bargal, A. Sawant, and J. S. Choudhari, "AI-Based Automatic Timetable Generator Using React," *International Journal of Computer Applications*, 2022.
-2. M. Asif and A. Khalid, "Artificial Intelligence in Education: AI-Powered Timetable Scheduling System," *Journal of Educational Computing Research*, vol. 58, no. 3, 2021.
-3. Z. Habib and A. U. Haq, "Constraint-Based Timetable Scheduling Using Genetic Algorithms," in *Proc. Int. Conf. Computing*, 2020.
-4. K. A. Smith and D. L. Wilkinson, "Automated Scheduling Using AI: A Case Study in Timetabling," *IEEE Trans. Educ.*, vol. 52, no. 4, 2019.
-5. C. R. Knight and T. O'Donnell, "A Comparative Study of Scheduling Algorithms for Academic Timetable Generation," *Int. J. Scheduling*, vol. 15, 2020.
+---
+
+## :building_construction: Architecture
+
+```
+Browser (EJS pages)
+      │
+      ▼
+Node.js + Express  (port 5001) ──────────────► MongoDB
+      │        │                                   ▲
+      │        └─ runs parse_command.py ──► spaCy NER model (model/model-best)
+      ▼                                            │
+FastAPI AI service (port 8000) ─────────────────────┘
+  • services/generator.py   - constraint-based scheduler
+  • services/teacher_utils.py - teacher timetables
+  • /export-timetables      - Excel export
+```
+
+**How the scheduler works:** it loads subjects, teachers, classes and rooms from MongoDB, then places labs first (two consecutive slots, batch-wise) and theory lectures next. A shared teacher-and-room occupancy grid is checked before every placement, so the same teacher or room is never booked twice in a slot across the whole department. Placement order is randomised, so regenerating gives alternative valid timetables.
+
+> The JETIR paper describes the project's first design (a Random Forest + Genetic Algorithm hybrid). The code has since moved to the constraint-based scheduler above, which handles multi-class conflicts directly. An experimental U-Net model (`services/timetable_generator.py`, PyTorch) is also included.
+
+---
+
+## :brain: NLP command parser
+
+| Entity | Example |
+| --- | --- |
+| `SUBJECT1`, `SUBJECT2` | "NLP", "BC" |
+| `DAY_SOURCE`, `DAY_TARGET` | "Tuesday" |
+| `SLOT_SOURCE`, `SLOT_TARGET` | "1", "2" |
+| `TEACHER`, `BUSY_DAY`, `TARGET_DAY` | "Prof. Shah", "Monday" |
+| `ROOM_SOURCE`, `ROOM_TARGET` | "Lab 3", "Room 402" |
+
+Trained on 700 annotated commands (`train.spacy`, built from `ai-service/prompts/` plus generated examples). The saved model reports **entity F1 0.92** (precision 0.94, recall 0.91). Note this score is measured on the training data, so real-world accuracy will be lower - a held-out evaluation set is on the roadmap. Regex fallbacks fill in slot numbers and dates the model misses.
+
+---
+
+## :rocket: Getting started
+
+**Prerequisites:** Node.js 18+, Python 3.10+, and MongoDB (local or a free [Atlas](https://www.mongodb.com/atlas) cluster).
+
+```bash
+git clone https://github.com/AiMk937/timetable-scheduler.git
+cd timetable-scheduler
+
+# 1. Configuration
+cp .env.example .env          # then add your MONGO_URI and GOOGLE_API_KEY
+
+# 2. Web app
+npm install
+
+# 3. AI service
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the two services in separate terminals:
+
+```bash
+npm run ai-service    # FastAPI on http://localhost:8000
+npm start             # Web app on http://localhost:5001
+```
+
+Then add a department, academic year, classes, subjects, teachers and rooms, and click **Generate Timetable**.
+
+---
+
+## :file_folder: Project structure
+
+```
+timetable-scheduler/
+├── server.js                 # Express entry point
+├── routes/                   # CRUD, timetable and chatbot routes
+├── models/                   # Mongoose schemas
+├── pages/                    # EJS views
+├── public/                   # CSS
+├── ai-service/
+│   ├── main.py               # FastAPI: generate, export, update
+│   ├── config.py             # settings loaded from .env
+│   ├── parse_command.py      # NER parser called by the web app
+│   ├── nlp_trainer.py        # builds training data and trains the NER model
+│   ├── services/             # scheduler, teacher views, experimental U-Net
+│   └── prompts/              # NER training commands
+├── model/model-best/         # trained spaCy NER model
+├── config.cfg, train.spacy   # spaCy training config and data
+└── .env.example
+```
+
+---
+
+## :crystal_ball: Roadmap
+
+- Held-out test set for the NER model
+- Soft constraints (teacher preferences, balanced daily load)
+- Screenshots and a hosted demo
+- Authentication for admin pages
+
+---
+
+## :busts_in_silhouette: Team
+
+- **Aimaan Khan** (team lead) - [@AiMk937](https://github.com/AiMk937)
+- **Mariyum Siddique** - [@Mariyum008](https://github.com/Mariyum008)
+
+B.E. Computer Engineering Major Project, University of Mumbai (2024-25). Paper co-authors: Siddharth Pallar, Shiburaj Pappu, Dr. Anupam Choudhary.
+
+## :page_with_curl: License
+
+[MIT](LICENSE)

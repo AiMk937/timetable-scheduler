@@ -29,7 +29,7 @@ from spacy.training import Example
 import pymongo
 
 # Global MongoDB settings (for synthetic examples)
-MONGO_URI = "mongodb://localhost:27017/"
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 DB_NAME = "test"  # Adjust as needed
 
 # File paths for training prompts and generated DocBin

@@ -4,7 +4,8 @@ const express      = require("express");
 const router       = express.Router();
 const mongoose     = require("mongoose");
 const path         = require("path");
-const { exec }     = require("child_process");
+const { execFile } = require("child_process");
+const PYTHON_BIN = process.env.PYTHON_BIN || "python3";
 
 // Import your Mongoose models:
 const Timetable    = require("../models/Timetable");
@@ -22,7 +23,7 @@ async function callPythonGenerate(academicYearId, departmentId) {
   const { default: fetch } = await import("node-fetch");
   const payload = { academicYearId, departmentId };
 
-  const response = await fetch("http://localhost:8000/generate-timetable", {
+  const response = await fetch(`${process.env.AI_SERVICE_URL || "http://localhost:8000"}/generate-timetable`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -395,10 +396,8 @@ router.post("/edit-command", async (req, res) => {
 
     // 3) Invoke your NLP parser (parse_command.py) to extract DAY_SOURCE, SLOT_SOURCE, SLOT_TARGET, etc.
     const pythonScript = path.join(__dirname, "../ai-service/parse_command.py");
-    const safelyEscaped = command.replace(/"/g, '\\"');
-    const execCommand   = `python "${pythonScript}" "${safelyEscaped}"`;
-
-    exec(execCommand, async (error, stdout) => {
+    // execFile passes the text as a single argument without a shell, so user input can't run commands
+    execFile(PYTHON_BIN, [pythonScript, command], async (error, stdout) => {
       if (error) {
         console.error("Error executing parse_command.py:", error);
         return res

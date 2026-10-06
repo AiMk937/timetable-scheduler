@@ -21,12 +21,9 @@ from openpyxl.utils import get_column_letter
 app = FastAPI()
 
 # ── MongoDB setup ─────────────────────────────────────────────────────
-MONGO_URI = (
-    "mongodb+srv://aimaanjkhaan:Arshee2597@cluster1.1ycsg.mongodb.net/"
-    "timetableDB?retryWrites=true&w=majority&appName=Cluster1"
-)
-client = MongoClient(MONGO_URI)
-db = client["timetableDB"]
+from config import get_db  # connection string comes from .env
+
+db = get_db()
 timetables_col = db["timetables"]
 classes_col    = db["classes"]
 teachers_col   = db["teachers"]

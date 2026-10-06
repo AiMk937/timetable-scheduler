@@ -27,11 +27,9 @@ class TimetableScheduler:
         self.room_schedule    = defaultdict(lambda: [[False] * SLOTS_PER_DAY for _ in DAYS])
 
         # MongoDB setup
-        self.client = MongoClient(
-            'mongodb+srv://aimaanjkhaan:Arshee2597@cluster1.1ycsg.mongodb.net/'
-            'timetableDB?retryWrites=true&w=majority&appName=Cluster1'
-        )
-        self.db = self.client['timetableDB']
+        # Connection string comes from .env via config.py
+        from config import get_db
+        self.db = get_db()
         self.subjects_col       = self.db['subjects']
         self.teachers_col       = self.db['teachers']
         self.classes_col        = self.db['classes']

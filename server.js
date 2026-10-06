@@ -15,6 +15,7 @@
   // ------------------------------------------------
   // 2. Required Modules and Configuration
   // ------------------------------------------------
+  require('dotenv').config(); // Loads secrets from .env so they never live in the code
   const express = require('express');
   const mongoose = require('mongoose');
   const cors = require('cors');
@@ -23,9 +24,9 @@
   const { GoogleGenerativeAI } = require('@google/generative-ai'); // Generative AI client
 
   // Configuration values
-  const PORT = 5001;
-  const MONGO_URI = "mongodb+srv://aimaanjkhaan:Arshee2597@cluster1.1ycsg.mongodb.net/timetableDB?retryWrites=true&w=majority&appName=Cluster1";
-  const GENI_API_KEY = process.env.GOOGLE_API_KEY || "AIzaSyDurrWhYB2hV234MlrKpPaQYUNX54cubmI"; // Set your API key via environment variable
+  const PORT = process.env.PORT || 5001;
+  const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/timetableDB";
+  const GENI_API_KEY = process.env.GOOGLE_API_KEY; // Set in .env (see .env.example)
 
   // ------------------------------------------------
   // 3. Initialize Express App and Middleware

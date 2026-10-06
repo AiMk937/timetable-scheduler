@@ -5,9 +5,11 @@ import json
 import re
 import spacy
 
-# Load a transformer-based spaCy model.
-# Make sure you install it via: python -m spacy download en_core_web_trf
-nlp = spacy.load("en_core_web_trf")
+from pathlib import Path
+
+# Loads the custom NER model trained on timetable commands (SUBJECT1, DAY_SOURCE, SLOT_TARGET, ...)
+MODEL_DIR = Path(__file__).resolve().parent.parent / "model" / "model-best"
+nlp = spacy.load(MODEL_DIR)
 
 def fallback_extract_slots(command_text, existing_entities):
     """
@@ -88,7 +90,7 @@ def main():
         print(json.dumps(result))
         return
 
-    # Process the command text using the transformer-based spaCy model.
+    # Extract entities with the custom NER model
     doc = nlp(command_text)
     entities = []
     for ent in doc.ents:

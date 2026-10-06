@@ -1,5 +1,11 @@
 fastapi
 uvicorn
 pymongo
+python-dotenv
+pandas
 numpy
-spacy
+openpyxl
+spacy>=3.8.2,<3.9
+google-genai
+flask
+torch  # only needed for the experimental U-Net generator in services/timetable_generator.py

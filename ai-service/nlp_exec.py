@@ -27,7 +27,7 @@ import json
 from google import genai
 
 def generate_modification_plan(prompt: str) -> str:
-    api_key = "AIzaSyDurrWhYB2hV234MlrKpPaQYUNX54cubmI"
+    api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         sys.exit("Error: Please set the GOOGLE_API_KEY environment variable.")
     
