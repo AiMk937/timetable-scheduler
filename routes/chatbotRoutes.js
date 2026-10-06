@@ -223,14 +223,14 @@ router.post("/converse", async (req, res) => {
         let infraDoc;
         if (subjectDoc.subjectType === "Theory") {
           infraDoc = await Infrastructure.findOne({
-            classId: timetableDoc.classId,
+            classIds: timetableDoc.classId,
             type: "classroom"
           }).lean();
         } else {
           infraDoc = await Infrastructure.findOne({
-            classId: timetableDoc.classId,
+            classIds: timetableDoc.classId,
             type: "lab",
-            labSubjectId: subjectId
+            labSubjectIds: subjectId
           }).lean();
         }
         const room = infraDoc ? infraDoc.roomNo : "Unknown Room";

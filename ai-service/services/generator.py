@@ -393,7 +393,8 @@ class TimetableScheduler:
         lab_room_map: Dict[str, str] = {}
         for infra in infrastructures:
             if infra.get('type') == 'lab':
-                for sid in infra.get('labSubjectId', []):
+                # Schema field is labSubjectIds; older records may use labSubjectId
+                for sid in infra.get('labSubjectIds') or infra.get('labSubjectId') or []:
                     lab_room_map[str(sid)] = infra.get('roomNo', "")
 
         # List of all classrooms

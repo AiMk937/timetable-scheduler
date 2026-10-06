@@ -88,6 +88,12 @@ npm start             # Web app on http://localhost:5001
 
 Then add a department, academic year, classes, subjects, teachers and rooms, and click **Generate Timetable**.
 
+**Tests** - the scheduler is tested against a simulated database (no MongoDB needed). They check that no teacher or room is double-booked across classes, that every lecture hour is placed, and that every lab gets a room:
+
+```bash
+pytest ai-service/tests -q
+```
+
 ---
 
 ## :file_folder: Project structure
